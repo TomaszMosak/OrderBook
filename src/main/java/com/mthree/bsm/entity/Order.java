@@ -1,9 +1,6 @@
 package com.mthree.bsm.entity;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -16,7 +13,8 @@ import java.util.Objects;
  * {@link #lotSize} from when the order was first made, and a {@link #creationTime}.
  * <p>
  * An order is valid if none of its fields are null, the {@link #price} is nonnegative and has at most 7 digits with 1
- * digit after the decimal point, and the creation time is in the past.
+ * digit after the decimal point, the {@link #lotSize} and {@link #remainingSize} are between 0 and 100 000, and the
+ * creation time is in the past.
  */
 public class Order {
 
@@ -35,8 +33,12 @@ public class Order {
     @DecimalMin(value = "0.0", message = "The order's price must be nonnegative.")
     private BigDecimal price;
 
+    @Max(value = 100_000, message = "The order's lot size must be at most 100 000.")
+    @Min(value = 0, message = "The order's lot size must be at least 0.")
     private int lotSize;
 
+    @Max(value = 100_000, message = "The order's lot size must be at most 100 000.")
+    @Min(value = 0, message = "The order's lot size must be at least 0.")
     private int remainingSize;
 
     private boolean isBuy;

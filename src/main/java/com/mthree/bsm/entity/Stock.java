@@ -8,19 +8,19 @@ import java.util.Objects;
  * The stock entity corresponds to a stock being traded at the exchange. It has an {@link #id}to act as the primary key,
  * a {@link #symbol}, and the {@link #exchange} the stock is traded at.
  * <p>
- * A {@link Stock} is valid if none of its fields are null, the symbol has length at most 6, and the exchange has length
- * at most 10.
+ * A {@link Stock} is valid if none of its fields are null, the symbol has length at most 5, and the exchange has length
+ * at most 6.
  */
 public class Stock {
 
     private int id;
 
     @NotNull(message = "The stock's symbol must not be null.")
-    @Size(max = 6, message = "The stock's symbol must have length at most 6.")
+    @Size(max = 5, message = "The stock's symbol must have length at most 5.")
     private String symbol;
 
     @NotNull(message = "The stock's exchange must not be null.")
-    @Size(max = 10, message = "The stock's exchange must have length at most 10.")
+    @Size(max = 6, message = "The stock's exchange must have length at most 6.")
     private String exchange;
 
     @Override
