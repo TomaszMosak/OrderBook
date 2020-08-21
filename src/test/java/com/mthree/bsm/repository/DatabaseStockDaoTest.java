@@ -33,6 +33,7 @@ public class DatabaseStockDaoTest {
     
     @BeforeEach
     public void setUp() {
+        // deleteAllStocks();
     }
     
     @AfterEach
@@ -43,7 +44,18 @@ public class DatabaseStockDaoTest {
      * Test of getStocks method, of class StockRepository.
      */
     @Test
-    public void testGetStocks() {
+    public void testAddGetStocks() {
+        
+        Stock tesla = new Stock();
+        tesla.setSymbol("TSLA");
+        tesla.setExchange("NASDAQ");
+        
+        Stock apple = new Stock();
+        apple.setSymbol("APPl");
+        apple.setExchange("NASDAQ");
+        
+        
+        
     }
 
     

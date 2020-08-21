@@ -14,6 +14,14 @@ public interface StockRepository {
      */
     List<Stock> getStocks();
     
-
+    /**
+     * Deletes all stocks in the system.
+     */
+    void deleteAllStocks();
+    
+    /**
+     * Adds a stock in the system.
+     */
+    Stock addStock();
 
 }
