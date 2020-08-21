@@ -6,13 +6,12 @@
 package com.mthree.bsm.repository;
 
 import com.mthree.bsm.entity.Stock;
-import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -22,6 +21,9 @@ public class DatabaseStockDaoTest {
     
     public DatabaseStockDaoTest() {
     }
+    
+    @Autowired
+    StockDao stockDao;
     
     @BeforeAll
     public static void setUpClass() {
@@ -33,7 +35,7 @@ public class DatabaseStockDaoTest {
     
     @BeforeEach
     public void setUp() {
-        // deleteAllStocks();
+        stockDao.deleteAllStocks();
     }
     
     @AfterEach
@@ -49,10 +51,17 @@ public class DatabaseStockDaoTest {
         Stock tesla = new Stock();
         tesla.setSymbol("TSLA");
         tesla.setExchange("NASDAQ");
+        stockDao.addStock(tesla);
         
         Stock apple = new Stock();
         apple.setSymbol("APPl");
         apple.setExchange("NASDAQ");
+        stockDao.addStock(apple);
+        
+        Stock tesla = new Stock();
+        tesla.setSymbol("HSBC");
+        tesla.setExchange("LSE");
+
         
         
         
