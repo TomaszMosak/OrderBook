@@ -51,6 +51,8 @@ public class DatabaseOrderDaoTest {
     @BeforeEach
     public void setUp() {
         orderDao.deleteOrders();
+        userDao.deleteUsers();
+        stockDao.deleteStocks();
     }
     
     @AfterEach
@@ -115,7 +117,7 @@ public class DatabaseOrderDaoTest {
         invalidOrder1.setCreationDate(null);
         assertThrows(InvalidEntityException.class, orderDao.addOrder(invalidOrder1));
         // may need to adjust number of decimal places
-        LocalDateTime futureLDT = LocalDateTime.of(2019, 03, 28, 14, 33, 48, 123456789);
+        LocalDateTime futureLDT = LocalDateTime.of(2999, 03, 28, 14, 33, 48, 123456789);
         invalidOrder1.setCreationTime(futureLDT);
         assertThrows(InvalidEntityException.class, orderDao.addOrder(invalidOrder1));
         
