@@ -13,5 +13,15 @@ public interface UserRepository {
      * Gets a list of all users in the system.
      */
     List<User> getUsers();
+    
+    /**
+     * Deletes all users in the system.
+     */
+    void deleteAllUsers();
+    
+    /**
+     * Adds a user to the system
+     */
+    User addUser() throws InvalidEntityException;
 
 }

@@ -22,6 +22,6 @@ public interface StockRepository {
     /**
      * Adds a stock in the system.
      */
-    Stock addStock();
+    Stock addStock() throws InvalidEntityException;
 
 }

@@ -20,7 +20,7 @@ public class User {
     @Size(max = 20, message = "The user's username must have at most 20 characters.")
     private String username;
 
-    private String deleted;
+    private boolean deleted;
 
     @Override
     public String toString() {
@@ -64,11 +64,11 @@ public class User {
         return this;
     }
 
-    public String getDeleted() {
+    public boolean getDeleted() {
         return deleted;
     }
 
-    public User setDeleted(String deleted) {
+    public User setDeleted(boolean deleted) {
         this.deleted = deleted;
         return this;
     }
