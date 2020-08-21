@@ -13,5 +13,7 @@ public interface StockRepository {
      * Gets a list of all stocks in the system.
      */
     List<Stock> getStocks();
+    
+
 
 }
