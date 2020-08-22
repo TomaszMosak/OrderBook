@@ -21,6 +21,13 @@ public class User {
     private String username;
 
     private boolean deleted;
+    
+    public User(){  
+    }
+    
+    public User(String username){
+        this.username = username;
+    }
 
     @Override
     public String toString() {

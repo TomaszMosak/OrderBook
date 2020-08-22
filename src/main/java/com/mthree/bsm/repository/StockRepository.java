@@ -17,7 +17,7 @@ public interface StockRepository {
     /**
      * Deletes all stocks in the system.
      */
-    void deleteAllStocks();
+    void deleteStocks();
     
     /**
      * Adds a stock in the system.

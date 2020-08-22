@@ -17,7 +17,7 @@ public interface UserRepository {
     /**
      * Deletes all users in the system.
      */
-    void deleteAllUsers();
+    void deleteUsers();
     
     /**
      * Adds a user to the system

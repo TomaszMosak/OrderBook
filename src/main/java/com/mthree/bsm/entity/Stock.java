@@ -31,6 +31,14 @@ public class Stock {
                ", exchange='" + exchange + '\'' +
                '}';
     }
+    
+   public Stock(){
+   }
+   
+   public Stock(String symbol, String exchange){
+       this.symbol = symbol;
+       this.exchange = exchange;
+   }
 
     @Override
     public boolean equals(Object o) {

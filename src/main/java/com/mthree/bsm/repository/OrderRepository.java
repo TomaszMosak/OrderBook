@@ -57,5 +57,7 @@ public interface OrderRepository {
      * @throws InvalidEntityException if the given order is invalid.
      */
     void editOrder(Order order) throws MissingEntityException, InvalidEntityException;
+    
+    void deleteOrders(); 
 
 }

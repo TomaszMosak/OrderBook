@@ -40,7 +40,7 @@ public class DatabaseUserDaoTest {
     
     @BeforeEach
     public void setUp() {
-        userDao.deleteAllUsers();
+        userDao.deleteUsers();
     }
     
     @AfterEach
@@ -52,6 +52,9 @@ public class DatabaseUserDaoTest {
         
         // UserDao not yet wired in
         User invalidUser1 = new User();
+        assertThrows(InvalidEntityException.class, userDao.addUser(invalidUser1));
+        
+        invalidUser1.setUsername(null);
         assertThrows(InvalidEntityException.class, userDao.addUser(invalidUser1));
         
         invalidUser1.setUsername("Invalid Username, too long");
@@ -78,6 +81,7 @@ public class DatabaseUserDaoTest {
         assertFalse(users.contains(tomasz));
        
         tomasz = userDao.addUser(tomasz);
+        users = userDao.getUsers();
         
         assertEquals(users.size(), 3);
         assertTrue(users.contains(tom) && users.contains(billy) && users.contains(tomasz));

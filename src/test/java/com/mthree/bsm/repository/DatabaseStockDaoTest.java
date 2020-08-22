@@ -40,7 +40,7 @@ public class DatabaseStockDaoTest {
     
     @BeforeEach
     public void setUp() {
-        stockDao.deleteAllStocks();
+        stockDao.deleteStocks();
     }
     
     @AfterEach
@@ -59,26 +59,29 @@ public class DatabaseStockDaoTest {
         
         invalidStock1.setExchange("NASDAQ");
         assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock1));
-        
+        invalidStock1.setSymbol(null);
+        assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock1));
         invalidStock1.setSymbol("Invalid");
         assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock1));
         
         Stock invalidStock2 = new Stock();
+        
         invalidStock2.setSymbol("APPL");
         assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock2));
-        
         invalidStock2.setExchange("Invalid");
+        assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock2));
+        invalidStock2.setExchange(null);
         assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock2));
         
         Stock tesla = new Stock();
         tesla.setSymbol("TSLA");
         tesla.setExchange("NASDAQ");
-        stockDao.addStock(tesla);
+        tesla = stockDao.addStock(tesla);
         
         Stock apple = new Stock();
         apple.setSymbol("APPl");
         apple.setExchange("NASDAQ");
-        stockDao.addStock(apple);
+        apple = stockDao.addStock(apple);
         
         Stock hsbc = new Stock();
         tesla.setSymbol("HSBC");
@@ -90,14 +93,15 @@ public class DatabaseStockDaoTest {
         assertTrue(stocks.contains(tesla) && stocks.contains(apple));
         assertFalse(stocks.contains(hsbc));
         
-        stockDao.addStock(hsbc);
+        hsbc = stockDao.addStock(hsbc);
+        stocks = stockDao.getStocks();
         
         assertEquals(stocks.size(), 3);
         assertTrue(stocks.contains(tesla) && stocks.contains(apple) && stocks.contains(hsbc));
     }
     
     @Test
-    public void testDeleteStock() {
+    public void testDeleteStocks() {
         
         Stock tesla = new Stock();
         tesla.setSymbol("TSLA");
@@ -114,7 +118,6 @@ public class DatabaseStockDaoTest {
         assertEquals(stocks.size(), 2);
         
         stockDao.deleteAllStocks();
-        
         stocks = stockDao.getStocks();
         
         assertEquals(stocks.size(), 0);
