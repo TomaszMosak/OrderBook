@@ -15,6 +15,15 @@ import java.util.Objects;
  * A trade is valid if none of its fields are null, and the {@link #executionTime} is in the past.
  */
 public class Trade {
+    
+    public Trade(){
+    }
+    
+    public Trade(Order buyOrder, Order sellOrder, LocalDateTime executionTime){
+        this.buyOrder = buyOrder;
+        this.sellOrder = sellOrder;
+        this.executionTime = executionTime;
+    }
 
     private int id;
 
