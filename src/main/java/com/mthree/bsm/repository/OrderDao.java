@@ -10,7 +10,7 @@ import java.util.Optional;
  * Repository for creating, reading, and updating {@link Order}s in the system. Any orders retrieved or put into the
  * system are guaranteed to be valid after the function returns. In particular, all its fields will be filled.
  */
-public interface OrderRepository {
+public interface OrderDao {
 
     /**
      * Gets all {@link Order}s in the system.
@@ -57,7 +57,10 @@ public interface OrderRepository {
      * @throws InvalidEntityException if the given order is invalid.
      */
     void editOrder(Order order) throws MissingEntityException, InvalidEntityException;
-    
-    void deleteOrders(); 
 
+
+    /**
+     * Deletes all orders in the system, returning them in a list.
+     */
+    List<Order> deleteOrders();
 }

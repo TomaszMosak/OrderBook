@@ -7,39 +7,38 @@ import java.util.Objects;
 
 /**
  * The order entity corresponds to a buy or sell order made in the application. It has an {@link #id} to act as the
- * primary key, a {@link #user} referencing the user making the trade, a {@link #stock} referencing the stock being
- * bought/sold, a boolean {@link #isBuy} representing whether the order is a buy order or a sell order, a {@link
- * #status} for the order, a current {@link #price} for the order, the {@link #remainingSize} of the order and the
- * {@link #lotSize} from when the order was first made, and a {@link #creationTime}.
- * <p>
- * An order is valid if none of its fields are null, the {@link #price} is nonnegative and has at most 7 digits with 1
- * digit after the decimal point, the {@link #lotSize} and {@link #remainingSize} are between 0 and 100 000, and the
- * creation time is in the past.
+ * primary key, the current {@link #version} of the order, a {@link #user} referencing the user making the order and the
+ * {@link #party} owning the stock, a {@link #stock} referencing the stock being bought/sold, a boolean {@link #isBuy}
+ * representing whether the order is a buy order or a sell order, a {@link #status} for the order, a current {@link
+ * #price} for the order, the {@link #size} of the order and the {@link #versionTime} when the current version of the
+ * order came into being.
  */
 public class Order {
 
     private int id;
 
+    @Min(value = 1, message = "The order's version must be positive.")
+    private int version;
+
     @NotNull(message = "The order's user cannot be null.")
     private User user;
+
+    @NotNull(message = "The order's party cannot be null.")
+    private Party party;
 
     @NotNull(message = "The order's stock cannot be null.")
     private Stock stock;
 
     @NotNull(message = "The order's price cannot be null.")
     @Digits(integer = 6,
-            fraction = 1,
-            message = "The order's price must have at most 7 digits with 1 digit after the decimal point")
+            fraction = 2,
+            message = "The order's price must have at most 8 digits with 2 digit after the decimal point")
     @DecimalMin(value = "0.0", message = "The order's price must be nonnegative.")
     private BigDecimal price;
 
-    @Max(value = 100_000, message = "The order's lot size must be at most 100 000.")
-    @Min(value = 0, message = "The order's lot size must be at least 0.")
-    private int lotSize;
-
-    @Max(value = 100_000, message = "The order's lot size must be at most 100 000.")
-    @Min(value = 0, message = "The order's lot size must be at least 0.")
-    private int remainingSize;
+    @Max(value = 10_000_000, message = "The order's size must be at most 10 000 000.")
+    @Min(value = 0, message = "The order's size must be nonnegative.")
+    private int size;
 
     private boolean isBuy;
 
@@ -48,20 +47,21 @@ public class Order {
 
     @NotNull(message = "The order's creation time cannot be null.")
     @PastOrPresent(message = "The order's creation time must be in the past.")
-    private LocalDateTime creationTime;
+    private LocalDateTime versionTime;
 
     @Override
     public String toString() {
         return "Order{" +
                "id=" + id +
+               ", version=" + version +
                ", user=" + user +
+               ", party=" + party +
                ", stock=" + stock +
                ", price=" + price +
-               ", lotSize=" + lotSize +
-               ", remainingSize=" + remainingSize +
+               ", size=" + size +
                ", isBuy=" + isBuy +
                ", status=" + status +
-               ", creationTime=" + creationTime +
+               ", versionTime=" + versionTime +
                '}';
     }
 
@@ -71,19 +71,20 @@ public class Order {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
         return id == order.id &&
-               lotSize == order.lotSize &&
-               remainingSize == order.remainingSize &&
+               version == order.version &&
+               size == order.size &&
                isBuy == order.isBuy &&
                Objects.equals(user, order.user) &&
+               Objects.equals(party, order.party) &&
                Objects.equals(stock, order.stock) &&
                Objects.equals(price, order.price) &&
                status == order.status &&
-               Objects.equals(creationTime, order.creationTime);
+               Objects.equals(versionTime, order.versionTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, stock, price, lotSize, remainingSize, isBuy, status, creationTime);
+        return Objects.hash(id, version, user, party, stock, price, size, isBuy, status, versionTime);
     }
 
     public int getId() {
@@ -95,12 +96,30 @@ public class Order {
         return this;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
+    public Order setVersion(int version) {
+        this.version = version;
+        return this;
+    }
+
     public User getUser() {
         return user;
     }
 
     public Order setUser(User user) {
         this.user = user;
+        return this;
+    }
+
+    public Party getParty() {
+        return party;
+    }
+
+    public Order setParty(Party party) {
+        this.party = party;
         return this;
     }
 
@@ -122,21 +141,12 @@ public class Order {
         return this;
     }
 
-    public int getLotSize() {
-        return lotSize;
+    public int getSize() {
+        return size;
     }
 
-    public Order setLotSize(int lotSize) {
-        this.lotSize = lotSize;
-        return this;
-    }
-
-    public int getRemainingSize() {
-        return remainingSize;
-    }
-
-    public Order setRemainingSize(int remainingSize) {
-        this.remainingSize = remainingSize;
+    public Order setSize(int size) {
+        this.size = size;
         return this;
     }
 
@@ -158,12 +168,12 @@ public class Order {
         return this;
     }
 
-    public LocalDateTime getCreationTime() {
-        return creationTime;
+    public LocalDateTime getVersionTime() {
+        return versionTime;
     }
 
-    public Order setCreationTime(LocalDateTime creationTime) {
-        this.creationTime = creationTime;
+    public Order setVersionTime(LocalDateTime versionTime) {
+        this.versionTime = versionTime;
         return this;
     }
 

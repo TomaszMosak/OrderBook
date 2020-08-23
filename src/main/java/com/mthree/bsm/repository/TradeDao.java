@@ -1,5 +1,6 @@
 package com.mthree.bsm.repository;
 
+import com.mthree.bsm.entity.Party;
 import com.mthree.bsm.entity.Trade;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Optional;
  * Repository for getting and creating trades in the system. Any trades retrieved or put into the system are guaranteed
  * to be valid after the function returns. In particular, all its fields will be filled.
  */
-public interface TradeRepository {
+public interface TradeDao {
 
     /**
      * Gets all {@link Trade}s in the system.
@@ -28,6 +29,11 @@ public interface TradeRepository {
      *
      * @throws InvalidEntityException when the given trade is invalid.
      */
-    Trade createTrade(Trade trade) throws InvalidEntityException;
+    Trade addTrade(Trade trade) throws InvalidEntityException;
+
+    /**
+     * Deletes all trades in the system, returning them in a list.
+     */
+    List<Trade> deleteTrades();
 
 }

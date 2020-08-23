@@ -9,8 +9,9 @@ import java.util.Objects;
 /**
  * The trade entity corresponds to a trade made by the application matching a buy order and a sell order. It has an
  * {@link #id} to act as the primary key, {@link #buyOrder} and {@link #sellOrder} referencing the buy and sell order
- * respectively at the time the trade was made, a {@link #getQuantity()} of stock being traded at price {@link
- * #getPrice()} and an {@link #executionTime} when the trade is made.
+ * respectively at the time the trade was made, and an {@link #executionTime} when the trade is made. There are
+ * additional properties {@link #getQuantity()}, and {@link #getPrice()} representing how much is traded and at what
+ * price, calculated from the relevant quantities in the {@link #buyOrder} and {@link #sellOrder}.
  * <p>
  * A trade is valid if none of its fields are null, and the {@link #executionTime} is in the past.
  */
@@ -91,11 +92,11 @@ public class Trade {
     }
 
     public int getQuantity() {
-        return Math.min(buyOrder.getRemainingSize(), sellOrder.getRemainingSize());
+        return Math.min(buyOrder.getSize(), sellOrder.getSize());
     }
 
     public BigDecimal getPrice() {
-        return sellOrder.getPrice();
+        // Need a way to compare the time the buy order and sell order were executed.
     }
 
     public LocalDateTime getExecutionTime() {

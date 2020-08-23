@@ -1,19 +1,24 @@
 package com.mthree.bsm.entity;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * The stock entity corresponds to a stock being traded at the exchange. It has an {@link #id}to act as the primary key,
- * a {@link #symbol}, and the {@link #exchange} the stock is traded at.
- * <p>
- * A {@link Stock} is valid if none of its fields are null, the symbol has length at most 5, and the exchange has length
- * at most 6.
+ * The stock entity corresponds to a stock being traded at the exchange. It has an {@link #id} to act as the primary
+ * key, a {@link #centralParty} representing the party trading the stock (should be LCH), a {@link #symbol}, the
+ * {@link #exchange} the stock is traded at, and a {@link #tickSize}.
  */
 public class Stock {
 
     private int id;
+
+    @NotNull(message = "The stock's central party must not be null.")
+    private Party centralParty;
+
+    @NotNull(message = "The stock's company name must not be null.")
+    @Size(max = 30, message = "The stock's company name must have length at most 30.")
+    private String companyName;
 
     @NotNull(message = "The stock's symbol must not be null.")
     @Size(max = 5, message = "The stock's symbol must have length at most 5.")
@@ -23,6 +28,12 @@ public class Stock {
     @Size(max = 6, message = "The stock's exchange must have length at most 6.")
     private String exchange;
 
+    @NotNull(message = "The stock's tick size must not be null.")
+    @DecimalMin(value = "0.001", message = "The stock's tick size must be at least 0.001.")
+    @DecimalMax(value = "100.000", message = "The stock's tick size must be at most 100.000")
+    @Digits(integer = 3, fraction = 3, message = "The stock's tick size must have at most 3 digits after the decimal.")
+    private BigDecimal tickSize;
+
     @Override
     public String toString() {
         return "Stock{" +
@@ -31,14 +42,14 @@ public class Stock {
                ", exchange='" + exchange + '\'' +
                '}';
     }
-    
-   public Stock(){
-   }
-   
-   public Stock(String symbol, String exchange){
-       this.symbol = symbol;
-       this.exchange = exchange;
-   }
+
+    public Stock() {
+    }
+
+    public Stock(String symbol, String exchange) {
+        this.symbol = symbol;
+        this.exchange = exchange;
+    }
 
     @Override
     public boolean equals(Object o) {
