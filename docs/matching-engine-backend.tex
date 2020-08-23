@@ -33,7 +33,7 @@ There are four entities considered in this application, represented as tables in
 
 \paragraph{Stock} The stock entity corresponds to a stock being traded at the exchange. It has an \texttt{id} to act as the primary key, a \texttt{symbol}, and the \texttt{exchange} the stock is traded at.
 
-\paragraph{Party} The party entity corresponds to an actual party (e.g. a company) trading the stock. It has an \texttt{id} for the primary key, and a \texttt{name}.
+\paragraph{Party} The party entity corresponds to an actual party (e.g. a company) trading the stock. It has an \texttt{id} for the primary key, a \texttt{name}, and a \texttt{symbol} to act as an abbreviation of the name.
 
 \paragraph{User} The user entity corresponds to a user working with the application. It has an \texttt{id} to act as the primary key, a \texttt{name} (the username), and a \texttt{deleted} boolean to indicate whether the user is suppressed from the system - deleting the user from the table entirely will break a foreign key constraint with order histories, which we must preserve.
 
