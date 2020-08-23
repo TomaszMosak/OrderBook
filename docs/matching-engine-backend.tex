@@ -31,15 +31,17 @@ There are four entities considered in this application, represented as tables in
     \caption{Database entity-ralationship diagram}
 \end{figure}
 
-\paragraph{Stock} The stock entity corresponds to a stock being traded at the exchange. It has an \texttt{id} to act as the primary key, a \texttt{symbol}, and the \texttt{exchange} the stock is traded at.
+\paragraph{Stock} The stock entity corresponds to a stock being traded at the exchange. It has an \texttt{id} to act as the primary key, a \texttt{central\_party\_id} representing the party trading the stock (should be LCH), a \texttt{symbol}, the \texttt{exchange} the stock is traded at, and a \texttt{tick\_size}.
 
-\paragraph{Party} The party entity corresponds to an actual party (e.g. a company) trading the stock. It has an \texttt{id} for the primary key, a \texttt{name}, and a \texttt{symbol} to act as an abbreviation of the name.
+\paragraph{Party} The party entity corresponds to an actual party (e.g. a company) owning the stock. It has an \texttt{id} for the primary key, and a \texttt{name} and \texttt{symbol}.
 
 \paragraph{User} The user entity corresponds to a user working with the application. It has an \texttt{id} to act as the primary key, a \texttt{name} (the username), and a \texttt{deleted} boolean to indicate whether the user is suppressed from the system - deleting the user from the table entirely will break a foreign key constraint with order histories, which we must preserve.
 
-\paragraph{Order} The order entity corresponds to a buy or sell order made in the application. It has an \texttt{id} to act as the primary key, a foreign key \texttt{party\_id} referencing the party owning the stock making the trade, a \texttt{stock\_id} referencing the \texttt{stock} being bought/sold, the \texttt{side} of the order as a boolean (0 = sell, 1 = buy).
+\paragraph{Order} The order entity corresponds to a buy or sell order made in the application. It has an \texttt{id} to act as the primary key, a foreign key \texttt{party\_id} referencing the party owning the stock making the trade, a \texttt{stock\_id} referencing the \texttt{stock} being bought/sold, the \texttt{side} of the order as a boolean (0 = sell, 1 = buy), and the order's \texttt{status}.
 
-\paragraph{History} The \texttt{history} entity corresponds to the history of an order's price and size from when it is first created to when the order is fulfilled or cancelled. It has a \texttt{version\_id} and \texttt{order\_id} to represent the version of a referenced order, acting as the primary key, a \texttt{price}, a \texttt{size}, a \texttt{status} of the order, and a \texttt{timestamp} set to when a \texttt{history} row is made. The idea is that when an order changes its price,  size, or status in the  system  (through user modification or trades being made), a new version is made.
+Each time an \texttt{order} is made, a new \texttt{history} must be made referencing the initial version of the order.
+
+\paragraph{History} The \texttt{history} entity corresponds to the history of an order's price and size from when it is first created to when the order is fulfilled or cancelled. It has an \texttt{id} to act as the primary key, an \texttt{order\_id} to reference the order, a \texttt{user\_id} to reference the user who made the change to the order (if an order is matched by the system, this will be the user who made the matching order), a \texttt{price}, a \texttt{size}, and a \texttt{timestamp} set to when a \texttt{history} row is made. The idea is that when an order changes its price or size in the  system (through user modification or trades being made), a new version is made.
 
 \paragraph{Trade} The trade entity corresponds to a trade made by the application matching a buy order and a sell order. It has an \texttt{id} to act as the primary key, \texttt{buy\_id} and \texttt{sell\_id} referencing the buy and sell order respectively, and an \texttt{execution\_time} when the trade is made.
 
@@ -51,19 +53,68 @@ There are four entities considered in this application, represented as tables in
     \caption{Java entities}
 \end{figure}
 
-\paragraph{Stock} The \texttt{Stock} Java class corresponds exactly to the database. A \texttt{Stock} is valid if none of its fields are null, the symbol has length at most 6, and the exchange has length at most 10.
+\paragraph{Stock} The \texttt{Stock} Java class corresponds exactly to the database. A \texttt{Stock} is valid if:
+\begin{enumerate}
+    \item None of its fields are null.
+    \item The \texttt{companyName} has length at most 30.
+    \item The \texttt{symbol} has length at most 5.
+    \item The \texttt{exchange} has length at most 6.
+    \item The \texttt{tickSize} is positive, is at most 100, and has scale at most 3 (i.e. between 0.001 and 100.000).
+\end{enumerate}
 
-\paragraph{User} The \texttt{User} Java class corresponds exactly to the database, with \texttt{name} being called \texttt{username} in the class A \texttt{User} is valid if none of its fields are null, and its name is at most 20 characters.
 
-\paragraph{Order} The \texttt{Order} class is effectively a combination of the \texttt{order} and \texttt{history} tables. Within the \texttt{Order} class, the \texttt{user\_id} field will be replaced by the referenced user entity, and the \texttt{stock\_id} will be replaced by the referenced stock entity. The boolean field \texttt{isBuy} will take the place of \texttt{side} in the table, being \texttt{true} if the order's side is buy, and \texttt{false} if the side is sell. The reason for this decision is that it will be easier to store in the database. The \texttt{status} field will be an enum matching the \texttt{status} column in the table.
+\paragraph{User} The \texttt{User} Java class corresponds exactly to the database, with \texttt{name} being called \texttt{username} in the class. A \texttt{User} is valid if
+\begin{enumerate}
+    \item None of its fields are null.
+    \item The \texttt{username} has length at most 20.
+\end{enumerate}
 
-The \texttt{Order} class will take values from the \texttt{history} table for the \texttt{price} and \texttt{remainingSize}. The fields \texttt{creationTime} and \texttt{lotSize} will be the relevant fields taken from the \texttt{history} table for when the order was first created.
+ 
+\paragraph{Party} The \texttt{Party} class corresponds exactly to the database. A \texttt{Party} is valid if 
+\begin{enumerate}
+    \item None of its fields are null.
+    \item The \texttt{name} has length at most 20.
+    \item The \texttt{symbol} has length at most 5.
+\end{enumerate}
 
-An order is valid if none of its fields are null, the price has at most 7 digits with 1 digit after the decimal point, the \texttt{lotSize} and \texttt{remainingSize} is at most 100 000, the status is between 1 and 3, and the creation time is in the past.
 
-\paragraph{Trade} Within Java, the \texttt{buy\_id} and \texttt{sell\_id} will be replaced by the referenced order entities, with the orders set to be as they were at the time of the trade. There will be a \texttt{getQuantity()} property, which will be calculated based on the size of the buy and sell order at the time the trade is made, and a \texttt{getPrice()} property, which will be calculated based on the the price of the sell order at the time the trade is made. 
+\paragraph{Order} The \texttt{Order} class is effectively a combination of the \texttt{order} and \texttt{history} tables. While the \texttt{id} will remain as it is in the database, the \texttt{version} will be calculated based on the position of the version in the \texttt{history} table. The \texttt{versionTime} will correspond to the \texttt{timestamp} in the \texttt{history} table. The \texttt{party\_id} field will be replaced by the referenced \texttt{Party} entity, and the \texttt{stock\_id} will be replaced by the referenced stock entity. The \texttt{price} and \texttt{size} will be as they are in the database. The boolean field \texttt{isBuy} will take the place of \texttt{side} in the table, being \texttt{true} if the order's side is buy, and \texttt{false} if the side is sell. The reason for this design is that it will be easier to commit it to the database, while still remaining somewhat self-documented. An \texttt{Order}'s status will be an enum called \texttt{OrderStatus} which can take five values:
 
-A trade is valid if none of its fields are null, and the execution time is in the past.
+\begin{itemize}
+    \item \textbf{\texttt{UNKNOWN} when an order's status is unknown.}
+    \item \texttt{EDIT\_LOCK} when an order is being edited.
+    \item \texttt{MATCH\_LOCK} when the system finds a matching order and is updating this order in response.
+    \item \texttt{ACTIVE} when an order is available for usage.
+    \item \texttt{FULFILLED} when the order's size is 0.
+    \item \texttt{CANCELLED} when the order has been manually cancelled.
+\end{itemize} 
+A corresponding state diagram is found in figure \ref{fig:order-state-diagram}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{order-state.png}
+    \caption{Order status state diagram}
+    \label{fig:order-state-diagram}
+\end{figure}
+
+An \texttt{Order} is valid if
+\begin{enumerate}
+    \item None of its fields are null.
+    \item The \texttt{version} is at least 0.
+    \item The \texttt{price} is nonnegative, has scale at most 2 and at most 8 digits.
+    \item The \texttt{size} is at most 10 000 000.
+    \item The \texttt{versionTime} is in the past.
+\end{enumerate}
+
+
+\paragraph{Trade} Within Java, the \texttt{buy\_id} and \texttt{sell\_id} will be replaced by the referenced order entities, with the orders set to be as they were at the time of the trade, \textbf{except for  the \texttt{status}, which will be set to \texttt{UNKNOWN}}. There will be \texttt{getQuantity()} and \texttt{getPrice()} properties, which will be calculated based on the buy order and sell order.
+
+A trade is valid if 
+\begin{itemize}
+    \item None of its fields are null
+    \item The execution time is in the past.
+\end{itemize}
+
 
 \section{Java Backend}
 
@@ -73,7 +124,26 @@ A trade is valid if none of its fields are null, and the execution time is in th
     \caption{Class diagram}
 \end{figure}
 
-Most things in the backend are CRUD. For each Java entity, there is a controller (\texttt{@RestController}), a service layer, and a DAO. The relevant classes for \texttt{Order}s are larger than the others, and most interesting are the \texttt{createOrder(..)} and \texttt{editOrder(..)} methods in the \texttt{OrderService}. These methods take in some preliminary values for a new/edited \texttt{Order}, construct it, check if it's valid (throwing an exception containing a list of validation errors if not), and adds it to the database. It then checks the \texttt{OrderDao} for any matching orders, creating a \texttt{Trade} entity and updating the relevant \texttt{Orders} if so.
+The backend is a skyscraper-like design, with classes from controllers down to repositories for each data entity.
+
+\paragraph{Repositories} There are six repositories, one for each data entity, and one for auditing purposes separated into interfaces and implementations. The data entity implementations are prefixed \texttt{Database} to indicate they read to/write from a relational database using \texttt{org.springframework.jdbc.core.JdbcTemplate}. The audit repository implementation is prefixed with \texttt{TextFile} to indicate it writes to a text file.
+
+The \texttt{Stock}, \texttt{User}, and \texttt{Party} DAOs contain a small number of methods as a consequence of being small and mostly immutable entities. In particular, there are methods to get all entities of the relevant type in the system and get an entity by its ID, as well as methods to delete all such entities (primarily for testing purposes), and adding entities. The \texttt{UserDao} also contains a method to edit a user, since a user's \texttt{deleted} field is mutable.
+
+The \texttt{AuditDao} contains only one method, \texttt{writeMessage(message: String)}, whose \texttt{message} parameter contains the message to write to the audit log, to which additional information may be appended by the method.
+
+The \texttt{TradeDao} contains the same add, delete all, get all, and get by ID methods, as well as methods to get a trade by its buy order and its sell order.
+
+The \texttt{OrderDao} contains the same add, delete all, get all, and get by ID methods, as well as including the ability to edit an order, getting all orders by the side they lie on (buy or sell), getting all orders by their status, and getting all orders made by a particular user.
+
+Valdation checks are performed in the DAOs when adding or editing an entity. A specific \texttt{InvalidEntityException} is thrown with a list of validation errors when the checks fail. Editing an entity throws a \texttt{MissingEntityException} when an entity with the ID of the entity in the parameter doesn't already exist in the system.
+
+
+\paragraph{Services} There are five service classes, one for each entity. The service implementations are prefixed with \texttt{Data} to indicate they talk with a data layer to do their work. Each service implementation communicates with the \texttt{AuditDao} to write down everything that happens in them, as well as the repository corresponding to the entity they manage. The \texttt{DataOrderService} also communicates with the \texttt{TradeDao}.
+
+All services contain passthrough methods delegating to the repository for each method in their entity's repository, except for delete methods. In fact, \texttt{StockService}, \texttt{TradeService}, \texttt{UserService}, and \texttt{PartyService} contain only these methods
+
+The \texttt{OrderService} also contains passthrough methods for its repository, but the \texttt{createOrder(..) and \texttt{editOrder(..)}} methods are slightly special. They take parameters which allow an \texttt{Order} to be constructed, and as it is committed to the repository, the repository checks for any orders of the opposite side matching the committed order, and creates trades/updates orders in response to this. There are also \texttt{beginEditOrder(orderId: int)} and \texttt{cancelEditOrder(orderId: int)}, which update
 
 \section{REST Endpoints}
 
@@ -85,11 +155,15 @@ Most things in the backend are CRUD. For each Java entity, there is a controller
 
 \paragraph{GET /trade} Returns a JSON array of all trades in the system.
 
-\paragraph{GET /trade/\{id\}} Returns a JSON object of a trade in the system with the given ID if it can be found, and 404 not found otherwise.
-
+\paragraph{GET /trade/\{id\}} Returns a JSON object of a trade in the system with the given ID if it can be found, and 404 not found otherwise. 
+ 
 \subsection{User}
 
 \paragraph{GET /user} Returns a JSON array of all users in the system.
+
+\subsection{Party}
+
+\paragraph{GET /party} Returns a JSON array of all parties in the system.
 
 \subsection{Order}
 

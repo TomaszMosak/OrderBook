@@ -1,11 +1,11 @@
 # Fdb version 3
-["xdvipdfmx"] 1597996411 "matching-engine-backend.xdv" "matching-engine-backend.pdf" "matching-engine-backend" 1597996412
-  "matching-engine-backend.xdv" 1597996411 69500 32c80125f093f4d703805ba24eb39d87 "xelatex"
+["xdvipdfmx"] 1598176692 "matching-engine-backend.xdv" "matching-engine-backend.pdf" "matching-engine-backend" 1598176693
+  "matching-engine-backend.xdv" 1598176692 105204 5a13d80097e8b00004398412542bd6f9 "xelatex"
   (generated)
   "matching-engine-backend.pdf"
-["xelatex"] 1597996410 "/Users/billy/Documents/Developer/Java/Aspire/matching-engine/docs/matching-engine-backend.tex" "matching-engine-backend.xdv" "matching-engine-backend" 1597996412
-  "/Users/billy/Documents/Developer/Java/Aspire/matching-engine/docs/matching-engine-backend.tex" 1597954789 8438 7838030df2fc19934b04602784588e98 ""
-  "/dev/null" 1597996405 0 d41d8cd98f00b204e9800998ecf8427e ""
+["xelatex"] 1598176691 "/Users/billy/Documents/Developer/Java/Aspire/matching-engine/OrderBook/docs/matching-engine-backend.tex" "matching-engine-backend.xdv" "matching-engine-backend" 1598176693
+  "/Users/billy/Documents/Developer/Java/Aspire/matching-engine/OrderBook/docs/matching-engine-backend.tex" 1598176690 13047 1adf94bc516fd12e3189060fdb0aa675 ""
+  "/dev/null" 1598176669 0 d41d8cd98f00b204e9800998ecf8427e ""
   "/usr/local/texlive/2019/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1136768653 1524 4414a8315f39513458b80dfc63bff03a ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
@@ -44,12 +44,13 @@
   "/usr/local/texlive/2019/texmf-dist/web2c/texmf.cnf" 1557092114 35484 cb1661360667bf4db662a8895053b554 ""
   "/usr/local/texlive/2019/texmf-var/web2c/xetex/xelatex.fmt" 1570366265 3751084 5ba3595ad08b02e6d574af4dea592ec1 ""
   "/usr/local/texlive/2019/texmf.cnf" 1557341546 577 d150fef99ac436ad1156e86b0892f6ef ""
-  "class-diagram.png" 1597907593 293068 a0401767263a660a73968f1a3af4861d ""
-  "database-erd.png" 1597950691 66902 f53721f286b8035a691265904802237c ""
-  "entities.png" 1597996408 50280 ee1afd001327b48a9e47a114623341df ""
-  "matching-engine-backend.aux" 1597996411 3524 2180068e47d7fdc1a6783f5bf8461e41 "xelatex"
-  "matching-engine-backend.tex" 1597954789 8438 7838030df2fc19934b04602784588e98 ""
+  "class-diagram.png" 1598175462 293068 a0401767263a660a73968f1a3af4861d ""
+  "database-erd.png" 1598175462 66902 f53721f286b8035a691265904802237c ""
+  "entities.png" 1598176570 54688 9173c0d4be548fd243469f6a2785fd85 ""
+  "matching-engine-backend.aux" 1598176692 4117 b34256b3f8772b7efb6c9c64a0d32e66 "xelatex"
+  "matching-engine-backend.tex" 1598176690 13047 1adf94bc516fd12e3189060fdb0aa675 ""
+  "order-state.png" 1598011017 45970 d59de51b268f78f4308807059076926a ""
   (generated)
-  "matching-engine-backend.aux"
   "matching-engine-backend.xdv"
   "matching-engine-backend.log"
+  "matching-engine-backend.aux"

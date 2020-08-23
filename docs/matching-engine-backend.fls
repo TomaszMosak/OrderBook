@@ -1,8 +1,8 @@
-PWD /Users/billy/Documents/Developer/Java/Aspire/matching-engine/docs
+PWD /Users/billy/Documents/Developer/Java/Aspire/matching-engine/OrderBook/docs
 INPUT /usr/local/texlive/2019/texmf.cnf
 INPUT /usr/local/texlive/2019/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2019/texmf-var/web2c/xetex/xelatex.fmt
-INPUT /Users/billy/Documents/Developer/Java/Aspire/matching-engine/docs/matching-engine-backend.tex
+INPUT /Users/billy/Documents/Developer/Java/Aspire/matching-engine/OrderBook/docs/matching-engine-backend.tex
 OUTPUT matching-engine-backend.log
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
@@ -80,5 +80,6 @@ INPUT /usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmr6.tfm
 INPUT database-erd.png
 OUTPUT matching-engine-backend.xdv
 INPUT entities.png
+INPUT order-state.png
 INPUT class-diagram.png
 INPUT matching-engine-backend.aux

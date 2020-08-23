@@ -1,10 +1,10 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.10.6)  21 AUG 2020 08:53
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.10.6)  23 AUG 2020 10:58
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/Users/billy/Documents/Developer/Java/Aspire/matching-engine/docs/matching-engine-backend.tex
-(/Users/billy/Documents/Developer/Java/Aspire/matching-engine/docs/matching-engine-backend.tex
+**/Users/billy/Documents/Developer/Java/Aspire/matching-engine/OrderBook/docs/matching-engine-backend.tex
+(/Users/billy/Documents/Developer/Java/Aspire/matching-engine/OrderBook/docs/matching-engine-backend.tex
 LaTeX2e <2018-12-01>
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
@@ -442,25 +442,40 @@ File: database-erd.png Graphic file (type bmp)
 File: entities.png Graphic file (type bmp)
 <entities.png>
  [2]
-File: class-diagram.png Graphic file (type bmp)
-<class-diagram.png>
+File: order-state.png Graphic file (type bmp)
+<order-state.png>
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+File: class-diagram.png Graphic file (type bmp)
+<class-diagram.png>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (4.77611pt too wide) in paragraph at lines 129--130
+\TU/SegoeUI(0)/m/n/10 to/write from a relational database using \TU/FiraCode(0)/m/n/10 org.springframework.jdbc.core.JdbcTemplate\TU/SegoeUI(0)/m/n/10 . The audit repos-
+ []
+
 [3]
-Overfull \hbox (10.4623pt too wide) in paragraph at lines 110--111
+Overfull \hbox (25.50275pt too wide) in paragraph at lines 139--140
+[]\TU/SegoeUI(0)/m/n/10 Valdation checks are performed in the DAOs when adding or editing an entity. A specific \TU/FiraCode(0)/m/n/10 InvalidEntityException
+ []
+
+[4]
+Overfull \hbox (10.4623pt too wide) in paragraph at lines 184--185
  \TU/FiraCode(0)/bx/n/10 POST /order/edit/{id}?stock-id={stockId}&is-buy={isBuy}&price={price}&size={size}[] \TU/SegoeUI(0)/m/n/10 Ed-
  []
 
-[4] [5] (./matching-engine-backend.aux) ) 
+[5] [6] [7] (./matching-engine-backend.aux) ) 
 Here is how much of TeX's memory you used:
- 12816 strings out of 492916
- 284855 string characters out of 6133345
- 365930 words of memory out of 5000000
- 16829 multiletter control sequences out of 15000+600000
+ 12821 strings out of 492916
+ 284983 string characters out of 6133345
+ 367930 words of memory out of 5000000
+ 16833 multiletter control sequences out of 15000+600000
  535266 words of font info for 57 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 43i,6n,79p,799b,446s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,6n,79p,1155b,446s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on matching-engine-backend.xdv (5 pages, 69500 bytes).
+Output written on matching-engine-backend.xdv (7 pages, 105204 bytes).
