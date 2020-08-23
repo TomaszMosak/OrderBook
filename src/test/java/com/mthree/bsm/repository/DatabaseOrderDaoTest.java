@@ -5,15 +5,16 @@
  */
 package com.mthree.bsm.repository;
 
-import static com.mthree.bsm.entity.OrderStatus.PENDING;
 import com.mthree.bsm.entity.Stock;
 import com.mthree.bsm.entity.User;
 import com.mthree.bsm.entity.Order;
 import static com.mthree.bsm.entity.OrderStatus.CANCELLED;
 import static com.mthree.bsm.entity.OrderStatus.FULFILLED;
+import com.mthree.bsm.entity.Party;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import static javax.swing.SwingWorker.StateValue.PENDING;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,6 +46,7 @@ public class DatabaseOrderDaoTest {
     private StockDao stockDao;
     
     private Stock tesla = new Stock("TSLA", "NASDAQ");
+    private Party party = new Party("London Clearing House", "LCH");
     private User tom = new User("TomB", false);
     private BigDecimal price = new BigDecimal(100.00);
     private LocalDateTime ldt = LocalDateTime.now();
@@ -63,6 +65,8 @@ public class DatabaseOrderDaoTest {
         orderDao.deleteOrders();
         userDao.deleteUsers();
         stockDao.deleteStocks();
+        tesla = stockDao.addStock(tesla);
+        tom = userDao.addUser(tom);
     }
     
     @AfterEach
@@ -74,6 +78,7 @@ public class DatabaseOrderDaoTest {
      */
     @Test
     public void testAddGetOrders() throws Exception {
+        
         
         Order invalidOrder1 = new Order();
         assertThrows(InvalidEntityException.class, orderDao.addOrder(invalidOrder1));
@@ -233,10 +238,6 @@ public class DatabaseOrderDaoTest {
         assertThrows(MissingEntityException.class, orderDao.getOrdersByUserId(0));
         assertThrows(MissingEntityException.class, orderDao.getOrdersByUserId(null));
         
-        tom = userDao.addUser(tom);
-        
-        order.setUser(tom);
-        
         Order order1 = orderDao.createOrder(order);
         Order order2 = orderDao.createOrder(order);
         
@@ -250,11 +251,11 @@ public class DatabaseOrderDaoTest {
         List<Order> orderTom = orderDao.getOrdersByUserId(tom.getId());
         
         assertEquals(orderTom.size(), 2);
-        assertTrue(orderTom.contains(order1) && orderTom.contains(order1));
+        assertTrue(orderTom.contains(order1) && orderTom.contains(order2));
         
         List<Order> orderBilly = orderDao.getOrdersByUserId(billy.getId());
         
-        assertEquals(orderTom.size(), 1);
+        assertEquals(orderBilly.size(), 1);
         assertTrue(orderBilly.contains(order3));
         
     }
@@ -291,24 +292,6 @@ public class DatabaseOrderDaoTest {
         
         // discuss which fields need editiing testing 
         
-//        invalidOrder1.setUser(null);
-//        assertThrows(InvalidEntityException.class, orderDao.editOrder(invalidOrder1));
-//        
-//        invalidOrder1.setUser(tom);
-//        invalidOrder1.setStock(null);
-//        assertThrows(InvalidEntityException.class, orderDao.editOrder(invalidOrder1));
-//        
-//        invalidOrder1.setStock(tesla);
-//        invalidOrder1.setLotSize(-1);
-//        assertThrows(InvalidEntityException.class, orderDao.editOrder(invalidOrder1));
-//        invalidOrder1.setLotSize(100001);
-//        assertThrows(InvalidEntityException.class, orderDao.editOrder(invalidOrder1));
-//        
-//        invalidOrder1.setLotSize(100);
-//        BigDecimal negativePrice = new BigDecimal("-1.00");
-//        invalidOrder1.setPrice(negativePrice);
-//        asassertThrows(InvalidEntityException.class, orderDao.editOrder(invalidOrder1));
-        
         BigDecimal invalidPrice = new BigDecimal("10000000.00");
         invalidOrder1.setPrice(invalidPrice);
         assertThrows(InvalidEntityException.class, orderDao.editOrder(invalidOrder1));
@@ -326,32 +309,40 @@ public class DatabaseOrderDaoTest {
         invalidOrder1.setStatus(PENDING);
         invalidOrder1.setCreationTime(null);
         assertThrows(InvalidEntityException.class, orderDao.editOrder(invalidOrder1));
-        // may need to adjust number of decimal places
-//        LocalDateTime futureLDT = LocalDateTime.of(2999, 03, 28, 14, 33, 48, 123456789);
-//        invalidOrder1.setCreationTime(futureLDT);
-//        assertThrows(InvalidEntityException.class, orderDao.editOrder(invalidOrder1));
 
         Order originalOrder1 = order;
         
-       BigDecimal editedPrice = new BigDecimal("123.12");
-       order.setPrice(editedPrice);
-       Order editedOrder1 = orderDao.EditOrder(order);
+        BigDecimal editedPrice = new BigDecimal("123.12");
+        order.setPrice(editedPrice);
+        Order editedOrder1 = orderDao.EditOrder(order);
        
-       Order retrievedOrder1 = orderDao.getOrderById(order.getId());
+        Order retrievedOrder1 = orderDao.getOrderById(order.getId());
        
-       assertEquals(editedOrder1, retrievedOrder1);
-       assertNotEquals(editedOrder1, originalOrder1);
+        assertEquals(editedOrder1, retrievedOrder1);
+        assertNotEquals(editedOrder1, originalOrder1);
        
-       Order originalOrder2 = order;
+        Order originalOrder2 = order;
        
-       order.setRemainingSize(237);
-       Order editedOrder2 = orderDao.editOrder(order);
+        order.setRemainingSize(237);
+        Order editedOrder2 = orderDao.editOrder(order);
        
-       Order retrievedOrder2 = orderDao.getOrderById(order.getId());
+        Order retrievedOrder2 = orderDao.getOrderById(order.getId());
        
-       assertEquals(editedOrder2, retrievedOrder2);
-       assertNotEquals(editedOrder2, originalOrder2);
+        assertEquals(editedOrder2, retrievedOrder2);
+        assertNotEquals(editedOrder2, originalOrder2);
        
+    }
+    
+    @Test
+    public void testDeleteOrders() throws Exception {
+        
+        Order order1 = orderDao.createOrder(order);
+        Order order2 = orderDao.createOrder(order);
+        
+        orderDao.deleteOrders();
+        
+        List<Order> orders = 
+        
     }
 
    

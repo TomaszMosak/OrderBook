@@ -25,8 +25,9 @@ public class User {
     public User(){  
     }
     
-    public User(String username){
+    public User(String username, Boolean deleted){
         this.username = username;
+        this.deleted = deleted;
     }
 
     @Override

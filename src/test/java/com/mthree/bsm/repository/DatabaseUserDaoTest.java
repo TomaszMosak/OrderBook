@@ -7,10 +7,10 @@ package com.mthree.bsm.repository;
 
 import com.mthree.bsm.entity.User;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,6 +30,9 @@ public class DatabaseUserDaoTest {
     @Autowired
     UserDao userDao;
     
+    private User tom = new User("TomB", false);
+    private User billy = new User("BillyS", false);
+    
     @BeforeAll
     public static void setUpClass() {
     }
@@ -48,37 +51,24 @@ public class DatabaseUserDaoTest {
     }
     
     @Test
-    public void testAddGetUsers() {
-        
-        // UserDao not yet wired in
-        User invalidUser1 = new User();
-        assertThrows(InvalidEntityException.class, userDao.addUser(invalidUser1));
+    public void testAddGetUsers() throws Exception {
+       
+        User invalidUser1 = tom;
         
         invalidUser1.setUsername(null);
         assertThrows(InvalidEntityException.class, userDao.addUser(invalidUser1));
-        
         invalidUser1.setUsername("Invalid Username, too long");
         assertThrows(InvalidEntityException.class, userDao.addUser(invalidUser1));
-        
-        User tom = new User();
-        tom.setUsername("TomB");
-        tom.setDeleted(false);
+
         tom = userDao.addUser(tom);
-        
-        User billy = new User();
-        billy.setUsername("BillyS");
-        billy.setDeleted(false);
         billy = userDao.addUser(billy);
         
-        User tomasz = new User();
-        tomasz.setUsername("TomaszM");
-        tomasz.setDeleted(false);
+        User tomasz = new User("TomaszM", true);
         
         List<User> users = userDao.getUsers();
         
         assertEquals(users.size(), 2);
         assertTrue(users.contains(tom) && users.contains(billy));
-        assertFalse(users.contains(tomasz));
        
         tomasz = userDao.addUser(tomasz);
         users = userDao.getUsers();
@@ -89,27 +79,33 @@ public class DatabaseUserDaoTest {
     }
     
     @Test
-    public void deleteAllUsers(){
+    public void testGetUserById() throws Exception {
         
-        User tom = new User();
-        tom.setUsername("TomB");
-        tom.setDeleted(false);
         tom = userDao.addUser(tom);
-        
-        User billy = new User();
-        billy.setUsername("BillyS");
-        billy.setDeleted(false);
         billy = userDao.addUser(billy);
         
-        List<User> users = userDao.getUsers();
+        Optional<User> retrievedTom = userDao.getUserById(tom.getId());
+        Optional<User> retrievedBilly = userDao.getUserById(billy.getId());
         
-        assertEquals(users.size(), 2);
+        assertEquals(tom, retrievedTom);
+        assertEquals(billy, retrievedBilly);
+        
+        Optional<User> nullUser = userDao.getUserById(0);
+        assertFalse(nullUser.isPresent());
+    }
+    
+    
+    @Test
+    public void deleteAllUsers() throws Exception {
+        
+        tom = userDao.addUser(tom);
+        billy = userDao.addUser(billy);
         
         userDao.deleteUsers();
         
-        users = userDao.getAllUsers();
+        List<User> users = userDao.getUsers();
         
-        assertEquals(users.size(), 2);
+        assertEquals(users.size(), 0);
         
     }
     

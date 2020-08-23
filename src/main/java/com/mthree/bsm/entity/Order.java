@@ -14,6 +14,12 @@ import java.util.Objects;
  * order came into being.
  */
 public class Order {
+    
+    public Order(){
+    }
+    
+    public Order(User user, Party party, Stock stock, BigDecimal price, int size, boolean isbuy, OrderStatus status, LocalDateTime versionTime){
+    }
 
     private int id;
 

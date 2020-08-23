@@ -7,10 +7,10 @@ package com.mthree.bsm.repository;
 
 import com.mthree.bsm.entity.Stock;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +29,9 @@ public class DatabaseStockDaoTest {
     
     @Autowired
     StockDao stockDao;
+    
+    private Stock tesla = new Stock("TSLA", "NASDAQ");
+    private Stock apple = new Stock("APPL", "NASDAQ");
     
     @BeforeAll
     public static void setUpClass() {
@@ -51,47 +54,30 @@ public class DatabaseStockDaoTest {
      * Test of getStocks method, of class StockRepository.
      */
     @Test
-    public void testAddGetStocks() {
+    public void testAddGetStocks() throws Exception {
         
-        // stockDao not yet wired in
-        Stock invalidStock1 = new Stock();
-        assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock1));
-        
-        invalidStock1.setExchange("NASDAQ");
-        assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock1));
+        Stock invalidStock1 = tesla;
         invalidStock1.setSymbol(null);
         assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock1));
         invalidStock1.setSymbol("Invalid");
         assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock1));
         
-        Stock invalidStock2 = new Stock();
-        
-        invalidStock2.setSymbol("APPL");
+        Stock invalidStock2 = apple;
+                
+        invalidStock2.setExchange(null);
         assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock2));
         invalidStock2.setExchange("Invalid");
         assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock2));
-        invalidStock2.setExchange(null);
-        assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock2));
         
-        Stock tesla = new Stock();
-        tesla.setSymbol("TSLA");
-        tesla.setExchange("NASDAQ");
+        apple = stockDao.addStock(apple);
         tesla = stockDao.addStock(tesla);
         
-        Stock apple = new Stock();
-        apple.setSymbol("APPl");
-        apple.setExchange("NASDAQ");
-        apple = stockDao.addStock(apple);
-        
-        Stock hsbc = new Stock();
-        tesla.setSymbol("HSBC");
-        tesla.setExchange("LSE");
+        Stock hsbc = new Stock("HSBC", "LSE");
 
         List<Stock> stocks = stockDao.getStocks();
         
         assertEquals(stocks.size(), 2);
         assertTrue(stocks.contains(tesla) && stocks.contains(apple));
-        assertFalse(stocks.contains(hsbc));
         
         hsbc = stockDao.addStock(hsbc);
         stocks = stockDao.getStocks();
@@ -101,23 +87,30 @@ public class DatabaseStockDaoTest {
     }
     
     @Test
-    public void testDeleteStocks() {
+    public void testGetStockById() throws Exception {
         
-        Stock tesla = new Stock();
-        tesla.setSymbol("TSLA");
-        tesla.setExchange("NASDAQ");
+        apple = stockDao.addStock(apple);
+        tesla = stockDao.addStock(tesla);
+        
+        Optional <Stock> retrievedApple = stockDao.getStockById(apple.getId());
+        Optional <Stock> retrievedTesla = stockDao.getStockById(tesla.getId());
+        
+        assertEquals(apple, retrievedApple);
+        assertEquals(tesla, retrievedTesla);
+        
+    }
+    
+    @Test
+    public void testDeleteStocks() throws Exception {
+        
         stockDao.addStock(tesla);
-        
-        Stock apple = new Stock();
-        apple.setSymbol("APPl");
-        apple.setExchange("NASDAQ");
         stockDao.addStock(apple);
         
         List<Stock> stocks = stockDao.getStocks();
         
         assertEquals(stocks.size(), 2);
         
-        stockDao.deleteAllStocks();
+        stockDao.deleteStocks();
         stocks = stockDao.getStocks();
         
         assertEquals(stocks.size(), 0);
