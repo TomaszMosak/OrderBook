@@ -97,6 +97,7 @@ public class Trade {
 
     public BigDecimal getPrice() {
         // Need a way to compare the time the buy order and sell order were executed.
+
     }
 
     public LocalDateTime getExecutionTime() {

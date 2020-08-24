@@ -13,12 +13,20 @@ public class Party {
     private int id;
 
     @NotNull(message = "The party's symbol must not be null.")
-    @Size(max = 20, message = "The party's name must have length at most 20.")
+    @Size(max = 25, message = "The party's name must have length at most 20.")
     private String name;
 
     @NotNull(message = "The party's symbol must not be null.")
     @Size(max = 5, message = "The party's symbol must have length at most 20.")
     private String symbol;
+    
+    public Party(){
+    }
+    
+    public Party(String name, String symbol){
+        this.name = name;
+        this.symbol = symbol;
+    }
 
     @Override
     public String toString() {
