@@ -50,10 +50,11 @@ public class DatabaseOrderDaoTest {
     // boolean isbuy, OrderStatus status, LocalDateTime versionTime
     
     
-    private Stock tesla = new Stock("TSLA", "NASDAQ");
+    private BigDecimal tickSize = new BigDecimal("0.1");
     private Party lch = new Party("London Clearing House", "LCH");
+    private Stock tesla = new Stock(lch, "Tesla", "TSLA", "NASDAQ", tickSize);
     private User tom = new User("TomB", false);
-    private BigDecimal price = new BigDecimal(100.00);
+    private BigDecimal price = new BigDecimal("100.00");
     private LocalDateTime ldt = LocalDateTime.now();
     private Order order = new Order(tom, lch, tesla, price, 100, true, FULFILLED, ldt);
 

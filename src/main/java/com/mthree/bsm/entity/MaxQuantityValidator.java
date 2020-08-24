@@ -31,8 +31,8 @@ public class MaxQuantityValidator implements ConstraintValidator<MaxQuantity, Tr
      */
     @Override
     public boolean isValid(Trade trade, ConstraintValidatorContext context) {
-        return trade.getQuantity() <= trade.getBuyOrder().getRemainingSize() &&
-               trade.getQuantity() <= trade.getSellOrder().getRemainingSize();
+        return trade.getQuantity() <= trade.getBuyOrder().getSize() &&
+               trade.getQuantity() <= trade.getSellOrder().getSize();
     }
 
 }

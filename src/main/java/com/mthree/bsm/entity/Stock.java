@@ -10,6 +10,17 @@ import java.util.Objects;
  * {@link #exchange} the stock is traded at, and a {@link #tickSize}.
  */
 public class Stock {
+    
+    public Stock(){
+    }
+    
+    public Stock(Party centralParty, String companyName, String symbol, String exchange, BigDecimal tickSize){
+        this.centralParty = centralParty;
+        this.companyName = companyName;
+        this.symbol = symbol;
+        this.exchange = exchange;
+        this.tickSize = tickSize;
+    }
 
     private int id;
 

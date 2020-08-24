@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Objects;
 
 /**
@@ -96,8 +97,13 @@ public class Trade {
     }
 
     public BigDecimal getPrice() {
-        // Need a way to compare the time the buy order and sell order were executed.
-
+        LocalDateTime buyTime = buyOrder.getVersionTime();
+        LocalDateTime sellTime = sellOrder.getVersionTime();
+        if(buyTime.isBefore(sellTime)){
+            return buyOrder.getPrice();
+        } else {
+            return sellOrder.getPrice();
+        }
     }
 
     public LocalDateTime getExecutionTime() {

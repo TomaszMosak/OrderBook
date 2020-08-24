@@ -48,11 +48,13 @@ public class DatabaseTradeDaoTest {
     @Autowired
     StockDao stockDao;
     
-    private Stock tesla = new Stock("TSLA", "NASDAQ");
+    
     private Party lch = new Party("London Clearing House", "LCH");
+    private BigDecimal tickSize = new BigDecimal("0.1");
+    private Stock tesla = new Stock(lch, "Tesla", "TSLA", "NASDAQ", tickSize);
     private User tom = new User("TomB", false);
     private User billy = new User("BillyS", false);
-    private BigDecimal price = new BigDecimal(100.00);
+    private BigDecimal price = new BigDecimal("100.00");
     private LocalDateTime ldt = LocalDateTime.now();
     private Order buyOrder = new Order(tom, lch, tesla, price, 100, true, FULFILLED, ldt);
     private Order sellOrder = new Order(tom, lch, tesla, price, 100, false, FULFILLED, ldt);

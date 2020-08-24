@@ -5,7 +5,9 @@
  */
 package com.mthree.bsm.repository;
 
+import com.mthree.bsm.entity.Party;
 import com.mthree.bsm.entity.Stock;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
@@ -32,8 +34,14 @@ public class DatabaseStockDaoTest {
     @Autowired
     StockDao stockDao;
     
-    private Stock tesla = new Stock("TSLA", "NASDAQ");
-    private Stock apple = new Stock("APPL", "NASDAQ");
+    @Autowired
+    PartyDao partyDao;
+    
+    //Party centralParty, String companyName, String symbol, String exchange, BigDecimal tickSize
+    private Party lch = new Party("London Clearing House", "LCH");
+    private BigDecimal tickSize = new BigDecimal("0.1");
+    private Stock tesla = new Stock(lch, "Tesla", "TSLA", "NASDAQ", tickSize);
+    private Stock apple = new Stock(lch, "Apple", "APPL", "NASDAQ", tickSize);
     
     @BeforeAll
     public static void setUpClass() {
@@ -44,8 +52,9 @@ public class DatabaseStockDaoTest {
     }
     
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         stockDao.deleteStocks();
+        lch = partyDao.addParty(lch);
     }
     
     @AfterEach
@@ -59,22 +68,42 @@ public class DatabaseStockDaoTest {
     public void testAddGetStocks() throws Exception {
         
         Stock invalidStock1 = tesla;
+        
+        invalidStock1.setCentralParty(null);
+        assertThrowsIEE(invalidStock1);
+        
+        invalidStock1.setCentralParty(lch);
+        invalidStock1.setCompanyName(null);
+        assertThrowsIEE(invalidStock1);
+        
+        invalidStock1.setCompanyName("Invalid name, larger than 30 characters");
+        assertThrowsIEE(invalidStock1);
+        invalidStock1.setCompanyName("Tesla");
+        
         invalidStock1.setSymbol(null);
         assertThrowsIEE(invalidStock1);
         invalidStock1.setSymbol("Invalid");
         assertThrowsIEE(invalidStock1);
+
+        invalidStock1.setExchange(null);
+        assertThrowsIEE(invalidStock1);
+        invalidStock1.setExchange("Invalid");
+        assertThrowsIEE(invalidStock1);
         
-        Stock invalidStock2 = apple;
-                
-        invalidStock2.setExchange(null);
-        assertThrowsIEE(invalidStock2);
-        invalidStock2.setExchange("Invalid");
-        assertThrowsIEE(invalidStock2);
+        invalidStock1.setTickSize(null);
+        assertThrowsIEE(invalidStock1);
+        BigDecimal negTickSize = new BigDecimal("-1");
+        invalidStock1.setTickSize(negTickSize);
+        BigDecimal zeroTickSize = new BigDecimal("0");
+        invalidStock1.setTickSize(zeroTickSize);
+        BigDecimal largeTickSize = new BigDecimal("1000");
+        invalidStock1.setTickSize(largeTickSize);
+        
         
         apple = stockDao.addStock(apple);
         tesla = stockDao.addStock(tesla);
         
-        Stock hsbc = new Stock("HSBC", "LSE");
+        Stock hsbc = new Stock(lch, "HSBC Bank", "HSBC", "LSE", tickSize);
 
         List<Stock> stocks = stockDao.getStocks();
         
