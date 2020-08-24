@@ -4,7 +4,7 @@ CREATE DATABASE OrderBook;
 
 USE OrderBook;
 
-CREATE TABLE Order (
+CREATE TABLE `order` (
     id int AUTO_INCREMENT NOT NULL ,
     partyId int  NOT NULL ,
     stockId int  NOT NULL ,
@@ -18,7 +18,7 @@ CREATE TABLE Order (
 CREATE TABLE OrderHistory (
     id int AUTO_INCREMENT NOT NULL ,
     orderId int NOT NULL ,
-    Price Decimal(7,1)  NOT NULL ,
+    Price Decimal(8,2)  NOT NULL ,
     currentSize int  NOT NULL ,
     userId int  NOT NULL ,
     timestamp timestamp  NOT NULL ,
@@ -29,11 +29,11 @@ CREATE TABLE OrderHistory (
 
 CREATE TABLE Stock (
     id int AUTO_INCREMENT NOT NULL ,
-    companyName VARCHAR(35)  NOT NULL ,
-    stockSymbol VARCHAR(6)  NOT NULL ,
-    stockExchange VARCHAR(5)  NOT NULL ,
+    companyName VARCHAR(30)  NOT NULL ,
+    stockSymbol VARCHAR(5)  NOT NULL ,
+    stockExchange VARCHAR(6)  NOT NULL ,
     centralPartyId int  NOT NULL ,
-    tickSize Decimal(,2)  NOT NULL ,
+    tickSize Decimal(6,3)  NOT NULL ,
     PRIMARY KEY (
         id
     )
@@ -60,21 +60,21 @@ CREATE TABLE User (
 
 CREATE TABLE Party (
     id int AUTO_INCREMENT NOT NULL ,
-    name VARCHAR(35)  NOT NULL ,
+    name VARCHAR(20)  NOT NULL ,
     symbol VARCHAR(5)  NOT NULL ,
     PRIMARY KEY (
         id
     )
 );
 
-ALTER TABLE Order ADD CONSTRAINT fk_Order_partyId FOREIGN KEY(partyId)
+ALTER TABLE `order` ADD CONSTRAINT fk_Order_partyId FOREIGN KEY(partyId)
 REFERENCES Party (id);
 
-ALTER TABLE Order ADD CONSTRAINT fk_Order_stockId FOREIGN KEY(stockId)
+ALTER TABLE `order` ADD CONSTRAINT fk_Order_stockId FOREIGN KEY(stockId)
 REFERENCES Stock (id);
 
 ALTER TABLE OrderHistory ADD CONSTRAINT fk_OrderHistory_orderId FOREIGN KEY(orderId)
-REFERENCES Order (id);
+REFERENCES `order` (id);
 
 ALTER TABLE OrderHistory ADD CONSTRAINT fk_OrderHistory_userId FOREIGN KEY(userId)
 REFERENCES User (id);
