@@ -1,11 +1,11 @@
 # Fdb version 3
-["xdvipdfmx"] 1598176692 "matching-engine-backend.xdv" "matching-engine-backend.pdf" "matching-engine-backend" 1598176693
-  "matching-engine-backend.xdv" 1598176692 105204 5a13d80097e8b00004398412542bd6f9 "xelatex"
+["xdvipdfmx"] 1598260598 "matching-engine-backend.xdv" "matching-engine-backend.pdf" "matching-engine-backend" 1598260599
+  "matching-engine-backend.xdv" 1598260598 105204 58f6e5f0e63f1a1f6058c426ca102432 "xelatex"
   (generated)
   "matching-engine-backend.pdf"
-["xelatex"] 1598176691 "/Users/billy/Documents/Developer/Java/Aspire/matching-engine/OrderBook/docs/matching-engine-backend.tex" "matching-engine-backend.xdv" "matching-engine-backend" 1598176693
-  "/Users/billy/Documents/Developer/Java/Aspire/matching-engine/OrderBook/docs/matching-engine-backend.tex" 1598176690 13047 1adf94bc516fd12e3189060fdb0aa675 ""
-  "/dev/null" 1598176669 0 d41d8cd98f00b204e9800998ecf8427e ""
+["xelatex"] 1598260596 "/Users/billy/Documents/Developer/Java/Aspire/matching-engine/OrderBook/docs/matching-engine-backend.tex" "matching-engine-backend.xdv" "matching-engine-backend" 1598260599
+  "/Users/billy/Documents/Developer/Java/Aspire/matching-engine/OrderBook/docs/matching-engine-backend.tex" 1598260589 13049 1f40ec46ace70a946ae3d3f65711e22b ""
+  "/dev/null" 1598260587 0 d41d8cd98f00b204e9800998ecf8427e ""
   "/usr/local/texlive/2019/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1136768653 1524 4414a8315f39513458b80dfc63bff03a ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
@@ -45,12 +45,12 @@
   "/usr/local/texlive/2019/texmf-var/web2c/xetex/xelatex.fmt" 1570366265 3751084 5ba3595ad08b02e6d574af4dea592ec1 ""
   "/usr/local/texlive/2019/texmf.cnf" 1557341546 577 d150fef99ac436ad1156e86b0892f6ef ""
   "class-diagram.png" 1598175462 293068 a0401767263a660a73968f1a3af4861d ""
-  "database-erd.png" 1598175462 66902 f53721f286b8035a691265904802237c ""
+  "database-erd.png" 1598260577 75852 38ab879c9dbc9d804dc68131855d2b5d ""
   "entities.png" 1598176570 54688 9173c0d4be548fd243469f6a2785fd85 ""
-  "matching-engine-backend.aux" 1598176692 4117 b34256b3f8772b7efb6c9c64a0d32e66 "xelatex"
-  "matching-engine-backend.tex" 1598176690 13047 1adf94bc516fd12e3189060fdb0aa675 ""
+  "matching-engine-backend.aux" 1598260598 4117 b34256b3f8772b7efb6c9c64a0d32e66 "xelatex"
+  "matching-engine-backend.tex" 1598260589 13049 1f40ec46ace70a946ae3d3f65711e22b ""
   "order-state.png" 1598011017 45970 d59de51b268f78f4308807059076926a ""
   (generated)
-  "matching-engine-backend.xdv"
   "matching-engine-backend.log"
   "matching-engine-backend.aux"
+  "matching-engine-backend.xdv"
