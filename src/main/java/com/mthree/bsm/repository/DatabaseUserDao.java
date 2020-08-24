@@ -3,6 +3,7 @@ package com.mthree.bsm.repository;
 import com.mthree.bsm.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -90,7 +91,7 @@ public class DatabaseUserDao implements UserDao {
         }
 
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user (name, deleted) " +
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user (userName, deleted) " +
                                                                               "VALUES (?, ?)",
                                                                               Statement.RETURN_GENERATED_KEYS);
 
