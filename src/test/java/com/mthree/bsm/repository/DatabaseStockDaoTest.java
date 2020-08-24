@@ -11,8 +11,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -58,16 +60,16 @@ public class DatabaseStockDaoTest {
         
         Stock invalidStock1 = tesla;
         invalidStock1.setSymbol(null);
-        assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock1));
+        assertThrowsIEE(invalidStock1);
         invalidStock1.setSymbol("Invalid");
-        assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock1));
+        assertThrowsIEE(invalidStock1);
         
         Stock invalidStock2 = apple;
                 
         invalidStock2.setExchange(null);
-        assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock2));
+        assertThrowsIEE(invalidStock2);
         invalidStock2.setExchange("Invalid");
-        assertThrows(InvalidEntityException.class, stockDao.addStock(invalidStock2));
+        assertThrowsIEE(invalidStock2);
         
         apple = stockDao.addStock(apple);
         tesla = stockDao.addStock(tesla);
@@ -98,6 +100,9 @@ public class DatabaseStockDaoTest {
         assertEquals(apple, retrievedApple);
         assertEquals(tesla, retrievedTesla);
         
+        Optional <Stock> nullStock = stockDao.getStockById(0);
+        
+        assertFalse(nullStock.isPresent());
     }
     
     @Test
@@ -114,7 +119,14 @@ public class DatabaseStockDaoTest {
         stocks = stockDao.getStocks();
         
         assertEquals(stocks.size(), 0);
-        
+    }
+    
+    private void assertThrowsIEE(Stock stock) {
+        try{
+            stockDao.addStock(stock);
+            fail("Invalid user, should not be added");
+        } catch(InvalidEntityException e) {
+        }
     }
 
     
