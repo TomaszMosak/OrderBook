@@ -133,13 +133,16 @@ public class DatabaseOrderDaoTest {
         invalidOrder1.setVersionTime(ldt);
         
         Order validOrder1 = invalidOrder1;
+        Order validOrder2 = new Order(tom, lch, tesla, price, 100, true, FULFILLED, ldt);
+        Order validOrder3 = new Order(tom, lch, tesla, price, 100, true, FULFILLED, ldt);
+        
         validOrder1 = orderDao.createOrder(validOrder1);
         
-        Order validOrder2 = invalidOrder1;
+ 
         validOrder2.setBuy(false);
         validOrder2 = orderDao.createOrder(validOrder2);
         
-        Order validOrder3 = invalidOrder1;
+
         validOrder3.setSize(150);
         
         List<Order> orders = orderDao.getOrders();
@@ -163,8 +166,8 @@ public class DatabaseOrderDaoTest {
         
         Order buyOrder = orderDao.createOrder(order);
         
-        order.setBuy(false);
-        Order sellOrder = orderDao.createOrder(order);
+        Order sellOrder = new Order(tom, lch, tesla, price, 100, false, FULFILLED, ldt);
+        sellOrder = orderDao.createOrder(sellOrder);
  
         List<Order> orders = orderDao.getOrdersBySide(true);
         
@@ -176,8 +179,8 @@ public class DatabaseOrderDaoTest {
         assertEquals(orders.size(), 1);
         assertTrue(orders.contains(sellOrder));
         
-        order.setBuy(true);
-        Order buyOrder2 = orderDao.createOrder(order);
+        Order buyOrder2 = new Order(tom, lch, tesla, price, 100, true, FULFILLED, ldt);
+        buyOrder2 = orderDao.createOrder(buyOrder2);
         
         orders = orderDao.getOrdersBySide(true);
         
@@ -189,6 +192,7 @@ public class DatabaseOrderDaoTest {
     /**
      * Test of getOrdersByStatus method, of class OrderRepository.
      */
+    // needs fixing
     @Test
     public void testGetOrdersByStatus() throws Exception {
         

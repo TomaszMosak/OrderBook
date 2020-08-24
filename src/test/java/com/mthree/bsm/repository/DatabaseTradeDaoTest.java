@@ -111,6 +111,8 @@ public class DatabaseTradeDaoTest {
         invalidTrade.setExecutionTime(futureLDT);
         assertThrowsIEE(invalidTrade);
         
+        trade.setExecutionTime(ldt);
+        
         Trade validTrade1 = tradeDao.addTrade(trade);
         Trade validTrade2 = tradeDao.addTrade(trade);
         

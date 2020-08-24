@@ -68,6 +68,8 @@ public class DatabasePartyDaoTest {
         invalidParty.setSymbol(null);
         assertThrowsIEE(invalidParty);
         
+        party.setSymbol("lch");
+        
         // optional contains either the party or a null value, is present 
         // returns a boolean based on whether it contains an object or not
         Optional<Party> nullParty = partyDao.getPartyById(0);

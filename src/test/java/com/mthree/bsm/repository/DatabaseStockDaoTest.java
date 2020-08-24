@@ -99,6 +99,8 @@ public class DatabaseStockDaoTest {
         BigDecimal largeTickSize = new BigDecimal("1000");
         invalidStock1.setTickSize(largeTickSize);
         
+        tesla.setTickSize(tickSize);
+        
         
         apple = stockDao.addStock(apple);
         tesla = stockDao.addStock(tesla);

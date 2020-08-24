@@ -65,6 +65,8 @@ public class DatabaseUserDaoTest {
         assertThrowsIEE(invalidUser1);
         invalidUser1.setUsername("Invalid Username, too long");
         assertThrowsIEE(invalidUser1);
+        
+        tom.setUsername("TomB");
 
         tom = userDao.addUser(tom);
         billy = userDao.addUser(billy);
