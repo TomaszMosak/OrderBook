@@ -2,7 +2,6 @@ package com.mthree.bsm.repository;
 
 import com.mthree.bsm.entity.Party;
 import com.mthree.bsm.entity.Stock;
-import com.mthree.bsm.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -88,7 +87,6 @@ public class DatabaseStockDao implements StockDao {
      * Adds a stock to the system, validating it, and assigning it a new ID (no matter what ID the passed stock has),
      * returning it back.
      *
-     * @param stock
      * @throws InvalidEntityException when the given stock is invalid.
      */
     @Override
@@ -121,6 +119,7 @@ public class DatabaseStockDao implements StockDao {
 
         jdbc.update(preparedStatementCreator, keyHolder);
 
+        assert keyHolder.getKey() != null;
         stock.setId(keyHolder.getKey().intValue());
 
         return stock;
