@@ -11,8 +11,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,9 +58,9 @@ public class DatabaseUserDaoTest {
         User invalidUser1 = tom;
         
         invalidUser1.setUsername(null);
-        assertThrows(InvalidEntityException.class, userDao.addUser(invalidUser1));
+        assertThrowsIEE(invalidUser1);
         invalidUser1.setUsername("Invalid Username, too long");
-        assertThrows(InvalidEntityException.class, userDao.addUser(invalidUser1));
+        assertThrowsIEE(invalidUser1);
 
         tom = userDao.addUser(tom);
         billy = userDao.addUser(billy);
@@ -106,6 +108,15 @@ public class DatabaseUserDaoTest {
         List<User> users = userDao.getUsers();
         
         assertEquals(users.size(), 0);
+        
+    }
+    
+    private void assertThrowsIEE(User user) {
+        try{
+            userDao.addUser(user);
+            fail("Invalid user, should not be added");
+        } catch(InvalidEntityException e) {
+        }
         
     }
     

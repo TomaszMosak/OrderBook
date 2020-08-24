@@ -13,6 +13,7 @@ import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -56,16 +57,16 @@ public class DatabasePartyDaoTest {
     public void testAddGetPartyById() throws Exception {
         
         Party invalidParty = new Party();
-        assertThrows(InvalidEntityException.class, partyDao.addParty(invalidParty));
+        assertThrowsIEE(invalidParty);
         
         invalidParty = party;
         
         invalidParty.setName(null);
-        assertThrows(InvalidEntityException.class, partyDao.addParty(invalidParty));
+        assertThrowsIEE(invalidParty);
         
         invalidParty.setName("London Clearing House");
         invalidParty.setSymbol(null);
-        assertThrows(InvalidEntityException.class, partyDao.addParty(invalidParty));
+        assertThrowsIEE(invalidParty);
         
         // optional contains either the party or a null value, is present 
         // returns a boolean based on whether it contains an object or not
@@ -112,12 +113,23 @@ public class DatabasePartyDaoTest {
         Party party1 = partyDao.addParty(party);
         Party party2 = partyDao.addParty(party);
         
-        partyDao.deleteParties();
+        List<Party> deletedParties = partyDao.deleteParties();
+        
+        assertEquals(deletedParties.size(), 2);
+        assertTrue(deletedParties.contains(party1) && deletedParties.contains(party2));
         
         List<Party> parties = partyDao.getParties();
         
         assertEquals(parties.size(), 0);
         
+    }
+
+    private void assertThrowsIEE(Party party) {
+        try {
+            partyDao.addParty(party);
+            fail("Invalid Entity, should not pass");
+        } catch(InvalidEntityException e) {
+        }
     }
 
 
