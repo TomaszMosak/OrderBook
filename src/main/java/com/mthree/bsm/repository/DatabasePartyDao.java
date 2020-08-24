@@ -113,7 +113,7 @@ public class DatabasePartyDao implements PartyDao {
      * <b>Example</b>
      * <br>
      * <code>
-     * List<Party> parties = </Party>jdbc.update("SELECT * FROM party", new PartyRowMapper());
+     * List<Party> parties = jdbc.query("SELECT * FROM party", new PartyRowMapper());
      * </code>
      */
     public static class PartyRowMapper implements RowMapper<Party> {

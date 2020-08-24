@@ -38,17 +38,12 @@ public class Stock {
     public String toString() {
         return "Stock{" +
                "id=" + id +
+               ", centralParty=" + centralParty +
+               ", companyName='" + companyName + '\'' +
                ", symbol='" + symbol + '\'' +
                ", exchange='" + exchange + '\'' +
+               ", tickSize=" + tickSize +
                '}';
-    }
-
-    public Stock() {
-    }
-
-    public Stock(String symbol, String exchange) {
-        this.symbol = symbol;
-        this.exchange = exchange;
     }
 
     @Override
@@ -57,13 +52,16 @@ public class Stock {
         if (o == null || getClass() != o.getClass()) return false;
         Stock stock = (Stock) o;
         return id == stock.id &&
+               Objects.equals(centralParty, stock.centralParty) &&
+               Objects.equals(companyName, stock.companyName) &&
                Objects.equals(symbol, stock.symbol) &&
-               Objects.equals(exchange, stock.exchange);
+               Objects.equals(exchange, stock.exchange) &&
+               Objects.equals(tickSize, stock.tickSize);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, symbol, exchange);
+        return Objects.hash(id, centralParty, companyName, symbol, exchange, tickSize);
     }
 
     public int getId() {
@@ -72,6 +70,24 @@ public class Stock {
 
     public Stock setId(int id) {
         this.id = id;
+        return this;
+    }
+
+    public Party getCentralParty() {
+        return centralParty;
+    }
+
+    public Stock setCentralParty(Party centralParty) {
+        this.centralParty = centralParty;
+        return this;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public Stock setCompanyName(String companyName) {
+        this.companyName = companyName;
         return this;
     }
 
@@ -90,6 +106,15 @@ public class Stock {
 
     public Stock setExchange(String exchange) {
         this.exchange = exchange;
+        return this;
+    }
+
+    public BigDecimal getTickSize() {
+        return tickSize;
+    }
+
+    public Stock setTickSize(BigDecimal tickSize) {
+        this.tickSize = tickSize;
         return this;
     }
 

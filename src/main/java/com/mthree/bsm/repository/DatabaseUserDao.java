@@ -116,7 +116,7 @@ public class DatabaseUserDao implements UserDao {
      * <b>Example</b>
      * <br>
      * <code>
-     * List<User> users = </Party>jdbc.update("SELECT * FROM user", new UserRowMapper());
+     * List<User> users = jdbc.query("SELECT * FROM user", new UserRowMapper());
      * </code>
      */
     public static class UserRowMapper implements RowMapper<User> {
