@@ -1,4 +1,6 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 import { BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 
@@ -8,17 +10,19 @@ import NotFoundPage from "./pages/NotFoundPage";
 
 function App(){
     return (
-    <Router>
-      <Switch>
+        <Provider store={store}>
+             <Router>
+                <Switch>
 
-      {/*Home Page */}
-      <Route exact path="/" component={MainPage}/>
+                {/*Home Page */}
+                <Route exact path="/" component={MainPage}/>
 
-      {/* Only runs if they type in a weird url manually */}
-      <Route exact path="/404" component={NotFoundPage}/>
-      <Redirect to="/404" />
-      </Switch>
-    </Router>
+                {/* Only runs if they type in a weird url manually */}
+                <Route exact path="/404" component={NotFoundPage}/>
+                <Redirect to="/404" />
+                </Switch>
+             </Router>
+        </Provider>
     )
 }
 
