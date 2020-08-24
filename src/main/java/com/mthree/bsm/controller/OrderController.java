@@ -46,6 +46,7 @@ public class OrderController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/order?stock-id={stockId}&is-buy={isBuy}&price={price}&size={size}")
     public Order createOrder(int stockId, boolean isBuy, BigDecimal price, int size) {
         throw new UnsupportedOperationException("Not supported yet.");
