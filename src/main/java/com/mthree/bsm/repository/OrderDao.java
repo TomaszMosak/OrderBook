@@ -36,6 +36,13 @@ public interface OrderDao {
     List<Order> getOrdersByUserId(int userId) throws MissingEntityException;
 
     /**
+     * Gets all {@link Order}s made by a particular party.
+     *
+     * @throws MissingEntityException if a party in the system with the given ID cannot be found.
+     */
+    List<Order> getOrdersByPartyId(int partyId) throws MissingEntityException;
+
+    /**
      * Gets an order in the system with a given ID. If there is no order in the system with the given ID, the returned
      * {@link Optional} will not be present.
      */
@@ -63,4 +70,5 @@ public interface OrderDao {
      * Deletes all orders in the system, returning them in a list.
      */
     List<Order> deleteOrders();
+
 }
