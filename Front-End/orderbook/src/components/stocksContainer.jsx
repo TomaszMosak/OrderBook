@@ -1,29 +1,39 @@
-import React, {Component} from "react";
-/*import { connect } from 'react-redux';*/
-import { useSelector, useDispatch} from "react-redux";
-import { addStock } from '../redux/actions/stockActions'
+import React, { useEffect } from "react";
+import {connect} from "react-redux";
+import { fetchStocks } from "../redux";
 
-function StockContainer(props){
-    const numOfStocks = useSelector(state => state.stockReducer.numOfStocks)
-    const dispatch = useDispatch()
-    return (
+function StockContainer({ stockData, fetchStocks }){
+
+    useEffect(() => {
+        fetchStocks()
+    }, [])
+    
+    return stockData.loading ? (
+        <h2>Loading Text</h2>
+    ) : stockData.error ? (
+        <h2>{stockData.error}</h2>
+    ) : (
         <div>
-            <h2>Number of stocks - {numOfStocks}</h2>
-            <button onClick={() => dispatch(addStock())}>Add A Stock</button>
+            <h2>Stock List</h2>
+            <div>
+                {
+                    stockData && stockData.stocks && stockData.stocks.map(stock => <p>{stock.address.city}</p>)
+                }
+            </div>
         </div>
     )
 }
 
-/*const mapStateToProps = state => {
+const mapStateToProps = state => {
     return {
-        numOfStocks: state.numOfStocks
+        stockData: state.stock
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        addStock: () => dispatch()
+        fetchStocks: () => dispatch(fetchStocks())
     }
-}*/
+}
 
-export default /*connect(mapStateToProps, mapDispatchToProps)*/(StockContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(StockContainer);

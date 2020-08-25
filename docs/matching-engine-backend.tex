@@ -56,7 +56,7 @@ Each time an \texttt{order} is made, a new \texttt{history} must be made referen
 \paragraph{Stock} The \texttt{Stock} Java class corresponds exactly to the database. A \texttt{Stock} is valid if:
 \begin{enumerate}
     \item None of its fields are null.
-    \item The \texttt{companyName} has length at most 30.
+    \item The \texttt{companyName} has length at most 50.
     \item The \texttt{symbol} has length at most 5.
     \item The \texttt{exchange} has length at most 6.
     \item The \texttt{tickSize} is positive, is at most 100, and has scale at most 3 (i.e. between 0.001 and 100.000).
@@ -66,14 +66,14 @@ Each time an \texttt{order} is made, a new \texttt{history} must be made referen
 \paragraph{User} The \texttt{User} Java class corresponds exactly to the database, with \texttt{name} being called \texttt{username} in the class. A \texttt{User} is valid if
 \begin{enumerate}
     \item None of its fields are null.
-    \item The \texttt{username} has length at most 20.
+    \item The \texttt{username} has length at most 50.
 \end{enumerate}
 
  
 \paragraph{Party} The \texttt{Party} class corresponds exactly to the database. A \texttt{Party} is valid if 
 \begin{enumerate}
     \item None of its fields are null.
-    \item The \texttt{name} has length at most 20.
+    \item The \texttt{name} has length at most 50.
     \item The \texttt{symbol} has length at most 5.
 \end{enumerate}
 

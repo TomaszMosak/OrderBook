@@ -6,6 +6,13 @@ import { BrowserRouter as Router, Route, Switch, Redirect} from "react-router-do
 
 //Pages
 import MainPage from "./pages/MainPage";
+import Orderbook from "./pages/Orderbook";
+import CreateOrder from "./pages/CreateOrder";
+import EditOrder from "./pages/EditOrder";
+import UserPage from "./pages/UserPage";
+import ViewAllTrades from "./pages/ViewAllTrades";
+import ViewOrder from "./pages/ViewOrder";
+import ViewSingleTrade from "./pages/ViewSingleTrade";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App(){
@@ -13,10 +20,8 @@ function App(){
         <Provider store={store}>
              <Router>
                 <Switch>
-
                 {/*Home Page */}
                 <Route exact path="/" component={MainPage}/>
-
                 {/* Only runs if they type in a weird url manually */}
                 <Route exact path="/404" component={NotFoundPage}/>
                 <Redirect to="/404" />

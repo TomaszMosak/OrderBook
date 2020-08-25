@@ -17,7 +17,7 @@ public class User {
     private int id;
 
     @NotNull(message = "The user's username must not be null.")
-    @Size(max = 20, message = "The user's username must have at most 20 characters.")
+    @Size(max = 50, message = "The user's username must have at most 20 characters.")
     private String username;
 
     private boolean deleted;

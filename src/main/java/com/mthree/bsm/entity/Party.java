@@ -13,7 +13,7 @@ public class Party {
     private int id;
 
     @NotNull(message = "The party's symbol must not be null.")
-    @Size(max = 25, message = "The party's name must have length at most 20.")
+    @Size(max = 50, message = "The party's name must have length at most 20.")
     private String name;
 
     @NotNull(message = "The party's symbol must not be null.")
