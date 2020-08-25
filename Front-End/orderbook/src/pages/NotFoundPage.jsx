@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import { Redirect} from "react-router-dom";
+import {Alert} from "react-bootstrap";
 
 class NotFoundPage extends Component{
     state = {
@@ -11,7 +12,7 @@ class NotFoundPage extends Component{
             this.setState({
                 redirect: true,
             })
-        }, 2000)
+        }, 3000)
     }
 
     render() {
@@ -22,10 +23,12 @@ class NotFoundPage extends Component{
         }
 
         return (
-            <div>
-                <h3 className="text-center">ERROR 404: Not Found</h3>
-                <h5 className="text-center">Redirecting to homepage in two seconds!</h5>
-            </div>
+            <Alert className="alert-danger">
+                <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+                <p>
+                    Don't worry about a thing! You'll be redirected to the homepage in a couple of seconds!
+                </p>
+            </Alert>
         )
     }
 }
