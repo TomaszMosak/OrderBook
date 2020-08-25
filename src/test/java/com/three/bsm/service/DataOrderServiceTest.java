@@ -1,0 +1,131 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.three.bsm.service;
+
+import com.mthree.bsm.entity.Order;
+import static com.mthree.bsm.entity.OrderStatus.ACTIVE;
+import static com.mthree.bsm.entity.OrderStatus.FULFILLED;
+import com.mthree.bsm.entity.Party;
+import com.mthree.bsm.entity.Stock;
+import com.mthree.bsm.entity.Trade;
+import com.mthree.bsm.entity.User;
+import com.mthree.bsm.repository.OrderDao;
+import com.mthree.bsm.repository.TradeDao;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ *
+ * @author tombarton
+ */
+public class DataOrderServiceTest {
+    
+    // need stub wired in
+    @Autowired
+    OrderDao orderDao;
+    
+    @Autowired
+    TradeDao tradeDao;
+    
+    @Autowired
+    OrderService orderService;
+    
+    public DataOrderServiceTest() {
+    }
+    
+    private BigDecimal tickSize = new BigDecimal("0.1");
+    private Party lch = new Party("London Clearing House", "LCH");
+    private Stock tesla = new Stock(lch, "Tesla", "TSLA", "NASDAQ", tickSize);
+    private User tom = new User("TomB", false);
+    private BigDecimal highPrice = new BigDecimal("100.00");
+    private BigDecimal lowPrice = new BigDecimal("75.00");
+    private LocalDateTime ldt = LocalDateTime.now();
+    private Order order1 = new Order(tom, lch, tesla, highPrice, 100, true, ACTIVE, ldt);
+    private Order order2 = new Order(tom, lch, tesla, lowPrice, 150, false, ACTIVE, ldt);
+    private Order order3 = new Order(tom, lch, tesla, lowPrice, 50, true, ACTIVE, ldt);
+    
+    @BeforeAll
+    public static void setUpClass() {
+    }
+    
+    @AfterAll
+    public static void tearDownClass() {
+    }
+    
+    @BeforeEach
+    public void setUp() {
+        
+    }
+    
+    @AfterEach
+    public void tearDown() {
+    }
+
+    /**
+     * Test of createOrder method, of class DataOrderService.
+     */
+    @Test
+    public void testCreateOrder() throws Exception {
+        
+        
+      
+    }
+
+    /**
+     * Test of cancelOrder method, of class DataOrderService.
+     */
+    @Test
+    public void testCancelOrder() throws Exception {
+        
+        order1 = orderDao.createOrder(order1);
+        
+    }
+
+    /**
+     * Test of editOrder method, of class DataOrderService.
+     */
+    @Test
+    public void testEditOrder() throws Exception {
+    }
+
+    /**
+     * Test of matchOrders method, of class DataOrderService.
+     */
+    @Test
+    public void testMatchOrders() throws Exception {
+        
+        orderDao.createOrder(order1);
+        orderDao.createOrder(order2);
+        
+        orderService.matchOrders();
+        
+        List<Trade> trades = tradeDao.getTrades();
+        
+        assertEquals(trades.size(), 1);
+        
+        assertEquals(order1.getStatus(), FULFILLED);
+        assertEquals(order2.getStatus(), ACTIVE);
+        assertEquals(order1.getSize(), 0);
+        assertEquals(order2.getSize(), 50);
+        
+        Trade trade = trades.get(0);
+        
+        assertEquals(trade.getQuantity(), 100);
+        
+        // order 1 added first, lower history id = that price
+        assertEquals(trade.getPrice(), lowPrice);
+        
+    }
+    
+}
