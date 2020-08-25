@@ -3,6 +3,7 @@ import * as actions from './stockTypes';
 const initialState = {
     loading: false,
     numOfStocks: 0,
+    currentStock: 0,
     stocks: [],
     error: ''
 }
