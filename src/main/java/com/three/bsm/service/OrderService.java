@@ -37,5 +37,7 @@ public interface OrderService {
     void cancelOrder(int id, int userId) throws MissingEntityException, InvalidEntityException, IOException;
     
     Order editOrder(int orderId, BigDecimal price, int size, int userId) throws MissingEntityException, InvalidEntityException, IOException;
+    
+    void matchOrders() throws IOException, MissingEntityException, InvalidEntityException;
 
 }

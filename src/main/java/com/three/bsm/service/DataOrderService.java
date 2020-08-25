@@ -7,10 +7,13 @@ package com.three.bsm.service;
 
 import com.mthree.bsm.entity.Order;
 import com.mthree.bsm.entity.OrderStatus;
+import static com.mthree.bsm.entity.OrderStatus.ACTIVE;
 import static com.mthree.bsm.entity.OrderStatus.CANCELLED;
+import static com.mthree.bsm.entity.OrderStatus.FULFILLED;
 import static com.mthree.bsm.entity.OrderStatus.PENDING;
 import com.mthree.bsm.entity.Party;
 import com.mthree.bsm.entity.Stock;
+import com.mthree.bsm.entity.Trade;
 import com.mthree.bsm.entity.User;
 import com.mthree.bsm.repository.AuditDao;
 import com.mthree.bsm.repository.InvalidEntityException;
@@ -25,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -125,5 +129,41 @@ public class DataOrderService implements OrderService {
         
         return order;
     }
+
+    // assuming all orders of same stock
+    // match on startup, takes all active orders
+    @Override
+    public void matchOrders() throws IOException, MissingEntityException, InvalidEntityException {
+        List<Order> buyOrders = orderDao.getOrdersBySide(true);
+        List<Order> sellOrders = orderDao.getOrdersBySide(false);
+        
+        // filters out inactive orders
+        buyOrders = buyOrders.stream().filter(o -> o.getStatus().equals(ACTIVE)).collect(Collectors.toList());
+        sellOrders = sellOrders.stream().filter(o -> o.getStatus().equals(ACTIVE)).collect(Collectors.toList());
+        
+        for(Order buyOrder: buyOrders) {
+            for(Order sellOrder: sellOrders) {
+                if(buyOrder.getPrice().compareTo(sellOrder.getPrice()) == 1){
+                    LocalDateTime executionTime = LocalDateTime.now();
+                    Trade trade = new Trade(buyOrder, sellOrder, executionTime);
+                    
+                    editMatchedOrders(buyOrder, trade);
+                    editMatchedOrders(sellOrder, trade);
+                }
+            }
+        } 
+    }
+    
+    private void editMatchedOrders(Order order, Trade trade) throws IOException, MissingEntityException, InvalidEntityException {
+        order.setSize(order.getSize() - trade.getQuantity());
+        if(order.getSize() == 0){
+            order.setStatus(FULFILLED);
+        }
+        orderDao.editOrder(order);
+        
+        auditDao.writeMessage("Edit order: " + order.getId() + ", matched.");
+    }
+    
+    
 
 }
