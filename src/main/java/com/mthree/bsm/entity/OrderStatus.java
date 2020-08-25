@@ -7,6 +7,7 @@ public enum OrderStatus {
     MATCH_LOCK, // = 2
     ACTIVE, // = 3
     FULFILLED, // = 4
-    CANCELLED // = 5
+    CANCELLED, // = 5
+    PENDING // = 6
 
 }

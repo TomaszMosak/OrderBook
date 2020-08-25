@@ -137,7 +137,6 @@ public class DatabaseOrderDaoTest {
         Order validOrder3 = new Order(tom, lch, tesla, price, 100, true, FULFILLED, ldt);
         
         validOrder1 = orderDao.createOrder(validOrder1);
-        
  
         validOrder2.setBuy(false);
         validOrder2 = orderDao.createOrder(validOrder2);
