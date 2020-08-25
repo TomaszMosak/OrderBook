@@ -1,5 +1,5 @@
 import axios from "axios";
-import {FETCH_TRADES_FAILURE, FETCH_TRADES_REQUEST, FETCH_TRADES_SUCCESS} from "./tradeTypes";
+import {FETCH_TRADES_FAILURE, FETCH_TRADES_REQUEST, FETCH_TRADES_SUCCESS, SELECT_SINGLE_TRADE} from "./tradeTypes";
 
 const fetchTradesRequest = () => {
     return {
@@ -18,6 +18,13 @@ const fetchTradesFailure = error => {
     return {
         type: FETCH_TRADES_FAILURE,
         payload: error
+    }
+}
+
+export const selectSingleTrade = selectedTradeId => {
+    return {
+        type: SELECT_SINGLE_TRADE,
+        payload: selectedTradeId
     }
 }
 

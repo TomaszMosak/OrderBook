@@ -1,14 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {connect} from "react-redux";
-import { fetchTrades } from "../redux";
+import {fetchTrades, selectSingleTrade} from "../redux";
 import {Table} from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-function StockContainer({ tradeData, fetchTrades }){
+function StockContainer({ tradeData, fetchTrades, selectSingleTrade }){
 
     useEffect(() => {
         fetchTrades()
     }, [])
-
+    const [id, setId] = useState(tradeData.trades.id);
     return tradeData.loading ? (
         <h2>Loading Text</h2>
     ) : tradeData.error ? (
@@ -34,7 +35,7 @@ function StockContainer({ tradeData, fetchTrades }){
                         <td>{trade.address.city}</td>
                         <td>{trade.address.city}</td>
                         <td>{trade.address.city}</td>
-                        <td><a href={"/orderbook/id=" + trade.address.city}>Link to Orderbook</a></td>
+                        <td onClick={() => selectSingleTrade(trade.id)}><Link to="/singleTrade">Link to Trade</Link></td>
                     </tr>)
             }
             </tbody>
@@ -51,7 +52,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchTrades: () => dispatch(fetchTrades())
+        fetchTrades: () => dispatch(fetchTrades()),
+        selectSingleTrade: (id) => dispatch(selectSingleTrade(id))
     }
 }
 

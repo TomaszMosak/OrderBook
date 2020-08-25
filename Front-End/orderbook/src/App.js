@@ -22,6 +22,7 @@ function App(){
                 <Switch>
                 {/*Home Page */}
                 <Route exact path="/" component={MainPage}/>
+                <Route exact path="/singleTrade" component={ViewSingleTrade}/>
                 {/* Only runs if they type in a weird url manually */}
                 <Route exact path="/404" component={NotFoundPage}/>
                 <Redirect to="/404" />
