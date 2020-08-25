@@ -29,7 +29,7 @@ CREATE TABLE OrderHistory (
 
 CREATE TABLE Stock (
     id int AUTO_INCREMENT NOT NULL ,
-    companyName VARCHAR(30)  NOT NULL ,
+    companyName VARCHAR(50)  NOT NULL ,
     stockSymbol VARCHAR(5)  NOT NULL ,
     stockExchange VARCHAR(6)  NOT NULL ,
     centralPartyId int  NOT NULL ,
@@ -51,7 +51,7 @@ CREATE TABLE Trade (
 
 CREATE TABLE User (
     id int AUTO_INCREMENT NOT NULL ,
-    userName VARCHAR(20)  NOT NULL ,
+    userName VARCHAR(50)  NOT NULL ,
     deleted boolean  NOT NULL ,
     PRIMARY KEY (
         id
@@ -60,7 +60,7 @@ CREATE TABLE User (
 
 CREATE TABLE Party (
     id int AUTO_INCREMENT NOT NULL ,
-    name VARCHAR(20)  NOT NULL ,
+    name VARCHAR(50)  NOT NULL ,
     symbol VARCHAR(5)  NOT NULL ,
     PRIMARY KEY (
         id

@@ -28,7 +28,7 @@ public class Stock {
     private Party centralParty;
 
     @NotNull(message = "The stock's company name must not be null.")
-    @Size(max = 30, message = "The stock's company name must have length at most 30.")
+    @Size(max = 50, message = "The stock's company name must have length at most 30.")
     private String companyName;
 
     @NotNull(message = "The stock's symbol must not be null.")
