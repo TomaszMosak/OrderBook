@@ -49,7 +49,9 @@ public class DatabaseTradeDaoTest {
     
     @Autowired
     StockDao stockDao;
-    
+
+    @Autowired
+    PartyDao partyDao;
     
     private Party lch = new Party("London Clearing House", "LCH");
     private BigDecimal tickSize = new BigDecimal("0.1");
@@ -58,33 +60,50 @@ public class DatabaseTradeDaoTest {
     private User billy = new User("BillyS", false);
     private BigDecimal price = new BigDecimal("100.00");
     private LocalDateTime ldt = LocalDateTime.now();
-    private Order buyOrder = new Order(tom, lch, tesla, price, 100, true, FULFILLED, ldt);
-    private Order sellOrder = new Order(tom, lch, tesla, price, 100, false, FULFILLED, ldt);
-    private Trade trade = new Trade(buyOrder, sellOrder, ldt);
-    
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
+    private Order buyOrder;
+    private Order sellOrder;
+    private Trade trade;
+
     @BeforeEach
     public void setUp() throws Exception {
         tradeDao.deleteTrades();
         orderDao.deleteOrders();
         userDao.deleteUsers();
         stockDao.deleteStocks();
+        partyDao.deleteParties();
+
+        partyDao.addParty(lch);
         tesla = stockDao.addStock(tesla);
         tom = userDao.addUser(tom);
         billy = userDao.addUser(billy);
-        buyOrder = orderDao.createOrder(buyOrder);
-        sellOrder = orderDao.createOrder(sellOrder);
-    }
-    
-    @AfterEach
-    public void tearDown() {
+
+        buyOrder = new Order();
+        buyOrder.setUser(tom);
+        buyOrder.setParty(lch);
+        buyOrder.setStock(tesla);
+        buyOrder.setVersionTime(ldt);
+        buyOrder.setStatus(FULFILLED);
+        buyOrder.setBuy(true);
+        buyOrder.setPrice(price);
+        buyOrder.setSize(100);
+        orderDao.createOrder(buyOrder);
+
+        sellOrder = new Order();
+        sellOrder.setUser(tom);
+        sellOrder.setParty(lch);
+        sellOrder.setStock(tesla);
+        sellOrder.setVersionTime(ldt);
+        sellOrder.setStatus(FULFILLED);
+        sellOrder.setBuy(false);
+        sellOrder.setPrice(price);
+        sellOrder.setSize(100);
+        orderDao.createOrder(sellOrder);
+
+        trade = new Trade();
+        trade.setBuyOrder(buyOrder);
+        trade.setSellOrder(sellOrder);
+        trade.setExecutionTime(ldt);
+        tradeDao.addTrade(trade);
     }
 
     /**
@@ -92,27 +111,6 @@ public class DatabaseTradeDaoTest {
      */
     @Test
     public void testCreateGetTrades() throws Exception {
-        
-        Trade invalidTrade = new Trade();
-        assertThrowsIEE(invalidTrade);
-                
-        invalidTrade = trade;
-        invalidTrade.setBuyOrder(null);
-        assertThrowsIEE(invalidTrade);
-        
-        invalidTrade.setBuyOrder(buyOrder);
-        invalidTrade.setSellOrder(null);
-        assertThrowsIEE(invalidTrade);
-        
-        invalidTrade.setSellOrder(sellOrder);
-        invalidTrade.setExecutionTime(null);
-        assertThrowsIEE(invalidTrade);
-        
-        // may need to adjust number of decimal places
-        LocalDateTime futureLDT = LocalDateTime.of(2999, 03, 28, 14, 33, 48, 123456789);
-        invalidTrade.setExecutionTime(futureLDT);
-        assertThrowsIEE(invalidTrade);
-        
         trade.setExecutionTime(ldt);
         
         Trade validTrade1 = tradeDao.addTrade(trade);
@@ -120,17 +118,35 @@ public class DatabaseTradeDaoTest {
         
         List<Trade> trades = tradeDao.getTrades();
         
-        assertEquals(trades.size(), 2);
-        assertTrue(trades.contains(validTrade1) && trades.contains(validTrade2));
+        assertEquals(3, trades.size());
+        assertTrue(trades.contains(trade) && trades.contains(validTrade1) && trades.contains(validTrade2));
         
         Trade validTrade3 = tradeDao.addTrade(trade);
         
         trades = tradeDao.getTrades();
         
-        assertEquals(trades.size(), 3);
+        assertEquals(4, trades.size());
         assertTrue(trades.contains(validTrade1) && trades.contains(validTrade2) && trades.contains(validTrade3));
-                
-                
+
+        Trade invalidTrade = new Trade();
+        assertThrowsIEE(invalidTrade);
+
+        invalidTrade = trade;
+        invalidTrade.setBuyOrder(null);
+        assertThrowsIEE(invalidTrade);
+
+        invalidTrade.setBuyOrder(buyOrder);
+        invalidTrade.setSellOrder(null);
+        assertThrowsIEE(invalidTrade);
+
+        invalidTrade.setSellOrder(sellOrder);
+        invalidTrade.setExecutionTime(null);
+        assertThrowsIEE(invalidTrade);
+
+        // may need to adjust number of decimal places
+        LocalDateTime futureLDT = LocalDateTime.of(2999, 03, 28, 14, 33, 48, 123456789);
+        invalidTrade.setExecutionTime(futureLDT);
+        assertThrowsIEE(invalidTrade);
     }
 
     /**
@@ -142,15 +158,9 @@ public class DatabaseTradeDaoTest {
         Optional<Trade> nullTrade = tradeDao.getTradeById(0);
         assertFalse(nullTrade.isPresent());
         
-        Trade validTrade1 = tradeDao.addTrade(trade);
-        Trade validTrade2 = tradeDao.addTrade(trade);
-        
-        Optional<Trade> retrievedTrade1 = tradeDao.getTradeById(validTrade1.getId());
-        Optional<Trade> retrievedTrade2 = tradeDao.getTradeById(validTrade2.getId());
-        
-        assertEquals(retrievedTrade1.get(), validTrade1);
-        assertEquals(retrievedTrade2.get(), validTrade2);
-        assertNotEquals(retrievedTrade2.get(), validTrade1);
+        Optional<Trade> retrievedTrade = tradeDao.getTradeById(trade.getId());
+
+        assertEquals(trade, retrievedTrade.get());
     }
     
     @Test
@@ -163,7 +173,7 @@ public class DatabaseTradeDaoTest {
         
         List<Trade> trades = tradeDao.getTrades();
         
-        assertEquals(trades, 0);
+        assertEquals(0, trades.size());
         
     }
     

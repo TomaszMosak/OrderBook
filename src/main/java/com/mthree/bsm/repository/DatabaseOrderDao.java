@@ -14,10 +14,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.sql.*;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -55,7 +52,7 @@ public class DatabaseOrderDao implements OrderDao {
                                   " FROM `order` o " +
                                   " INNER JOIN OrderHistory h " +
                                   "     ON o.id = h.orderId " +
-                                  " ORDER BY h.id ";
+                                  " ORDER BY historyId ";
 
         List<Order> orders = determineCurrentOrders(jdbc.query(GET_ORDERS, orderRowMapper));
         orders.forEach(this::updateOrderPartyStockUser);
@@ -82,8 +79,8 @@ public class DatabaseOrderDao implements OrderDao {
                                          "FROM `order` o " +
                                          "INNER JOIN OrderHistory h " +
                                          "     ON o.id = h.orderId " +
-                                         "WHERE o.side = ?" +
-                                         "ORDER BY h.id ";
+                                         "WHERE o.side = ? " +
+                                         "ORDER BY historyId ";
 
         List<Order> orders = determineCurrentOrders(jdbc.query(GET_ORDER_BY_SIDE, orderRowMapper, isBuy));
         orders.forEach(this::updateOrderPartyStockUser);
@@ -111,8 +108,8 @@ public class DatabaseOrderDao implements OrderDao {
                                            "FROM `order` o " +
                                            "INNER JOIN OrderHistory h " +
                                            "     ON o.id = h.orderId " +
-                                           "WHERE o.orderStatus = ?" +
-                                           "ORDER BY h.id ";
+                                           "WHERE o.orderStatus = ? " +
+                                           "ORDER BY historyId ";
 
         List<Order> orders = determineCurrentOrders(jdbc.query(GET_ORDER_BY_STATUS, orderRowMapper, status.ordinal()));
         orders.forEach(this::updateOrderPartyStockUser);
@@ -149,8 +146,8 @@ public class DatabaseOrderDao implements OrderDao {
                                             "FROM `order` o " +
                                             "INNER JOIN OrderHistory h " +
                                             "     ON o.id = h.orderId " +
-                                            "WHERE o.userId = ?" +
-                                            "ORDER BY h.id ";
+                                            "WHERE h.userId = ? " +
+                                            "ORDER BY historyId ";
 
         List<Order> orders = determineCurrentOrders(jdbc.query(GET_ORDER_BY_USER_ID, orderRowMapper, userId));
         orders.forEach(this::updateOrderPartyStockUser);
@@ -186,8 +183,8 @@ public class DatabaseOrderDao implements OrderDao {
                                              "FROM `order` o " +
                                              "INNER JOIN OrderHistory h " +
                                              "     ON o.id = h.orderId " +
-                                             "WHERE o.partyId = ?" +
-                                             "ORDER BY h.id ";
+                                             "WHERE o.partyId = ? " +
+                                             "ORDER BY historyId ";
 
         List<Order> orders = determineCurrentOrders(jdbc.query(GET_ORDER_BY_PARTY_ID, orderRowMapper, partyId));
         orders.forEach(this::updateOrderPartyStockUser);
@@ -215,12 +212,17 @@ public class DatabaseOrderDao implements OrderDao {
                                        "FROM `order` o " +
                                        "INNER JOIN OrderHistory h " +
                                        "     ON o.id = h.orderId " +
-                                       "WHERE o.id = ?" +
-                                       "ORDER BY h.id ";
+                                       "WHERE o.id = ? " +
+                                       "ORDER BY historyId ";
 
         List<Order> orderHistory = jdbc.query(GET_ORDER_BY_ID, orderRowMapper, id);
         if (orderHistory.isEmpty()) {
             return Optional.empty();
+        }
+
+        orderHistory.sort(Comparator.comparing(Order::getHistoryId));
+        for (int i = 0; i < orderHistory.size(); i++) {
+            orderHistory.get(i).setVersion(i + 1);
         }
 
         Order order = orderHistory.stream()
@@ -281,7 +283,11 @@ public class DatabaseOrderDao implements OrderDao {
                     order.getUser().getId(),
                     order.getVersionTime());
 
-        return getOrderById(order.getId()).get();
+        Order retrievedOrder = getOrderById(order.getId()).get();
+        order.setHistoryId(retrievedOrder.getHistoryId());
+        order.setVersion(retrievedOrder.getVersion());
+
+        return retrievedOrder;
     }
 
     /**
@@ -292,6 +298,7 @@ public class DatabaseOrderDao implements OrderDao {
      * @throws InvalidEntityException if the given order is invalid.
      */
     @Override
+    @Transactional
     public void editOrder(Order order) throws MissingEntityException, InvalidEntityException {
         if (getOrderById(order.getId()).isEmpty()) {
             throw new MissingEntityException("Order with given order's ID does not already exist in the system.");
@@ -315,15 +322,21 @@ public class DatabaseOrderDao implements OrderDao {
                     order.getSize(),
                     order.getUser().getId(),
                     order.getVersionTime());
+
+        Order retrievedOrder = getOrderById(order.getId()).get();
+        order.setHistoryId(retrievedOrder.getHistoryId());
+        order.setVersion(retrievedOrder.getVersion());
     }
 
     /**
      * Deletes all orders in the system, returning them in a list.
      */
     @Override
+    @Transactional
     public List<Order> deleteOrders() {
         List<Order> orders = getOrders();
 
+        jdbc.update("DELETE FROM OrderHistory");
         jdbc.update("DELETE FROM `order`");
 
         return orders;
@@ -350,6 +363,14 @@ public class DatabaseOrderDao implements OrderDao {
         assert stock != null;
         order.setStock(stock);
 
+        Party stockCentralParty = jdbc.queryForObject("SELECT * " +
+                                                      "FROM Party " +
+                                                      "WHERE id = ?",
+                                                      partyRowMapper,
+                                                      order.getStock().getCentralParty().getId());
+        assert stockCentralParty != null;
+        order.getStock().setCentralParty(stockCentralParty);
+
         User user = jdbc.queryForObject("SELECT * " +
                                         "FROM User " +
                                         "WHERE id = ?", userRowMapper, order.getUser().getId());
@@ -362,14 +383,21 @@ public class DatabaseOrderDao implements OrderDao {
      * and retrieves the latest order for each, returning this list of latest orders.
      */
     private List<Order> determineCurrentOrders(List<Order> orderHistories) {
-        return orderHistories.stream()
-                             .collect(Collectors.groupingBy(Order::getId))
-                             .values()
-                             .stream()
-                             .map(orderHistory -> orderHistory.stream()
-                                                              .max(Comparator.comparing(Order::getVersion))
-                                                              .get())
-                             .collect(Collectors.toList());
+        Map<Integer, List<Order>> orderHistoryMap = orderHistories.stream()
+                                                                  .collect(Collectors.groupingBy(Order::getId));
+
+        orderHistoryMap.values().forEach(orderHistory -> {
+            orderHistory.sort(Comparator.comparing(Order::getHistoryId));
+            for (int i = 0; i < orderHistory.size(); i++) {
+                orderHistory.get(i).setVersion(i + 1);
+            }
+        });
+
+        return orderHistoryMap.values().stream()
+                              .map(orderHistory -> orderHistory.stream()
+                                                               .max(Comparator.comparing(Order::getHistoryId))
+                                                               .get())
+                              .collect(Collectors.toList());
     }
 
     /**
@@ -418,8 +446,8 @@ public class DatabaseOrderDao implements OrderDao {
         public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
             Order order = new Order();
 
-            order.setId(rs.getInt("id"));
-            order.setVersion(rowNum);
+            order.setId(rs.getInt("orderId"));
+            order.setHistoryId(rs.getInt("historyId"));
 
             User user = new User();
             user.setId(rs.getInt("userId"));

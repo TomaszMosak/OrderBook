@@ -98,8 +98,6 @@ public class Order {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
         return id == order.id &&
-               historyId == order.historyId &&
-               version == order.version &&
                size == order.size &&
                isBuy == order.isBuy &&
                Objects.equals(user, order.user) &&

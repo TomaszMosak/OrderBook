@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -56,17 +57,20 @@ public class DatabaseUserDao implements UserDao {
     @Override
     public List<User> getUsers() {
         return jdbc.query("SELECT * " +
-                          "FROM party", userRowMapper);
+                          "FROM User", userRowMapper);
     }
 
     /**
      * Deletes all trades in the system, returning them in a list.
      */
     @Override
+    @Transactional
     public List<User> deleteUsers() {
         List<User> users = jdbc.query("SELECT * " +
                                       "FROM user", userRowMapper);
 
+        jdbc.update("DELETE FROM Trade");
+        jdbc.update("DELETE FROM OrderHistory");
         jdbc.update("DELETE FROM user");
 
         return users;

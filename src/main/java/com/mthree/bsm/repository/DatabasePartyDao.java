@@ -63,6 +63,10 @@ public class DatabasePartyDao implements PartyDao {
         List<Party> parties = jdbc.query("SELECT * " +
                                          "FROM party", partyRowMapper);
 
+        jdbc.update("DELETE FROM Trade");
+        jdbc.update("DELETE FROM OrderHistory");
+        jdbc.update("DELETE FROM `order`");
+        jdbc.update("DELETE FROM Stock");
         jdbc.update("DELETE FROM party");
 
         return parties;

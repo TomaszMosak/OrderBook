@@ -5,6 +5,7 @@ import javax.validation.constraints.PastOrPresent;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 /**
@@ -57,7 +58,7 @@ public class Trade {
         return id == trade.id &&
                Objects.equals(buyOrder, trade.buyOrder) &&
                Objects.equals(sellOrder, trade.sellOrder) &&
-               Objects.equals(executionTime, trade.executionTime);
+               executionTime.truncatedTo(ChronoUnit.SECONDS).equals(trade.executionTime);
     }
 
     @Override
