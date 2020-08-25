@@ -101,6 +101,7 @@ public class DataOrderService implements OrderService {
         
         auditDao.writeMessage("Add Order: " + order.getId() + " to Repository, userId:  " + userId);
         
+        // sets status
         matchOrder(order);
         
         return order;
@@ -122,7 +123,7 @@ public class DataOrderService implements OrderService {
         auditDao.writeMessage("Cancel Order: " + order.getId() + ", userId:  " + userId);
     }
 
-    // status not lock on outset
+
     @Override
     public Order editOrder(int orderId, BigDecimal price, int size, int userId) throws MissingEntityException, InvalidEntityException, IOException {
         Order order = orderDao.getOrderById(orderId).get();
@@ -141,7 +142,8 @@ public class DataOrderService implements OrderService {
         orderDao.editOrder(order);
         
         // matches order if price changes
-        if(originalPrice != price) {
+        if(!(originalPrice.equals(price))) {
+            // sets status
             matchOrder(order);
         }
         
@@ -163,7 +165,7 @@ public class DataOrderService implements OrderService {
     }
     
     
-    // Private methods
+
     
     private void matchOrder(Order order) throws IOException, MissingEntityException, InvalidEntityException {
         List<Order> counterSideOrders = getActiveOrders(!order.isBuy());
@@ -190,8 +192,8 @@ public class DataOrderService implements OrderService {
     }
     
     private List<Order> getActiveOrders(boolean isBuy) {
-        List<Order> activeOrders = orderDao.getOrdersBySide(isBuy);
-        return activeOrders.stream().filter(o -> o.getStatus().equals(ACTIVE)).collect(Collectors.toList());
+        List<Order> activeSideOrders = orderDao.getOrdersBySide(isBuy);
+        return activeSideOrders.stream().filter(o -> o.getStatus().equals(ACTIVE)).collect(Collectors.toList());
     }
     
     // when DB first loaded, setting the version time after a match will affect which price is selected for the trade

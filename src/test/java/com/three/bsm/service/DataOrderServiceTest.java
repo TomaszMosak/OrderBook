@@ -7,6 +7,7 @@ package com.three.bsm.service;
 
 import com.mthree.bsm.entity.Order;
 import static com.mthree.bsm.entity.OrderStatus.ACTIVE;
+import static com.mthree.bsm.entity.OrderStatus.CANCELLED;
 import static com.mthree.bsm.entity.OrderStatus.FULFILLED;
 import com.mthree.bsm.entity.Party;
 import com.mthree.bsm.entity.Stock;
@@ -54,6 +55,7 @@ public class DataOrderServiceTest {
     private Order order1 = new Order(tom, lch, tesla, highPrice, 100, true, ACTIVE, ldt);
     private Order order2 = new Order(tom, lch, tesla, lowPrice, 150, false, ACTIVE, ldt);
     private Order order3 = new Order(tom, lch, tesla, lowPrice, 50, true, ACTIVE, ldt);
+    private Order order4 = new Order(tom, lch, tesla, highPrice, 125, false, ACTIVE, ldt);
     
     @BeforeAll
     public static void setUpClass() {
@@ -63,9 +65,11 @@ public class DataOrderServiceTest {
     public static void tearDownClass() {
     }
     
+    // clears memory
     @BeforeEach
     public void setUp() {
-        
+        orderDao.deleteOrders();
+        tradeDao.deleteTrades();
     }
     
     @AfterEach
@@ -78,8 +82,20 @@ public class DataOrderServiceTest {
     @Test
     public void testCreateOrder() throws Exception {
         
+        order1 = orderDao.createOrder(order1);
+        order2 = orderService.createOrder(tesla.getId(), lch.getId(), tom.getId(), false, lowPrice, 150);
         
-      
+        assertEquals(order2.getSize(), 50);
+        
+        List<Trade> trades = tradeDao.getTrades();
+        
+        assertEquals(trades.size(), 1);
+        
+        Trade trade = trades.get(0);
+        
+        assertEquals(trade.getQuantity(), 100);
+        assertEquals(trade.getPrice(), highPrice);
+        
     }
 
     /**
@@ -90,6 +106,10 @@ public class DataOrderServiceTest {
         
         order1 = orderDao.createOrder(order1);
         
+        // might need to find another way of doing this
+        orderService.cancelOrder(order1.getId(), tom.getId());
+        
+        assertEquals(order1.getStatus(), CANCELLED);
     }
 
     /**
@@ -97,6 +117,29 @@ public class DataOrderServiceTest {
      */
     @Test
     public void testEditOrder() throws Exception {
+        
+        order3 = orderDao.createOrder(order3);
+        order4 = orderDao.createOrder(order4);
+        
+        orderService.matchOrders();
+        
+        List<Trade> trades = tradeDao.getTrades();
+        
+        assertEquals(trades.size(), 0);
+        
+        order3.setPrice(highPrice);
+        
+        // going to attempt to write to and from database, which is an issue?
+        orderService.editOrder(order3.getId(), lowPrice, 50, tom.getId());
+        
+        assertEquals(trades.size(), 1);
+        
+        Trade trade = trades.get(0);
+        
+        // needs building out probably
+        assertEquals(trade.getPrice(), lowPrice);
+        assertEquals(trade.getQuantity(), 50);
+
     }
 
     /**
@@ -124,7 +167,7 @@ public class DataOrderServiceTest {
         assertEquals(trade.getQuantity(), 100);
         
         // order 1 added first, lower history id = that price
-        assertEquals(trade.getPrice(), lowPrice);
+        assertEquals(trade.getPrice(), highPrice);
         
     }
     
