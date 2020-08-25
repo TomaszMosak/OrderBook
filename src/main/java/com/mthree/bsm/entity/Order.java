@@ -3,6 +3,8 @@ package com.mthree.bsm.entity;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
 /**
@@ -14,16 +16,11 @@ import java.util.Objects;
  * order came into being.
  */
 public class Order {
-    
-    public Order(){
-    }
-    
-    public Order(User user, Party party, Stock stock, BigDecimal price, int size, boolean isbuy, OrderStatus status, LocalDateTime versionTime){
-    }
 
     private int id;
 
-    @Min(value = 1, message = "The order's version must be positive.")
+    private int historyId;
+
     private int version;
 
     @NotNull(message = "The order's user cannot be null.")
@@ -55,10 +52,34 @@ public class Order {
     @PastOrPresent(message = "The order's creation time must be in the past.")
     private LocalDateTime versionTime;
 
+    public Order() {
+    }
+
+    public Order(@NotNull(message = "The order's user cannot be null.") User user,
+                 @NotNull(message = "The order's party cannot be null.") Party party,
+                 @NotNull(message = "The order's stock cannot be null.") Stock stock,
+                 @NotNull(message = "The order's price cannot be null.") @Digits(integer = 6,
+                         fraction = 2,
+                         message = "The order's price must have at most 8 digits with 2 digit after the decimal point") @DecimalMin(value = "0.0", message = "The order's price must be nonnegative.") BigDecimal price,
+                 @Max(value = 10_000_000, message = "The order's size must be at most 10 000 000.") @Min(value = 0, message = "The order's size must be nonnegative.") int size,
+                 boolean isBuy,
+                 @NotNull(message = "The order's status cannot be null.") OrderStatus status,
+                 @NotNull(message = "The order's creation time cannot be null.") @PastOrPresent(message = "The order's creation time must be in the past.") LocalDateTime versionTime) {
+        this.user = user;
+        this.party = party;
+        this.stock = stock;
+        this.price = price;
+        this.size = size;
+        this.isBuy = isBuy;
+        this.status = status;
+        this.versionTime = versionTime;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
                "id=" + id +
+               ", historyId=" + historyId +
                ", version=" + version +
                ", user=" + user +
                ", party=" + party +
@@ -77,6 +98,7 @@ public class Order {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
         return id == order.id &&
+               historyId == order.historyId &&
                version == order.version &&
                size == order.size &&
                isBuy == order.isBuy &&
@@ -85,12 +107,12 @@ public class Order {
                Objects.equals(stock, order.stock) &&
                Objects.equals(price, order.price) &&
                status == order.status &&
-               Objects.equals(versionTime, order.versionTime);
+               versionTime.truncatedTo(ChronoUnit.SECONDS).equals(order.versionTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, version, user, party, stock, price, size, isBuy, status, versionTime);
+        return Objects.hash(id, historyId, version, user, party, stock, price, size, isBuy, status, versionTime);
     }
 
     public int getId() {
@@ -99,6 +121,15 @@ public class Order {
 
     public Order setId(int id) {
         this.id = id;
+        return this;
+    }
+
+    public int getHistoryId() {
+        return historyId;
+    }
+
+    public Order setHistoryId(int historyId) {
+        this.historyId = historyId;
         return this;
     }
 

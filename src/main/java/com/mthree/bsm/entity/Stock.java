@@ -67,7 +67,7 @@ public class Stock {
                Objects.equals(companyName, stock.companyName) &&
                Objects.equals(symbol, stock.symbol) &&
                Objects.equals(exchange, stock.exchange) &&
-               Objects.equals(tickSize, stock.tickSize);
+               tickSize.compareTo(stock.tickSize) == 0;
     }
 
     @Override
