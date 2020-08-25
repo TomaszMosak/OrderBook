@@ -7,7 +7,7 @@ const fetchStocksRequest = () => {
     }
 }
 
-const fetchStocksSuccess = (stocks) => {
+const fetchStocksSuccess = stocks => {
     return {
         type: FETCH_STOCKS_SUCCESS,
         payload: stocks
