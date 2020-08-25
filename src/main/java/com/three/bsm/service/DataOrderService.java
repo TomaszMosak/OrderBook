@@ -8,7 +8,7 @@ package com.three.bsm.service;
 import com.mthree.bsm.entity.Order;
 import com.mthree.bsm.entity.OrderStatus;
 import static com.mthree.bsm.entity.OrderStatus.CANCELLED;
-import static com.mthree.bsm.entity.OrderStatus.EDIT_LOCK;
+import static com.mthree.bsm.entity.OrderStatus.PENDING;
 import com.mthree.bsm.entity.Party;
 import com.mthree.bsm.entity.Stock;
 import com.mthree.bsm.entity.User;
@@ -89,7 +89,7 @@ public class DataOrderService implements OrderService {
         Party party = partyDao.getPartyById(partyId).get();
         LocalDateTime versionTime = LocalDateTime.now();
         
-        Order order = new Order(user, party, stock, price, size, isBuy, EDIT_LOCK, versionTime);
+        Order order = new Order(user, party, stock, price, size, isBuy, PENDING, versionTime);
         
         order = orderDao.createOrder(order);
         
@@ -102,17 +102,22 @@ public class DataOrderService implements OrderService {
     public void cancelOrder(int orderId, int userId) throws MissingEntityException, InvalidEntityException, IOException {
         Order order = orderDao.getOrderById(orderId).get();
         order.setStatus(CANCELLED);
+        LocalDateTime versionTime = LocalDateTime.now();
+        order.setVersionTime(versionTime);
         
         orderDao.editOrder(order);
         
         auditDao.writeMessage("Cancel Order: " + order.getId() + ", userId:  " + userId);
     }
 
+    // status not lock on outset
     @Override
     public Order editOrder(int orderId, BigDecimal price, int size, int userId) throws MissingEntityException, InvalidEntityException, IOException {
         Order order = orderDao.getOrderById(orderId).get();
         order.setPrice(price);
         order.setSize(size);
+        LocalDateTime versionTime = LocalDateTime.now();
+        order.setVersionTime(versionTime);
         
         auditDao.writeMessage("Edit Order: " + order.getId() + ", userId:  " + userId);
         
