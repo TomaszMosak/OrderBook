@@ -78,6 +78,9 @@ public class DatabaseStockDao implements StockDao {
 
         stocks.forEach(this::updateStockCentralParty);
 
+        jdbc.update("DELETE FROM Trade");
+        jdbc.update("DELETE FROM OrderHistory");
+        jdbc.update("DELETE FROM `order`");
         jdbc.update("DELETE FROM stock");
 
         return stocks;

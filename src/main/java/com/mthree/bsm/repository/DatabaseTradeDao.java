@@ -8,20 +8,19 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Repository;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.sql.*;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Implements the {@link TradeDao}, communicating with a relational database to do its work.
  */
+@Repository
 public class DatabaseTradeDao implements TradeDao {
 
     private final JdbcTemplate jdbc;
@@ -43,7 +42,9 @@ public class DatabaseTradeDao implements TradeDao {
     public List<Trade> getTrades() {
         List<Trade> trades = jdbc.query("SELECT * " +
                                         "FROM trade", tradeRowMapper);
-        trades.forEach(this::updateTradeOrders);
+        if (!trades.isEmpty()) {
+            trades.forEach(this::updateTradeOrders);
+        }
 
         return trades;
     }
@@ -96,8 +97,8 @@ public class DatabaseTradeDao implements TradeDao {
                     "VALUES (?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
 
-            preparedStatement.setInt(1, trade.getBuyOrder().getId());
-            preparedStatement.setInt(2, trade.getSellOrder().getId());
+            preparedStatement.setInt(1, trade.getBuyOrder().getHistoryId());
+            preparedStatement.setInt(2, trade.getSellOrder().getHistoryId());
             preparedStatement.setTimestamp(3, Timestamp.valueOf(trade.getExecutionTime()));
 
             return preparedStatement;
@@ -117,11 +118,11 @@ public class DatabaseTradeDao implements TradeDao {
      */
     @Override
     public List<Trade> deleteTrades() {
-        List<Trade> trades = getTrades();
+        //List<Trade> trades = getTrades();
 
         jdbc.update("DELETE FROM Trade");
 
-        return trades;
+        return new ArrayList<>();
     }
 
     private void updateOrderPartyStockUser(@NonNull Order order) {
@@ -136,6 +137,11 @@ public class DatabaseTradeDao implements TradeDao {
                                           "WHERE id = ?", stockRowMapper, order.getStock().getId());
         assert stock != null;
         order.setStock(stock);
+
+        Party centralParty = jdbc.queryForObject("SELECT * " +
+                                                 "FROM Party " +
+                                                 "WHERE id = ?", partyRowMapper, stock.getCentralParty().getId());
+        order.getStock().setCentralParty(centralParty);
 
         User user = jdbc.queryForObject("SELECT * " +
                                         "FROM User " +
@@ -159,25 +165,16 @@ public class DatabaseTradeDao implements TradeDao {
                                        "FROM `order` o " +
                                        "INNER JOIN OrderHistory h " +
                                        "     ON o.id = h.orderId " +
-                                       "WHERE o.id = ?" +
+                                       "WHERE h.id = ? " +
                                        "ORDER BY h.id ";
 
-        Order buyOrder = jdbc.query(GET_ORDER_BY_ID, orderRowMapper, trade.getBuyOrder().getId())
-                             .stream()
-                             .max(Comparator.comparing(Order::getVersion))
-                             .get();
+        Order buyOrder = jdbc.queryForObject(GET_ORDER_BY_ID, orderRowMapper, trade.getBuyOrder().getHistoryId());
         updateOrderPartyStockUser(buyOrder);
-
         trade.setBuyOrder(buyOrder);
 
-
-        Order sellOrder = jdbc.query(GET_ORDER_BY_ID, orderRowMapper, trade.getSellOrder().getId())
-                              .stream()
-                              .max(Comparator.comparing(Order::getVersion))
-                              .get();
+        Order sellOrder = jdbc.queryForObject(GET_ORDER_BY_ID, orderRowMapper, trade.getSellOrder().getHistoryId());
         updateOrderPartyStockUser(sellOrder);
-
-        trade.setBuyOrder(sellOrder);
+        trade.setSellOrder(sellOrder);
     }
 
     /**
@@ -214,11 +211,11 @@ public class DatabaseTradeDao implements TradeDao {
             trade.setId(rs.getInt("id"));
 
             Order buyOrder = new Order();
-            buyOrder.setId(rs.getInt("buyId"));
+            buyOrder.setHistoryId(rs.getInt("buyId"));
             trade.setBuyOrder(buyOrder);
 
             Order sellOrder = new Order();
-            sellOrder.setId(rs.getInt("sellId"));
+            sellOrder.setHistoryId(rs.getInt("sellId"));
             trade.setSellOrder(sellOrder);
 
             trade.setExecutionTime(rs.getTimestamp("executionTime").toLocalDateTime());

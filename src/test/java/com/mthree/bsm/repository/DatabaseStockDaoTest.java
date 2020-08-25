@@ -68,20 +68,36 @@ public class DatabaseStockDaoTest {
      */
     @Test
     public void testAddGetStocks() throws Exception {
+        apple = stockDao.addStock(apple);
+        tesla = stockDao.addStock(tesla);
         
+        Stock hsbc = new Stock(lch, "HSBC Bank", "HSBC", "LSE", tickSize);
+
+        List<Stock> stocks = stockDao.getStocks();
+        
+        assertEquals(stocks.size(), 2);
+        assertTrue(stocks.contains(apple));
+        assertTrue(stocks.contains(tesla));
+
+        hsbc = stockDao.addStock(hsbc);
+        stocks = stockDao.getStocks();
+        
+        assertEquals(stocks.size(), 3);
+        assertTrue(stocks.contains(tesla) && stocks.contains(apple) && stocks.contains(hsbc));
+
         Stock invalidStock1 = tesla;
-        
+
         invalidStock1.setCentralParty(null);
         assertThrowsIEE(invalidStock1);
-        
+
         invalidStock1.setCentralParty(lch);
         invalidStock1.setCompanyName(null);
         assertThrowsIEE(invalidStock1);
-        
-        invalidStock1.setCompanyName("Invalid name, larger than 30 characters");
+
+        invalidStock1.setCompanyName("Invalid name, larger than 50 characterscharacterscharacterscharacterscharacters");
         assertThrowsIEE(invalidStock1);
         invalidStock1.setCompanyName("Tesla");
-        
+
         invalidStock1.setSymbol(null);
         assertThrowsIEE(invalidStock1);
         invalidStock1.setSymbol("Invalid");
@@ -91,7 +107,7 @@ public class DatabaseStockDaoTest {
         assertThrowsIEE(invalidStock1);
         invalidStock1.setExchange("Invalid");
         assertThrowsIEE(invalidStock1);
-        
+
         invalidStock1.setTickSize(null);
         assertThrowsIEE(invalidStock1);
         BigDecimal negTickSize = new BigDecimal("-1");
@@ -100,25 +116,8 @@ public class DatabaseStockDaoTest {
         invalidStock1.setTickSize(zeroTickSize);
         BigDecimal largeTickSize = new BigDecimal("1000");
         invalidStock1.setTickSize(largeTickSize);
-        
-        tesla.setTickSize(tickSize);
-        
-        
-        apple = stockDao.addStock(apple);
-        tesla = stockDao.addStock(tesla);
-        
-        Stock hsbc = new Stock(lch, "HSBC Bank", "HSBC", "LSE", tickSize);
 
-        List<Stock> stocks = stockDao.getStocks();
-        
-        assertEquals(stocks.size(), 2);
-        assertTrue(stocks.contains(tesla) && stocks.contains(apple));
-        
-        hsbc = stockDao.addStock(hsbc);
-        stocks = stockDao.getStocks();
-        
-        assertEquals(stocks.size(), 3);
-        assertTrue(stocks.contains(tesla) && stocks.contains(apple) && stocks.contains(hsbc));
+        tesla.setTickSize(tickSize);
     }
     
     @Test
@@ -127,11 +126,13 @@ public class DatabaseStockDaoTest {
         apple = stockDao.addStock(apple);
         tesla = stockDao.addStock(tesla);
         
-        Optional <Stock> retrievedApple = stockDao.getStockById(apple.getId());
-        Optional <Stock> retrievedTesla = stockDao.getStockById(tesla.getId());
-        
-        assertEquals(apple, retrievedApple);
-        assertEquals(tesla, retrievedTesla);
+        Optional<Stock> retrievedApple = stockDao.getStockById(apple.getId());
+        Optional<Stock> retrievedTesla = stockDao.getStockById(tesla.getId());
+
+        assertTrue(retrievedApple.isPresent());
+        assertTrue(retrievedTesla.isPresent());
+        assertEquals(apple, retrievedApple.get());
+        assertEquals(tesla, retrievedTesla.get());
         
         Optional <Stock> nullStock = stockDao.getStockById(0);
         

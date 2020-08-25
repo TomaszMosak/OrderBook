@@ -10,15 +10,13 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -57,22 +55,7 @@ public class DatabasePartyDaoTest {
      */
     @Test
     public void testAddGetPartyById() throws Exception {
-        
-        Party invalidParty = new Party();
-        assertThrowsIEE(invalidParty);
-        
-        invalidParty = party;
-        
-        invalidParty.setName(null);
-        assertThrowsIEE(invalidParty);
-        
-        invalidParty.setName("London Clearing House");
-        invalidParty.setSymbol(null);
-        assertThrowsIEE(invalidParty);
-        
-        party.setSymbol("lch");
-        
-        // optional contains either the party or a null value, is present 
+        // optional contains either the party or a null value, is present
         // returns a boolean based on whether it contains an object or not
         Optional<Party> nullParty = partyDao.getPartyById(0);
         assertFalse(nullParty.isPresent());
@@ -80,9 +63,21 @@ public class DatabasePartyDaoTest {
         party = partyDao.addParty(party);
         
         Optional<Party> retrievedParty = partyDao.getPartyById(party.getId());
-        
-        assertEquals(party, retrievedParty);
-        
+
+        assertTrue(retrievedParty.isPresent());
+        assertEquals(party, retrievedParty.get());
+
+        Party invalidParty = new Party();
+        assertThrowsIEE(invalidParty);
+
+        invalidParty = party;
+
+        invalidParty.setName(null);
+        assertThrowsIEE(invalidParty);
+
+        invalidParty.setName("London Clearing House");
+        invalidParty.setSymbol(null);
+        assertThrowsIEE(invalidParty);
     }
 
     /**

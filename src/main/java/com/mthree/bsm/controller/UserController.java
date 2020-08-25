@@ -7,6 +7,9 @@ package com.mthree.bsm.controller;
 
 import com.mthree.bsm.entity.User;
 import java.util.List;
+
+import com.three.bsm.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,9 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class UserController {
-    
+
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/user")
     public List<User> displayUsers() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return userService.getUsers();
     }
 }

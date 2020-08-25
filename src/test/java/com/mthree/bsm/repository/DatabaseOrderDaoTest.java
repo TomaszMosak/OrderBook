@@ -44,6 +44,9 @@ public class DatabaseOrderDaoTest {
     
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PartyDao partyDao;
     
     @Autowired
     private StockDao stockDao;
@@ -58,7 +61,7 @@ public class DatabaseOrderDaoTest {
     private User tom = new User("TomB", false);
     private BigDecimal price = new BigDecimal("100.00");
     private LocalDateTime ldt = LocalDateTime.now();
-    private Order order = new Order(tom, lch, tesla, price, 100, true, FULFILLED, ldt);
+    private Order order;
 
     @BeforeAll
     public static void setUpClass() {
@@ -70,9 +73,12 @@ public class DatabaseOrderDaoTest {
     
     @BeforeEach
     public void setUp() throws Exception {
-        orderDao.deleteOrders();
+        order = new Order(tom, lch, tesla, price, 100, true, ACTIVE, ldt);
+
         userDao.deleteUsers();
         stockDao.deleteStocks();
+        orderDao.deleteOrders();
+        partyDao.addParty(lch);
         tesla = stockDao.addStock(tesla);
         tom = userDao.addUser(tom);
     }
@@ -86,44 +92,51 @@ public class DatabaseOrderDaoTest {
      */
     @Test
     public void testAddGetOrders() throws Exception {
+        orderDao.createOrder(order);
+
+        List<Order> orders = orderDao.getOrders();
         
-        
-        
+        assertEquals(1, orders.size());
+        assertTrue(orders.contains(order));
+    }
+
+    @Test
+    public void addingInvalidOrder_ThrowsInvalidEntityException() {
         Order invalidOrder1 = new Order();
         assertThrowsAddIEE(invalidOrder1);
 
         invalidOrder1 = order;
-        
+
         invalidOrder1.setUser(null);
         assertThrowsAddIEE(invalidOrder1);
-        
+
         invalidOrder1.setUser(tom);
         invalidOrder1.setStock(null);
         assertThrowsAddIEE(invalidOrder1);
-        
+
         invalidOrder1.setStock(tesla);
         invalidOrder1.setParty(null);
         assertThrowsAddIEE(invalidOrder1);
-        
+
         invalidOrder1.setParty(lch);
         invalidOrder1.setSize(-1);
         assertThrowsAddIEE(invalidOrder1);
-        invalidOrder1.setSize(100001);
+        invalidOrder1.setSize(10_000_001);
         assertThrowsAddIEE(invalidOrder1);
-        
+
         invalidOrder1.setSize(100);
         BigDecimal negativePrice = new BigDecimal("-1.00");
         invalidOrder1.setPrice(negativePrice);
         assertThrowsAddIEE(invalidOrder1);
-        
+
         BigDecimal invalidPrice = new BigDecimal("10000000.00");
         invalidOrder1.setPrice(invalidPrice);
         assertThrowsAddIEE(invalidOrder1);
-        
+
         invalidOrder1.setPrice(price);
         invalidOrder1.setStatus(null);
         assertThrowsAddIEE(invalidOrder1);
-        
+
         invalidOrder1.setStatus(FULFILLED);
         invalidOrder1.setVersionTime(null);
         assertThrowsAddIEE(invalidOrder1);
@@ -131,32 +144,8 @@ public class DatabaseOrderDaoTest {
         LocalDateTime futureLDT = LocalDateTime.of(2999, 03, 28, 14, 33, 48, 123456789);
         invalidOrder1.setVersionTime(futureLDT);
         assertThrowsAddIEE(invalidOrder1);
-        
-        invalidOrder1.setVersionTime(ldt);
-        
-        Order validOrder1 = invalidOrder1;
-        Order validOrder2 = new Order(tom, lch, tesla, price, 100, true, FULFILLED, ldt);
-        Order validOrder3 = new Order(tom, lch, tesla, price, 100, true, FULFILLED, ldt);
-        
-        validOrder1 = orderDao.createOrder(validOrder1);
- 
-        validOrder2.setBuy(false);
-        validOrder2 = orderDao.createOrder(validOrder2);
-        
 
-        validOrder3.setSize(150);
-        
-        List<Order> orders = orderDao.getOrders();
-        
-        assertEquals(orders.size(), 2);
-        assertTrue(orders.contains(validOrder1) && orders.contains(validOrder2));
-        assertFalse(orders.contains(validOrder3));
-        
-        validOrder3 = orderDao.createOrder(validOrder3);
-        orders = orderDao.getOrders();
-        
-        assertEquals(orders.size(), 3);
-        assertTrue(orders.contains(validOrder1) && orders.contains(validOrder2) && orders.contains(validOrder3));
+        invalidOrder1.setVersionTime(ldt);
     }
 
     /**
@@ -186,7 +175,7 @@ public class DatabaseOrderDaoTest {
         orders = orderDao.getOrdersBySide(true);
         
         assertEquals(orders.size(), 2);
-        assertTrue(orders.contains(sellOrder) && orders.contains(buyOrder2));
+        assertTrue(orders.contains(buyOrder) && orders.contains(buyOrder2));
 
     }
 
@@ -277,6 +266,7 @@ public class DatabaseOrderDaoTest {
         Order order2 = orderDao.createOrder(order);
         
         Party nycha = new Party("New York CHA", "NYCHA");
+        partyDao.addParty(nycha);
         
         Order order3 = order;
         order3.setParty(nycha);
@@ -316,35 +306,7 @@ public class DatabaseOrderDaoTest {
      */
     @Test
     public void testEditOrder() throws Exception {
-        
         order = orderDao.createOrder(order);
-        
-        Order invalidOrder1 = order; 
-        
-        // discuss which fields need editiing testing 
-        
-        BigDecimal invalidPrice = new BigDecimal("10000000.00");
-        invalidOrder1.setPrice(invalidPrice);
-        assertThrowsEditIEE(invalidOrder1);
-        
-        invalidOrder1.setPrice(price);
-        invalidOrder1.setSize(-1);
-        assertThrowsEditIEE(invalidOrder1);
-        invalidOrder1.setSize(100001);
-        assertThrowsEditIEE(invalidOrder1);
-        
-        invalidOrder1.setSize(100);
-        invalidOrder1.setStatus(null);
-        assertThrowsEditIEE(invalidOrder1);
-        
-        invalidOrder1.setStatus(FULFILLED);
-        invalidOrder1.setVersionTime(null);
-        assertThrowsEditIEE(invalidOrder1);
-        
-        invalidOrder1.setId(0);
-        assertThrowsEditMEE(invalidOrder1);
-
-        Order originalOrder1 = order;
         
         BigDecimal editedPrice = new BigDecimal("123.12");
         order.setPrice(editedPrice);
@@ -353,8 +315,7 @@ public class DatabaseOrderDaoTest {
         Optional<Order> retrievedOrder1 = orderDao.getOrderById(order.getId());
        
         assertEquals(order, retrievedOrder1.get());
-        assertNotEquals(retrievedOrder1.get(), originalOrder1);
-       
+
         Order originalOrder2 = order;
        
         order.setSize(237);
@@ -363,8 +324,30 @@ public class DatabaseOrderDaoTest {
         Optional<Order> retrievedOrder2 = orderDao.getOrderById(order.getId());
        
         assertEquals(order, retrievedOrder2.get());
-        assertNotEquals(retrievedOrder2.get(), originalOrder2);
-       
+
+        Order invalidOrder1 = order;
+
+        // discuss which fields need editiing testing
+
+        BigDecimal invalidPrice = new BigDecimal("10000000.00");
+        invalidOrder1.setPrice(invalidPrice);
+        assertThrowsEditIEE(invalidOrder1);
+
+        invalidOrder1.setPrice(price);
+        invalidOrder1.setSize(-1);
+        assertThrowsEditIEE(invalidOrder1);
+        invalidOrder1.setSize(10_000_001);
+        assertThrowsEditIEE(invalidOrder1);
+
+        invalidOrder1.setSize(100);
+        invalidOrder1.setStatus(null);
+        assertThrowsEditIEE(invalidOrder1);
+
+        invalidOrder1.setStatus(FULFILLED);
+        invalidOrder1.setVersionTime(null);
+        assertThrowsEditIEE(invalidOrder1);
+
+        Order originalOrder1 = order;
     }
     
     @Test
