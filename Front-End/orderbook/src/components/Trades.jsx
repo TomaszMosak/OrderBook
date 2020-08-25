@@ -35,7 +35,7 @@ function StockContainer({ tradeData, fetchTrades, selectSingleTrade }){
                         <td>{trade.address.city}</td>
                         <td>{trade.address.city}</td>
                         <td>{trade.address.city}</td>
-                        <td onClick={() => selectSingleTrade(trade.id)}><Link to="/singleTrade">Link to Trade</Link></td>
+                        <td onClick={() => selectSingleTrade(trade.id)}><Link to="/singleTrade">Trade Details</Link></td>
                     </tr>)
             }
             </tbody>

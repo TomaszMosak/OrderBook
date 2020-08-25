@@ -30,7 +30,7 @@ function StockContainer({ stockData, fetchStocks }){
                             <td>{stock.address.city}</td>
                             <td>{stock.address.city}</td>
                             <td>{stock.address.city}</td>
-                            <td><a href={"/orderbook/id=" + stock.address.city}>Link to Orderbook</a></td>
+                            <td><a href={"/orderbook/id=" + stock.address.city}>Click Me!</a></td>
                         </tr>)
                 }
             </tbody>
