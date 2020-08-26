@@ -27,6 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -38,20 +39,24 @@ public class DatabaseOrderDaoTest {
     
     public DatabaseOrderDaoTest() {
     }
-    
+
+    @Qualifier("databaseOrderDao")
     @Autowired
     private OrderDao orderDao;
-    
+
+    @Qualifier("databaseUserDao")
     @Autowired
     private UserDao userDao;
 
+    @Qualifier("databasePartyDao")
     @Autowired
     private PartyDao partyDao;
-    
+
+    @Qualifier("databaseStockDao")
     @Autowired
     private StockDao stockDao;
-    
-    
+
+
     private BigDecimal tickSize = new BigDecimal("0.1");
     private Party lch = new Party("London Clearing House", "LCH");
     private Stock tesla = new Stock(lch, "Tesla", "TSLA", "NASDAQ", tickSize);

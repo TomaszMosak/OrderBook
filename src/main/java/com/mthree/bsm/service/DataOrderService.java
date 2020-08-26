@@ -55,10 +55,10 @@ public class DataOrderService implements OrderService {
     @Autowired
     public DataOrderService(@Qualifier("databaseOrderDao") OrderDao orderDao,
                             @Qualifier("databaseTradeDao") TradeDao tradeDao,
-                            StockDao stockDao,
-                            UserDao userDao,
-                            PartyDao partyDao,
-                            @Qualifier("auditDaoStub") AuditDao auditDao) {
+                            @Qualifier("databaseStockDao") StockDao stockDao,
+                            @Qualifier("databaseUserDao") UserDao userDao,
+                            @Qualifier("databasePartyDao") PartyDao partyDao,
+                            @Qualifier("textFileAuditDao") AuditDao auditDao) {
         this.orderDao = orderDao;
         this.tradeDao = tradeDao;
         this.stockDao = stockDao;

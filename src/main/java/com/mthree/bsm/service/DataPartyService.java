@@ -9,6 +9,7 @@ import com.mthree.bsm.entity.Party;
 import com.mthree.bsm.repository.PartyDao;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,7 +22,7 @@ public class DataPartyService implements PartyService {
     PartyDao partyDao;
 
     @Autowired
-    public DataPartyService(PartyDao partyDao) {
+    public DataPartyService(@Qualifier("databasePartyDao") PartyDao partyDao) {
         this.partyDao = partyDao;
     }
 

@@ -147,6 +147,4 @@ public interface OrderService {
 
     void matchOrders() throws IOException, MissingEntityException, InvalidEntityException;
 
-    List<Order> getSideOrdersByStatus(boolean b, OrderStatus status);
-
 }

@@ -6,12 +6,15 @@
 package com.mthree.bsm.service;
 
 import com.mthree.bsm.repository.AuditDao;
+import org.springframework.stereotype.Repository;
+
 import java.io.IOException;
 
 /**
  *
  * @author tombarton
  */
+@Repository
 public class AuditDaoStub implements AuditDao {
 
     @Override

@@ -9,6 +9,7 @@ import com.mthree.bsm.entity.User;
 import com.mthree.bsm.repository.UserDao;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,7 +22,7 @@ public class DataUserService implements UserService {
     UserDao userDao;
 
     @Autowired
-    public DataUserService(UserDao userDao) {
+    public DataUserService(@Qualifier("databaseUserDao") UserDao userDao) {
         this.userDao = userDao;
     }
 
