@@ -21,9 +21,9 @@ function BuyOrders({ orderData }){
                 orderData.buyOrders.map(order =>
                     <tr>
                         <td>...</td>
-                        <td>{order.id}</td>
-                        <td>{order.id}</td>
-                        <td>{order.id}</td>
+                        <td>{order.versionTime}</td>
+                        <td>{order.size}</td>
+                        <td>{order.price}</td>
                         <td className="text-center"><i className="arrow up"></i></td>
                     </tr>)
             }

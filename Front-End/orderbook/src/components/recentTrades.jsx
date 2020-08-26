@@ -2,12 +2,20 @@ import React, { useEffect } from "react";
 import {connect} from "react-redux";
 import {fetchRecentTrades, fetchSingleTrade} from "../redux";
 import {Table} from "react-bootstrap";
-import { Link } from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
 function MostRecentTrades(props){
     useEffect(() => {
         props.fetchRecentTrades()
     }, [])
+
+    const anything = props.tradeData.trades
+    if(anything === undefined || anything === []){
+        return (
+            <Redirect to="/404"/>
+        )
+    }
+
     return props.tradeData.loading ? (
         <h2>Loading Text</h2>
     ) : props.tradeData.error ? (

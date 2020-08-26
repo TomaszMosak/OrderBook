@@ -21,6 +21,8 @@ function StockContainer(props){
                 <th>ID</th>
                 <th>Symbol</th>
                 <th>Exchange</th>
+                <th>Central CP</th>
+                <th>Tick Size</th>
                 <th>View OrderBook</th>
             </tr>
             </thead>
@@ -28,9 +30,11 @@ function StockContainer(props){
                 {
                     props.stockData.stocks.map(stock =>
                         <tr>
-                            <td>{stock.address.city}</td>
-                            <td>{stock.address.city}</td>
-                            <td>{stock.address.city}</td>
+                            <td>{stock.id}</td>
+                            <td>{stock.symbol}</td>
+                            <td>{stock.exchange}</td>
+                            <td>{stock.centralParty.symbol}</td>
+                            <td>{stock.tickSize}p</td>
                             <td onClick={() => props.selectStock(stock.id, props.stockData.stocks.indexOf(stock))}><Link to="/Orderbook">Orderbook Link</Link></td>
                         </tr>)
                 }
