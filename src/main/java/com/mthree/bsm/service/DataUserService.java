@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.three.bsm.service;
+package com.mthree.bsm.service;
 
-import com.mthree.bsm.entity.Trade;
-import com.mthree.bsm.repository.TradeDao;
+import com.mthree.bsm.entity.User;
+import com.mthree.bsm.repository.UserDao;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +16,14 @@ import org.springframework.stereotype.Service;
  * @author tombarton
  */
 @Service
-public class DataTradeService implements TradeService {
+public class DataUserService implements UserService {
     
     @Autowired
-    TradeDao tradeDao;
+    UserDao userDao;
 
     @Override
-    public List<Trade> getTrades() {
-        return tradeDao.getTrades();
+    public List<User> getUsers() {
+       return userDao.getUsers();
     }
-
-    @Override
-    public Optional<Trade> getTradeById(int id) {
-        return tradeDao.getTradeById(id);
-    } 
+    
 }

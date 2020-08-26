@@ -3,20 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.three.bsm.service;
+package com.mthree.bsm.service;
 
-import com.mthree.bsm.entity.Stock;
+import com.mthree.bsm.entity.Party;
 import java.util.List;
 
 /**
  *
  * @author tombarton
  */
-public interface StockService {
+public interface PartyService {
 
     /**
-     * Gets a list of all {@link Stock}s in the system.
+     * Gets a list of all {@link Party}s in the system.
      */
-    List<Stock> getStocks();
+    List<Party> getParties();
     
 }

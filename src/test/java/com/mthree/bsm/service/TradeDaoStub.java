@@ -3,20 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.three.bsm.service;
-
-import com.mthree.bsm.entity.User;
-import java.util.List;
+package com.mthree.bsm.service;
 
 /**
  *
  * @author tombarton
  */
-public interface UserService {
-
-    /**
-     * Gets a list of all {@link User}s in the system.
-     */
-    List<User> getUsers();
+public class TradeDaoStub {
     
 }

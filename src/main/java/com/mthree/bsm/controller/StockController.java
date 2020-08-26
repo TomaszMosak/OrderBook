@@ -8,7 +8,7 @@ package com.mthree.bsm.controller;
 import com.mthree.bsm.entity.Stock;
 import java.util.List;
 
-import com.three.bsm.service.StockService;
+import com.mthree.bsm.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
