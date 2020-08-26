@@ -17,7 +17,6 @@ class MainPage extends Component {
                         <h1 className="text-center">The Fantastic OrderBook</h1>
                     </Col>
                 </Row>
-                <hr className="my-3 divider"/>
                 <MyNavBar />
                 <Container>
                     <Col className="tableContent align-content-center">
