@@ -4,13 +4,21 @@ import {Table} from "react-bootstrap";
 
 function SingleOrder({ orderData }){
 
+    function side(boolean){
+        if(boolean){
+            return "Buy"
+        } else {
+            return "Sell"
+        }
+    }
+
     return (
         <Table striped bordered hover>
             <thead>
             <tr>
                 <th>Version</th>
                 <th>Stock Symbol</th>
-                <th>Price Remaining</th>
+                <th>Price</th>
                 <th>Size</th>
                 <th>Side</th>
                 <th>Status</th>
@@ -22,14 +30,14 @@ function SingleOrder({ orderData }){
             {
                 orderData.orderHistory.map(order =>
                 <tr>
-                    <td>{order.id}</td>
-                    <td>{order.name}</td>
-                    <td>{order.username}</td>
-                    <td>{order.address.city}</td>
-                    <td>{order.address.city}</td>
-                    <td>{order.address.city}</td>
-                    <td>{order.address.city}</td>
-                    <td>{order.address.city}</td>
+                    <td>{order.version}</td>
+                    <td>{order.stock.symbol}</td>
+                    <td>{order.price}</td>
+                    <td>{order.size}</td>
+                    <td>{side(order.buy)}</td>
+                    <td>{order.status}</td>
+                    <td>{order.stock.symbol}</td>
+                    <td>{order.versionTime}</td>
                 </tr>)
             }
             </tbody>

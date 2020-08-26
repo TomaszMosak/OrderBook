@@ -37,7 +37,7 @@ const fetchOrdersFailure = error => {
 export const fetchAllOrders = () => {
     return (dispatch) => {
         dispatch(fetchOrdersRequest)
-        axios.get("https://jsonplaceholder.typicode.com/users")
+        axios.get("http://localhost:8080/order/buy")
             .then(r => {
                 const buyOrders = r.data
                 dispatch(fetchBuyOrdersSuccess(buyOrders))
@@ -48,7 +48,7 @@ export const fetchAllOrders = () => {
                 dispatch(fetchOrdersFailure(errorMsg))
                 // error.message is the error description
             })
-        axios.get("https://jsonplaceholder.typicode.com/users")
+        axios.get("http://localhost:8080/order/sell")
             .then(r => {
                 const sellOrders = r.data
                 dispatch(fetchSellOrdersSuccess(sellOrders))
@@ -70,10 +70,10 @@ const returnOrderHistory = (orderHistory) => {
 export const fetchOrderHistory = orderId => {
     return (dispatch) => {
         dispatch(fetchOrdersRequest)
-        axios.get("https://jsonplaceholder.typicode.com/users")
+        axios.get("http://localhost:8080/order/history/" + orderId)
             .then(r => {
-                const buyOrders = r.data
-                dispatch(returnOrderHistory(buyOrders))
+                const orderHistory = r.data
+                dispatch(returnOrderHistory(orderHistory))
                 //response data is the array of stocks
             })
             .catch(err => {

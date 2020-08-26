@@ -34,14 +34,15 @@ export const selectStock = (id, index) => {
 export const fetchStocks = () => {
     return (dispatch) => {
         dispatch(fetchStocksRequest)
-        axios.get("https://jsonplaceholder.typicode.com/users")
+        axios.get("http://localhost:8080/stock")
             .then(r => {
                 const stocks = r.data
                 dispatch(fetchStocksSuccess(stocks))
                 //response data is the array of stocks
             })
             .catch(err => {
-                const errorMsg = err.message
+                const errorMsg = err.message + "! Please Reload the webpage";
+                console.log(err.message);
                 dispatch(fetchStocksFailure(errorMsg))
                 // error.message is the error description
             })

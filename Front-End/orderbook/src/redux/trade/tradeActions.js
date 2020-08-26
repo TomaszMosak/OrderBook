@@ -43,16 +43,15 @@ const foundTradeDetails = trade => {
 
 export const fetchSingleTrade = (id) => {
     return (dispatch) => {
-        //NEEDS CHANGING TO FETCH FOR SINGLE TRADE
         dispatch(selectSingleTrade(id))
-        axios.get("https://jsonplaceholder.typicode.com/users")
+        axios.get("https://jsonplaceholder.typicode.com/users/" + id)
             .then(r => {
                 const trades = r.data
-                dispatch(foundTradeDetails(trades[id]))
+                dispatch(foundTradeDetails(trades))
                 //response data is the array of stocks
             })
             .catch(err => {
-                const errorMsg = err.message
+                const errorMsg = err.message + "! Please Reload the webpage";
                 dispatch(fetchTradesFailure(errorMsg))
                 // error.message is the error description
             })
@@ -62,14 +61,14 @@ export const fetchSingleTrade = (id) => {
 export const fetchTrades = () => {
     return (dispatch) => {
         dispatch(fetchTradesRequest)
-        axios.get("https://jsonplaceholder.typicode.com/users")
+        axios.get("http://localhost:8080/trade")
             .then(r => {
                 const trades = r.data
                 dispatch(fetchTradesSuccess(trades))
                 //response data is the array of stocks
             })
             .catch(err => {
-                const errorMsg = err.message
+                const errorMsg = err.message + "! Please Reload the webpage";
                 dispatch(fetchTradesFailure(errorMsg))
                 // error.message is the error description
             })
@@ -79,14 +78,15 @@ export const fetchTrades = () => {
 export const fetchRecentTrades = () => {
     return (dispatch) => {
         dispatch(fetchTradesRequest)
-        axios.get("https://jsonplaceholder.typicode.com/users")
+        axios.get("http://localhost:8080/trade")
             .then(r => {
                 const trades = r.data
+                trades.slice(0,10)
                 dispatch(fetchTradesSuccess(trades))
                 //response data is the array of stocks
             })
             .catch(err => {
-                const errorMsg = err.message
+                const errorMsg = err.message  + "! Please Reload the webpage";
                 dispatch(fetchTradesFailure(errorMsg))
                 // error.message is the error description
             })
