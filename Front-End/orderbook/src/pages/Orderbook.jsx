@@ -26,9 +26,9 @@ function Orderbook (props){
                 <hr className="my-3 divider"/>
                 <MyNavBar />
                 <Container>
-                    <Row className="stockStats align-content-center">
+                    <Col className="stockStats align-content-center">
                         <StockStats/>
-                    </Row>
+                    </Col>
                     <Row className="justify-content-md-center">
                         <Col className="m-sm-2">
                             <BuyOrders/>
