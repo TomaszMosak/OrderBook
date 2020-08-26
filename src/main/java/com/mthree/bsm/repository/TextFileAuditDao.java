@@ -34,9 +34,11 @@ public class TextFileAuditDao implements AuditDao {
      */
     @Override
     public void writeMessage(String message) throws IOException {
-        PrintWriter writer = new PrintWriter(new FileWriter(AUDIT_FILE));
+        PrintWriter writer = new PrintWriter(new FileWriter(AUDIT_FILE, true));
 
         writer.println("[" + LocalDateTime.now() + "] " + message);
+        writer.flush();
+        writer.close();
     }
 
 }

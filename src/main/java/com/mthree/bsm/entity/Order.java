@@ -64,7 +64,7 @@ public class Order implements Comparable<Order> {
                  @Max(value = 10_000_000, message = "The order's size must be at most 10 000 000.") @Min(value = 0, message = "The order's size must be nonnegative.") int size,
                  boolean isBuy,
                  @NotNull(message = "The order's status cannot be null.") OrderStatus status,
-                 @NotNull(message = "The order's creation time cannot be null.") @PastOrPresent(message = "The order's creation time must be in the past.") LocalDateTime versionTime) {
+                 @NotNull(message = "The order's creation time cannot be null.") LocalDateTime versionTime) {
         this.user = user;
         this.party = party;
         this.stock = stock;

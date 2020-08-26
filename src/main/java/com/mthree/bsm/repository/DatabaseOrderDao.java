@@ -351,6 +351,11 @@ public class DatabaseOrderDao implements OrderDao {
             throw new InvalidEntityException(violationMessages);
         }
 
+        final String SET_ORDER_STATUS = "UPDATE `order` " +
+                                        "SET orderStatus = ? " +
+                                        "WHERE id = ?";
+        jdbc.update(SET_ORDER_STATUS, order.getStatus().ordinal(), order.getId());
+
         final String CREATE_VERSION = "INSERT INTO OrderHistory (orderId, Price, currentSize, userId, timestamp) " +
                                       "VALUES (?, ?, ?, ?, ?)";
         jdbc.update(CREATE_VERSION,
@@ -430,7 +435,8 @@ public class DatabaseOrderDao implements OrderDao {
             }
         });
 
-        return orderHistoryMap.values().stream()
+        return orderHistoryMap.values()
+                              .stream()
                               .map(orderHistory -> orderHistory.stream()
                                                                .max(Comparator.comparing(Order::getHistoryId))
                                                                .get())
