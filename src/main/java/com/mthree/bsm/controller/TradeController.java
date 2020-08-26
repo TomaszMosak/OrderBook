@@ -6,25 +6,39 @@
 package com.mthree.bsm.controller;
 
 import com.mthree.bsm.entity.Trade;
+
 import java.util.List;
+import java.util.Optional;
+
+import com.three.bsm.service.TradeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
  * @author tombarton
  */
 @RestController
 public class TradeController {
-    
+
+    private final TradeService tradeService;
+
+    @Autowired
+    public TradeController(TradeService tradeService) {
+        this.tradeService = tradeService;
+    }
+
     @GetMapping("/trade")
     public List<Trade> displayTrades() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return tradeService.getTrades();
     }
-    
+
     @GetMapping("/trade/{id}")
-    public Trade displayTradeById(int id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<Trade> displayTradeById(int id) {
+        return tradeService.getTradeById(id).map(ResponseEntity::ok)
+                           .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-    
+
 }
