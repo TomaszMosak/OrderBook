@@ -56,7 +56,6 @@ public class DatabaseOrderDaoTest {
     @Autowired
     private StockDao stockDao;
 
-
     private BigDecimal tickSize = new BigDecimal("0.1");
     private Party lch = new Party("London Clearing House", "LCH");
     private Stock tesla = new Stock(lch, "Tesla", "TSLA", "NASDAQ", tickSize);

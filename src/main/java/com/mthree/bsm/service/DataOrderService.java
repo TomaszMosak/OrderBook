@@ -155,7 +155,7 @@ public class DataOrderService implements OrderService {
             MissingEntityException,
             InvalidEntityException,
             IOException {
-        Order order = orderDao.getOrderById(orderId).get();
+        Order order = orderDao.getOrderById(orderId).orElseThrow();
         order.setStatus(EDIT_LOCK);
         orderDao.editOrder(order);
 
@@ -168,13 +168,10 @@ public class DataOrderService implements OrderService {
 
         auditDao.writeMessage("Edit Order: " + order.getId() + ", userId:  " + userId);
 
+        order.setStatus(PENDING);
         orderDao.editOrder(order);
 
-        // matches order if price changes
-        if (!(originalPrice.equals(price))) {
-            // sets status
-            matchOrder(order);
-        }
+        matchOrder(order);
 
         return order;
     }
@@ -198,7 +195,7 @@ public class DataOrderService implements OrderService {
         List<Order> counterSideOrders = getOrdersBySideAndStatus(!order.isBuy(), ACTIVE);
 
         for (Order cso : counterSideOrders) {
-            if (order.isBuy() == true) {
+            if (order.isBuy()) {
                 checkForMatch(order, cso);
             } else {
                 checkForMatch(cso, order);
@@ -210,7 +207,7 @@ public class DataOrderService implements OrderService {
             IOException,
             MissingEntityException,
             InvalidEntityException {
-        if (buyOrder.getPrice().compareTo(sellOrder.getPrice()) == 1) {
+        if (buyOrder.getPrice().compareTo(sellOrder.getPrice()) >= 0) {
             LocalDateTime executionTime = LocalDateTime.now();
             Trade trade = new Trade(buyOrder, sellOrder, executionTime);
             tradeDao.addTrade(trade);

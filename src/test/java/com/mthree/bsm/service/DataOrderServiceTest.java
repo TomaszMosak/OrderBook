@@ -131,16 +131,15 @@ public class DataOrderServiceTest {
         order3.setPrice(highPrice);
 
         // going to attempt to write to and from database, which is an issue?
-        orderService.editOrder(order3.getId(), lowPrice, 50, tom.getId());
+        orderService.editOrder(order3.getId(), highPrice, 50, tom.getId());
 
-        assertEquals(trades.size(), 1);
+        assertEquals(1, trades.size());
 
         Trade trade = trades.get(0);
 
         // needs building out probably
-        assertEquals(trade.getPrice(), lowPrice);
-        assertEquals(trade.getQuantity(), 50);
-
+        assertEquals(highPrice, trade.getPrice());
+        assertEquals(50, trade.getQuantity());
     }
 
     /**
@@ -158,10 +157,13 @@ public class DataOrderServiceTest {
 
         assertEquals(trades.size(), 1);
 
-        assertEquals(order1.getStatus(), FULFILLED);
-        assertEquals(order2.getStatus(), ACTIVE);
-        assertEquals(order1.getSize(), 0);
-        assertEquals(order2.getSize(), 50);
+        order1 = orderDao.getOrderById(order1.getId()).orElseThrow();
+        order2 = orderDao.getOrderById(order2.getId()).orElseThrow();
+
+        assertEquals(FULFILLED, order1.getStatus());
+        assertEquals(ACTIVE, order2.getStatus());
+        assertEquals(0, order1.getSize());
+        assertEquals(50, order2.getSize());
 
         Trade trade = trades.get(0);
 
