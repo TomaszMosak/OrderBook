@@ -49,6 +49,12 @@ public interface OrderDao {
     Optional<Order> getOrderById(int id);
 
     /**
+     * Gets the full history of the order with the given ID. If there is no order in the system with the given ID, the
+     * returned {@link Optional} will not be present.
+     */
+    List<Order> getOrderHistoryById(int id) throws MissingEntityException;
+
+    /**
      * Creates an order in the system, validates it, and assigns it a new ID (no matter what ID the passed order has),
      * returning it back.
      *

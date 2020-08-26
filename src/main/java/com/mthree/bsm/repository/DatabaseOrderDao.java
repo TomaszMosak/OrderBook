@@ -234,6 +234,43 @@ public class DatabaseOrderDao implements OrderDao {
     }
 
     /**
+     * Gets the full history of the order with the given ID.
+     *
+     * @throws MissingEntityException if there is no order in the system with the given ID.
+     */
+    @Override
+    public List<Order> getOrderHistoryById(int id) throws MissingEntityException {
+        final String GET_HISTORY_BY_ID = "SELECT o.id AS orderId, " +
+                                         "       o.stockId, " +
+                                         "       o.partyId, " +
+                                         "       o.orderStatus, " +
+                                         "       o.side, " +
+                                         "       h.id AS historyId, " +
+                                         "       h.userId, " +
+                                         "       h.price, " +
+                                         "       h.currentSize, " +
+                                         "       h.timestamp " +
+                                         "FROM `order` o " +
+                                         "INNER JOIN OrderHistory h " +
+                                         "     ON o.id = h.orderId " +
+                                         "WHERE o.id = ? " +
+                                         "ORDER BY historyId ";
+
+        List<Order> orderHistory = jdbc.query(GET_HISTORY_BY_ID, orderRowMapper, id);
+        if (orderHistory.isEmpty()) {
+            throw new MissingEntityException("No order in the system with the given ID");
+        }
+        orderHistory.forEach(this::updateOrderPartyStockUser);
+
+        orderHistory.sort(Comparator.comparing(Order::getHistoryId));
+        for (int i = 0; i < orderHistory.size(); i++) {
+            orderHistory.get(i).setVersion(i + 1);
+        }
+
+        return orderHistory;
+    }
+
+    /**
      * Creates an order in the system, validates it, and assigns it a new ID (no matter what ID the passed order has),
      * returning it back.
      *
