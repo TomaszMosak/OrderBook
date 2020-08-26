@@ -9,6 +9,7 @@ import com.mthree.bsm.entity.Stock;
 import com.mthree.bsm.repository.StockDao;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,9 +19,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataStockService implements StockService {
 
-    @Autowired
     StockDao stockDao;
-    
+
+    @Autowired
+    public DataStockService(@Qualifier("databaseStockDao") StockDao stockDao) {
+        this.stockDao = stockDao;
+    }
+
     @Override
     public List<Stock> getStocks() {
        return stockDao.getStocks();
