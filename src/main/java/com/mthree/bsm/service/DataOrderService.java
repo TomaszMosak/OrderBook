@@ -171,7 +171,9 @@ public class DataOrderService implements OrderService {
         order.setStatus(PENDING);
         orderDao.editOrder(order);
 
-        matchOrder(order);
+        if(originalPrice != price) {
+            matchOrder(order);
+        }
 
         return order;
     }
