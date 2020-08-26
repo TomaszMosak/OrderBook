@@ -151,7 +151,7 @@ public class OrderController {
     /**
      * Cancels an order in the system - such orders cannot be matched against or edited in the future.
      * <p>
-     * Any request of this type should pass a JSON object with one field named "userId" to identify the user canceling
+     * Any request of this type should pass a JSON object with one field named "userId" to identify the user cancelling
      * the order.
      *
      * @param orderId the order to cancel.
