@@ -13,7 +13,10 @@ import java.util.List;
  * @author tombarton
  */
 public interface UserService {
-    
+
+    /**
+     * Gets a list of all {@link User}s in the system.
+     */
     List<User> getUsers();
     
 }

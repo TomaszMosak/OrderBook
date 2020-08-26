@@ -13,7 +13,10 @@ import java.util.List;
  * @author tombarton
  */
 public interface StockService {
-    
+
+    /**
+     * Gets a list of all {@link Stock}s in the system.
+     */
     List<Stock> getStocks();
     
 }
