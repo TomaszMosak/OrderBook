@@ -100,7 +100,6 @@ public class OrderController {
     }
     
     
-    // double check shouldn't be an exception thrown for an incorrect status entered
     @GetMapping("/orders/buy/{status}")
     public ResponseEntity<List<Order>> displayBuyOrdersByStatus(@PathVariable String stringStatus) {
         try{

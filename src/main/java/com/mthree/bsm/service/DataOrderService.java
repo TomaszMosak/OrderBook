@@ -75,7 +75,7 @@ public class DataOrderService implements OrderService {
     }
     
     @Override
-        public List<Order> getSideOrdersByStatus(boolean isBuy, OrderStatus status) {
+    public List<Order> getSideOrdersByStatus(boolean isBuy, OrderStatus status) {
        return getOrdersBySideAndStatus(true, status);
     }
 
@@ -175,10 +175,7 @@ public class DataOrderService implements OrderService {
             }
         } 
     }
-    
-    
 
-    
     private void matchOrder(Order order) throws IOException, MissingEntityException, InvalidEntityException {
         List<Order> counterSideOrders = getOrdersBySideAndStatus(!order.isBuy(), ACTIVE);
         
@@ -198,6 +195,7 @@ public class DataOrderService implements OrderService {
                     tradeDao.addTrade(trade);
                     auditDao.writeMessage("Add trade:" + trade.getId() + " to Repository.");
                     
+                    // might want to move match lock out of these methods, to ensure quicker locking
                     editMatchedOrders(buyOrder, trade);
                     editMatchedOrders(sellOrder, trade);
                 }
@@ -229,7 +227,4 @@ public class DataOrderService implements OrderService {
         
         auditDao.writeMessage("Edit order: " + order.getId() + ", matched.");
     }
-
-  
-    
 }

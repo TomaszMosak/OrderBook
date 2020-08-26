@@ -37,6 +37,9 @@ public interface OrderService {
      * @param status must not be null.
      */
     List<Order> getOrdersByStatus(OrderStatus status);
+    
+    List<Order> getSideOrdersByStatus(boolean isBuy, OrderStatus status);
+    
 
     /**
      * Gets a list of all orders made by the {@link Party} with the given ID.
