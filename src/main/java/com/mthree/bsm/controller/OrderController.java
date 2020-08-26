@@ -99,11 +99,11 @@ public class OrderController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
-    
+
+
     @GetMapping("/order/buy/{status}")
     public ResponseEntity<List<Order>> displayBuyOrdersByStatus(@PathVariable String status) {
-        try{
+        try {
             OrderStatus oStatus = OrderStatus.valueOf(status.toUpperCase());
             List<Order> orders = orderService.getSideOrdersByStatus(true, oStatus);
             return ResponseEntity.ok(orders);
@@ -111,10 +111,10 @@ public class OrderController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    
+
     @GetMapping("/order/sell/{status}")
     public ResponseEntity<List<Order>> displaySellOrdersByStatus(@PathVariable String status) {
-        try{
+        try {
             OrderStatus oStatus = OrderStatus.valueOf(status.toUpperCase());
             List<Order> orders = orderService.getSideOrdersByStatus(false, oStatus);
             return ResponseEntity.ok(orders);
@@ -136,13 +136,13 @@ public class OrderController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/order")
-    public Order createOrder(@RequestBody int stockId,
-                             @RequestBody int partyId,
-                             @RequestBody int userId,
-                             @RequestBody boolean isBuy,
-                             @RequestBody BigDecimal price,
-                             @RequestBody int size) throws IOException, InvalidEntityException, MissingEntityException {
-        return orderService.createOrder(stockId, partyId, userId, isBuy, price, size);
+    public Order createOrder(@RequestBody OrderRequestEntity orderRequestEntity) throws
+            IOException,
+            InvalidEntityException,
+            MissingEntityException {
+        return orderService.createOrder(orderRequestEntity.stockId,
+                                        orderRequestEntity.partyId, orderRequestEntity.userId,
+                                        orderRequestEntity.isBuy, orderRequestEntity.price, orderRequestEntity.size);
     }
 
     /**
@@ -165,10 +165,11 @@ public class OrderController {
     /**
      * Edits an order in the system.
      *
-     * @param id the ID of the order to edit.
+     * @param id     the ID of the order to edit.
      * @param userId the ID of the user editing the order.
-     * @param price the new price of the order.
-     * @param size the new size of the order.
+     * @param price  the new price of the order.
+     * @param size   the new size of the order.
+     *
      * @throws InvalidEntityException when the new data for the order (price and size) is invalid.
      * @throws MissingEntityException when an order or user with the given ID(s) cannot be found.
      */
@@ -195,6 +196,71 @@ public class OrderController {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public List<String> handleInvalidEntityException(InvalidEntityException e) {
         return e.getValidationErrors();
+    }
+
+    public static class OrderRequestEntity {
+
+        int stockId;
+        int partyId;
+        int userId;
+        boolean isBuy;
+        BigDecimal price;
+        int size;
+
+        public int getStockId() {
+            return stockId;
+        }
+
+        public OrderRequestEntity setStockId(int stockId) {
+            this.stockId = stockId;
+            return this;
+        }
+
+        public int getPartyId() {
+            return partyId;
+        }
+
+        public OrderRequestEntity setPartyId(int partyId) {
+            this.partyId = partyId;
+            return this;
+        }
+
+        public int getUserId() {
+            return userId;
+        }
+
+        public OrderRequestEntity setUserId(int userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public boolean isBuy() {
+            return isBuy;
+        }
+
+        public OrderRequestEntity setBuy(boolean buy) {
+            isBuy = buy;
+            return this;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public OrderRequestEntity setPrice(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public OrderRequestEntity setSize(int size) {
+            this.size = size;
+            return this;
+        }
+
     }
 
 }
