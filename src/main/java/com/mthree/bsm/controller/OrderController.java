@@ -102,23 +102,25 @@ public class OrderController {
     
     // double check shouldn't be an exception thrown for an incorrect status entered
     @GetMapping("/orders/buy/{status}")
-    public ResponseEntity<List<Order>> displayBuyOrdersByStatus(@PathVariable OrderStatus status) {
-//        try{
+    public ResponseEntity<List<Order>> displayBuyOrdersByStatus(@PathVariable String stringStatus) {
+        try{
+            OrderStatus status = OrderStatus.valueOf(stringStatus.toUpperCase());
             List<Order> orders = orderService.getSideOrdersByStatus(true, status);
             return ResponseEntity.ok(orders);
-//        } catch (MissingEntityException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
     
     @GetMapping("/orders/sell/{status}")
-    public ResponseEntity<List<Order>> displaySellOrdersByStatus(@PathVariable OrderStatus status) {
-//        try{
+    public ResponseEntity<List<Order>> displaySellOrdersByStatus(@PathVariable String stringStatus) {
+        try{
+            OrderStatus status = OrderStatus.valueOf(stringStatus.toUpperCase());
             List<Order> orders = orderService.getSideOrdersByStatus(false, status);
             return ResponseEntity.ok(orders);
-//        } catch (MissingEntityException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 
