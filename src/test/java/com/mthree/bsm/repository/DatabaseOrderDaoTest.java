@@ -51,9 +51,6 @@ public class DatabaseOrderDaoTest {
     @Autowired
     private StockDao stockDao;
     
-    // User user, Party party, Stock stock, BigDecimal price, int size, 
-    // boolean isbuy, OrderStatus status, LocalDateTime versionTime
-    
     
     private BigDecimal tickSize = new BigDecimal("0.1");
     private Party lch = new Party("London Clearing House", "LCH");
