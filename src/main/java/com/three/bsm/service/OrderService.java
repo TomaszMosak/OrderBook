@@ -31,6 +31,8 @@ public interface OrderService {
     List<Order> getOrdersByUserId(int id) throws MissingEntityException;
     
     Optional<Order> getOrderById(int id);
+
+    List<Order> getOrderHistoryById(int id) throws MissingEntityException;
     
     Order createOrder(int stockId, int partyId, int userId, boolean isBuy, BigDecimal price, int size) throws InvalidEntityException, MissingEntityException, IOException;
     

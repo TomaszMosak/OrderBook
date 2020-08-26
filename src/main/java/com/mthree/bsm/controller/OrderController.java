@@ -76,6 +76,16 @@ public class OrderController {
     }
 
     /**
+     * Returns the history of an order with the given ID.
+     *
+     * @throws MissingEntityException if there is no order with the given ID.
+     */
+    @GetMapping("/order/history/{id}")
+    public List<Order> displayOrderHistoryById(@PathVariable int id) throws MissingEntityException {
+        return orderService.getOrderHistoryById(id);
+    }
+
+    /**
      * Returns all orders made or edited by the given user, unless there is no user with the given ID, in which case
      * returns 404.
      */

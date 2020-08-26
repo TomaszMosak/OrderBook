@@ -83,6 +83,11 @@ public class DataOrderService implements OrderService {
     }
 
     @Override
+    public List<Order> getOrderHistoryById(int id) throws MissingEntityException {
+        return orderDao.getOrderHistoryById(id);
+    }
+
+    @Override
     public List<Order> getOrdersByPartyId(int id) throws MissingEntityException {
         return orderDao.getOrdersByPartyId(id);
     }
