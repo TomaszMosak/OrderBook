@@ -7,5 +7,15 @@
     border-top-style: solid;
     border-color: #D8D8D8;
     border-width: 1.5px;
-    color: #989898;
+    color: #595959;
+}
+
+.innerCard{
+    border-color: #c4c4c4;
+    border-width: 1.5px;
+    border-style: solid;
+}
+
+.innerCardTitle{
+    color: #595959;
 }

@@ -30,10 +30,11 @@ function Orderbook (props){
                         <StockStats/>
                     </Col>
                     <Row className="justify-content-md-center">
-                        <Col className="m-sm-2">
+                        <Col className="">
                             <BuyOrders/>
                         </Col>
-                        <Col className="col-md">
+                        <div className="orderSplit"/>
+                        <Col>
                             <SellOrders/>
                         </Col>
                     </Row>

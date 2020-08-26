@@ -3,9 +3,10 @@ import {connect} from "react-redux";
 import {Table} from "react-bootstrap";
 
 function SellOrders({ orderData }){
-
     return (
-        <Table striped bordered hover>
+        <React.Fragment>
+            <h5 className="sellText text-left">Asks</h5>
+        <Table striped bordered hover size="sm" className="mr-4">
             <thead>
             <tr>
                 <th>Version</th>
@@ -15,7 +16,7 @@ function SellOrders({ orderData }){
                 <th>Side</th>
                 <th>Status</th>
                 <th>CP</th>
-                <th>Timestamp</th>
+                <th>Stamp</th>
             </tr>
             </thead>
             <tbody>
@@ -23,17 +24,18 @@ function SellOrders({ orderData }){
                 orderData.sellOrders.map(order =>
                     <tr>
                         <td>{order.id}</td>
-                        <td>{order.name}</td>
-                        <td>{order.username}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
+                        <td>{order.id}</td>
+                        <td>{order.id}</td>
+                        <td>{order.id}</td>
+                        <td>{order.id}</td>
+                        <td>{order.id}</td>
+                        <td>{order.id}</td>
+                        <td>{order.id}</td>
                     </tr>)
             }
             </tbody>
         </Table>
+        </React.Fragment>
     )
 }
 

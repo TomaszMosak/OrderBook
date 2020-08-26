@@ -1,0 +1,14 @@
+.orderSplit {
+    border-left-color: #c4c4c4;
+    border-left-style: solid;
+    border-left-width: 5px;
+    height: auto;
+}
+
+.sellText{
+    color: red;
+}
+
+.buyText{
+    color: green;
+}
