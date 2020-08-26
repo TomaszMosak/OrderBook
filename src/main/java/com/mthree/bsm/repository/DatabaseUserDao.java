@@ -42,7 +42,7 @@ public class DatabaseUserDao implements UserDao {
     public Optional<User> getUserById(int userId) {
         try {
             User user = jdbc.queryForObject("SELECT * " +
-                                            "FROM user " +
+                                            "FROM User " +
                                             "WHERE id = ?", userRowMapper, userId);
 
             return Optional.ofNullable(user);
@@ -67,11 +67,11 @@ public class DatabaseUserDao implements UserDao {
     @Transactional
     public List<User> deleteUsers() {
         List<User> users = jdbc.query("SELECT * " +
-                                      "FROM user", userRowMapper);
+                                      "FROM User", userRowMapper);
 
         jdbc.update("DELETE FROM Trade");
         jdbc.update("DELETE FROM OrderHistory");
-        jdbc.update("DELETE FROM user");
+        jdbc.update("DELETE FROM User");
 
         return users;
     }
@@ -95,7 +95,7 @@ public class DatabaseUserDao implements UserDao {
         }
 
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user (userName, deleted) " +
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO User (userName, deleted) " +
                                                                               "VALUES (?, ?)",
                                                                               Statement.RETURN_GENERATED_KEYS);
 

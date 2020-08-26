@@ -100,22 +100,22 @@ public class OrderController {
     }
     
     
-    @GetMapping("/orders/buy/{status}")
-    public ResponseEntity<List<Order>> displayBuyOrdersByStatus(@PathVariable String stringStatus) {
+    @GetMapping("/order/buy/{status}")
+    public ResponseEntity<List<Order>> displayBuyOrdersByStatus(@PathVariable String status) {
         try{
-            OrderStatus status = OrderStatus.valueOf(stringStatus.toUpperCase());
-            List<Order> orders = orderService.getSideOrdersByStatus(true, status);
+            OrderStatus oStatus = OrderStatus.valueOf(status.toUpperCase());
+            List<Order> orders = orderService.getSideOrdersByStatus(true, oStatus);
             return ResponseEntity.ok(orders);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
     
-    @GetMapping("/orders/sell/{status}")
-    public ResponseEntity<List<Order>> displaySellOrdersByStatus(@PathVariable String stringStatus) {
+    @GetMapping("/order/sell/{status}")
+    public ResponseEntity<List<Order>> displaySellOrdersByStatus(@PathVariable String status) {
         try{
-            OrderStatus status = OrderStatus.valueOf(stringStatus.toUpperCase());
-            List<Order> orders = orderService.getSideOrdersByStatus(false, status);
+            OrderStatus oStatus = OrderStatus.valueOf(status.toUpperCase());
+            List<Order> orders = orderService.getSideOrdersByStatus(false, oStatus);
             return ResponseEntity.ok(orders);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

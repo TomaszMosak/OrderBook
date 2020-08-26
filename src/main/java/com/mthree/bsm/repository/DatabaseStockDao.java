@@ -43,7 +43,7 @@ public class DatabaseStockDao implements StockDao {
         Stock stock;
         try {
             stock = jdbc.queryForObject("SELECT * " +
-                                        "FROM stock " +
+                                        "FROM Stock " +
                                         "WHERE id = ?", stockRowMapper, stockId);
         } catch (IncorrectResultSizeDataAccessException e) {
             return Optional.empty();
@@ -61,7 +61,7 @@ public class DatabaseStockDao implements StockDao {
     @Override
     public List<Stock> getStocks() {
         List<Stock> stocks = jdbc.query("SELECT * " +
-                                        "FROM stock", stockRowMapper);
+                                        "FROM Stock", stockRowMapper);
 
         stocks.forEach(this::updateStockCentralParty);
 
@@ -74,14 +74,14 @@ public class DatabaseStockDao implements StockDao {
     @Override
     public List<Stock> deleteStocks() {
         List<Stock> stocks = jdbc.query("SELECT * " +
-                                        "FROM stock", stockRowMapper);
+                                        "FROM Stock", stockRowMapper);
 
         stocks.forEach(this::updateStockCentralParty);
 
         jdbc.update("DELETE FROM Trade");
         jdbc.update("DELETE FROM OrderHistory");
-        jdbc.update("DELETE FROM `order`");
-        jdbc.update("DELETE FROM stock");
+        jdbc.update("DELETE FROM `Order`");
+        jdbc.update("DELETE FROM Stock");
 
         return stocks;
     }
@@ -106,7 +106,7 @@ public class DatabaseStockDao implements StockDao {
 
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO stock (centralPartyId, companyName, stockSymbol, stockExchange, tickSize) " +
+                    "INSERT INTO Stock (centralPartyId, companyName, stockSymbol, stockExchange, tickSize) " +
                     "VALUES (?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
 
@@ -138,7 +138,7 @@ public class DatabaseStockDao implements StockDao {
     private void updateStockCentralParty(Stock stock) {
         assert stock != null;
         Party centralParty = jdbc.queryForObject("SELECT * " +
-                                                 "FROM party " +
+                                                 "FROM Party " +
                                                  "WHERE id = ?", partyRowMapper, stock.getCentralParty().getId());
         assert centralParty != null;
         stock.setCentralParty(centralParty);

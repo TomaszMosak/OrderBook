@@ -4,7 +4,7 @@ CREATE DATABASE OrderBookTest;
 
 USE OrderBookTest;
 
-CREATE TABLE `order` (
+CREATE TABLE `Order` (
     id int AUTO_INCREMENT NOT NULL ,
     partyId int  NOT NULL ,
     stockId int  NOT NULL ,
@@ -67,14 +67,14 @@ CREATE TABLE Party (
     )
 );
 
-ALTER TABLE `order` ADD CONSTRAINT fk_Order_partyId FOREIGN KEY(partyId)
+ALTER TABLE `Order` ADD CONSTRAINT fk_Order_partyId FOREIGN KEY(partyId)
 REFERENCES Party (id);
 
-ALTER TABLE `order` ADD CONSTRAINT fk_Order_stockId FOREIGN KEY(stockId)
+ALTER TABLE `Order` ADD CONSTRAINT fk_Order_stockId FOREIGN KEY(stockId)
 REFERENCES Stock (id);
 
 ALTER TABLE OrderHistory ADD CONSTRAINT fk_OrderHistory_orderId FOREIGN KEY(orderId)
-REFERENCES `order` (id);
+REFERENCES `Order` (id);
 
 ALTER TABLE OrderHistory ADD CONSTRAINT fk_OrderHistory_userId FOREIGN KEY(userId)
 REFERENCES User (id);

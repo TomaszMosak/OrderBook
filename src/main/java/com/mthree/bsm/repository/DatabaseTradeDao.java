@@ -41,7 +41,7 @@ public class DatabaseTradeDao implements TradeDao {
     @Override
     public List<Trade> getTrades() {
         List<Trade> trades = jdbc.query("SELECT * " +
-                                        "FROM trade", tradeRowMapper);
+                                        "FROM Trade", tradeRowMapper);
         if (!trades.isEmpty()) {
             trades.forEach(this::updateTradeOrders);
         }
@@ -127,7 +127,7 @@ public class DatabaseTradeDao implements TradeDao {
 
     private void updateOrderPartyStockUser(@NonNull Order order) {
         Party party = jdbc.queryForObject("SELECT * " +
-                                          "FROM party " +
+                                          "FROM Party " +
                                           "WHERE id = ?", partyRowMapper, order.getParty().getId());
         assert party != null;
         order.setParty(party);
@@ -162,7 +162,7 @@ public class DatabaseTradeDao implements TradeDao {
                                        "       h.price, " +
                                        "       h.currentSize, " +
                                        "       h.timestamp " +
-                                       "FROM `order` o " +
+                                       "FROM `Order` o " +
                                        "INNER JOIN OrderHistory h " +
                                        "     ON o.id = h.orderId " +
                                        "WHERE h.id = ? " +
