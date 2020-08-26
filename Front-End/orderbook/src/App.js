@@ -11,7 +11,7 @@ import CreateOrder from "./pages/CreateOrder";
 import EditOrder from "./pages/EditOrder";
 import UserPage from "./pages/UserPage";
 import ViewAllTrades from "./pages/ViewAllTrades";
-import ViewOrder from "./pages/ViewOrder";
+import ViewOrder from "./pages/ViewSingleOrder";
 import ViewSingleTrade from "./pages/ViewSingleTrade";
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -27,7 +27,7 @@ function App(){
                     <Route exact path="/editOrder" component={EditOrder}/>
                     <Route exact path="/userPage" component={UserPage}/>
                     <Route exact path="/allTrades" component={ViewAllTrades}/>
-                    <Route exact path="/ViewOrder" component={ViewOrder}/>
+                    <Route exact path="/singleOrder" component={ViewOrder}/>
 
                     {/* Only runs if they type in a weird url manually */}
                     <Route exact path="/404" component={NotFoundPage}/>

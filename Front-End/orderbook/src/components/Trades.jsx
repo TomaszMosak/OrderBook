@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import {connect} from "react-redux";
-import {fetchTrades, selectSingleTrade} from "../redux";
+import {fetchTrades, fetchSingleTrade} from "../redux";
 import {Table} from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function StockContainer(props){
-
     useEffect(() => {
         props.fetchTrades()
     }, [])
@@ -39,7 +38,6 @@ function StockContainer(props){
             }
             </tbody>
         </Table>
-
     )
 }
 
@@ -52,7 +50,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchTrades: () => dispatch(fetchTrades()),
-        selectSingleTrade: (id) => dispatch(selectSingleTrade(id))
+        selectSingleTrade: (id) => dispatch(fetchSingleTrade(id))
     }
 }
 
