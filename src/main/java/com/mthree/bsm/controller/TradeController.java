@@ -42,7 +42,7 @@ public class TradeController {
     }
 
     @GetMapping("/trade/{id}")
-    public ResponseEntity<Trade> displayTradeById(int id) {
+    public ResponseEntity<Trade> displayTradeById(@PathVariable int id) {
         return tradeService.getTradeById(id).map(ResponseEntity::ok)
                            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

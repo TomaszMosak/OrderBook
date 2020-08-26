@@ -15,7 +15,7 @@ import ViewOrder from "./pages/ViewSingleOrder";
 import ViewSingleTrade from "./pages/ViewSingleTrade";
 import NotFoundPage from "./pages/NotFoundPage";
 
-function App(){
+function App() {
     return (
         <Provider store={store}>
              <Router>
