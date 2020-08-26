@@ -3,7 +3,7 @@ import * as actions from './orderTypes';
 const initialState = {
     loading: false,
     numOfOrders: 0,
-    currentOrder: 0,
+    currentOrder: [],
     buyOrders: [],
     sellOrders: [],
     orderHistory: [],
@@ -33,6 +33,7 @@ const orderReducer = (state = initialState, action) => {
             }
         case actions.FETCH_ORDERS_FAILURE:
             return {
+                ...state,
                 loading: false,
                 buyOrders: [],
                 sellOrders: [],
@@ -43,6 +44,27 @@ const orderReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 orderHistory: action.payload,
+                error: ''
+            }
+        case actions.CREATE_NEW_ORDER:
+            return{
+                ...state,
+                loading: false,
+                currentOrder: action.payload,
+                error: ''
+            }
+        case actions.CANCEL_ORDER:
+            return{
+                ...state,
+                loading: false,
+                currentOrder: action.payload,
+                error: ''
+            }
+        case actions.EDIT_ORDER:
+            return{
+                ...state,
+                loading: false,
+                currentOrder: action.payload,
                 error: ''
             }
         default: return state

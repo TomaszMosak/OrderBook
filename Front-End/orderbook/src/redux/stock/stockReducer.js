@@ -18,12 +18,14 @@ const stockReducer = (state = initialState, action) => {
         }
         case actions.FETCH_STOCKS_SUCCESS:
             return {
+                ...state,
             loading: false,
             stocks: action.payload,
             error: ''
         }
         case actions.FETCH_STOCKS_FAILURE:
             return {
+                ...state,
             loading: false,
             stocks: [],
             error: action.payload

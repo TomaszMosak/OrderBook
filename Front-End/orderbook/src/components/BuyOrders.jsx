@@ -1,8 +1,10 @@
 import React from "react";
 import {connect} from "react-redux";
 import {Table} from "react-bootstrap";
+import {Link} from "react-router-dom";
+import {fetchOrderHistory} from "../redux";
 
-function BuyOrders({ orderData }){
+function BuyOrders({ orderData, fetchOrderHistory }){
     return (
         <React.Fragment>
             <h5 className="buyText text-right">Bids</h5>
@@ -20,7 +22,7 @@ function BuyOrders({ orderData }){
             {
                 orderData.buyOrders.map(order =>
                     <tr>
-                        <td>...</td>
+                        <td onClick={() => fetchOrderHistory(order.id)}><Link to="/singleOrder">Order History</Link></td>
                         <td>{order.versionTime}</td>
                         <td>{order.size}</td>
                         <td>{order.price}</td>
@@ -40,4 +42,10 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(BuyOrders);
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchOrderHistory: (id) => dispatch(fetchOrderHistory(id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BuyOrders);

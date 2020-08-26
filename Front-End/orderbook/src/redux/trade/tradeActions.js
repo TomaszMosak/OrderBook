@@ -44,7 +44,7 @@ const foundTradeDetails = trade => {
 export const fetchSingleTrade = (id) => {
     return (dispatch) => {
         dispatch(selectSingleTrade(id))
-        axios.get("https://jsonplaceholder.typicode.com/users/" + id)
+        axios.get("http://localhost:8080/trade/" + id)
             .then(r => {
                 const trades = r.data
                 dispatch(foundTradeDetails(trades))
