@@ -13,7 +13,7 @@ function MostRecentTrades(props){
     ) : props.tradeData.error ? (
         <h2>{props.tradeData.error}</h2>
     ) : (
-        <Table striped bordered hover>
+        <Table striped bordered hover size="sm">
             <thead>
             <tr>
                 <th>Stock</th>
