@@ -11,3 +11,5 @@ class EditOrder extends Component {
     
     
 }
+
+export default EditOrder
