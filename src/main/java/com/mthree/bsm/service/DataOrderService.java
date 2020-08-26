@@ -73,6 +73,11 @@ public class DataOrderService implements OrderService {
     public List<Order> getOrdersByStatus(OrderStatus status) {
         return orderDao.getOrdersByStatus(status);
     }
+    
+    @Override
+        public List<Order> getSideOrdersByStatus(boolean isBuy, OrderStatus status) {
+       return getOrdersBySideAndStatus(true, status);
+    }
 
     @Override
     public List<Order> getOrdersByUserId(int id) throws MissingEntityException {
@@ -161,8 +166,8 @@ public class DataOrderService implements OrderService {
     // match on startup, takes all active orders
     @Override
     public void matchOrders() throws IOException, MissingEntityException, InvalidEntityException {
-        List<Order> buyOrders = getActiveOrders(true);
-        List<Order> sellOrders = getActiveOrders(false);
+        List<Order> buyOrders = getOrdersBySideAndStatus(true, ACTIVE);
+        List<Order> sellOrders = getOrdersBySideAndStatus(false,ACTIVE);
         
         for(Order buyOrder: buyOrders) {
             for(Order sellOrder: sellOrders) {
@@ -175,7 +180,7 @@ public class DataOrderService implements OrderService {
 
     
     private void matchOrder(Order order) throws IOException, MissingEntityException, InvalidEntityException {
-        List<Order> counterSideOrders = getActiveOrders(!order.isBuy());
+        List<Order> counterSideOrders = getOrdersBySideAndStatus(!order.isBuy(), ACTIVE);
         
         for(Order cso: counterSideOrders) {
             if(order.isBuy() == true){
@@ -198,9 +203,9 @@ public class DataOrderService implements OrderService {
                 }
     }
     
-    private List<Order> getActiveOrders(boolean isBuy) {
+    private List<Order> getOrdersBySideAndStatus(boolean isBuy, OrderStatus status) {
         List<Order> activeSideOrders = orderDao.getOrdersBySide(isBuy);
-        return activeSideOrders.stream().filter(o -> o.getStatus().equals(ACTIVE)).collect(Collectors.toList());
+        return activeSideOrders.stream().filter(o -> o.getStatus().equals(status)).collect(Collectors.toList());
     }
     
     // when DB first loaded, setting the version time after a match will affect which price is selected for the trade
@@ -224,5 +229,7 @@ public class DataOrderService implements OrderService {
         
         auditDao.writeMessage("Edit order: " + order.getId() + ", matched.");
     }
+
+  
     
 }
