@@ -10,11 +10,13 @@ import com.mthree.bsm.repository.TradeDao;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author tombarton
  */
+@Service
 public class DataTradeService implements TradeService {
     
     @Autowired
