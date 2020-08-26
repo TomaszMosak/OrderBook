@@ -5,3 +5,6 @@
 .idea/
 >>>>>>> 1ce3a618ff0803df2bd9937d318d5c5878e76f3b
 OrderBook.iml
+auditlog.txt
+src/main/resources/application.properties
+src/main/resources/application.properties
