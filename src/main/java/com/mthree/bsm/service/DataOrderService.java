@@ -128,6 +128,11 @@ public class DataOrderService implements OrderService {
         // sets status
         matchOrder(order);
 
+        if (order.getStatus() == PENDING) {
+            order.setStatus(ACTIVE);
+            orderDao.editOrder(order);
+        }
+
         return order;
     }
 
@@ -176,6 +181,11 @@ public class DataOrderService implements OrderService {
             matchOrder(order);
         }
 
+        if (order.getStatus() == PENDING) {
+            order.setStatus(ACTIVE);
+            orderDao.editOrder(order);
+        }
+
         return order;
     }
 
@@ -197,6 +207,11 @@ public class DataOrderService implements OrderService {
 
     private void matchOrder(Order order) throws IOException, MissingEntityException, InvalidEntityException {
         List<Order> counterSideOrders = getOrdersBySideAndStatus(!order.isBuy(), ACTIVE);
+
+        if (counterSideOrders.isEmpty()) {
+            order.setStatus(ACTIVE);
+            orderDao.editOrder(order);
+        }
 
         for (Order cso : counterSideOrders) {
             if (order.isBuy()) {

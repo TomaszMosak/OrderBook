@@ -136,13 +136,16 @@ public class OrderController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/order")
-    public Order createOrder(@RequestBody OrderRequestEntity orderRequestEntity) throws
+    public Order createOrder(@RequestBody CreateOrderRequestEntity createOrderRequestEntity) throws
             IOException,
             InvalidEntityException,
             MissingEntityException {
-        return orderService.createOrder(orderRequestEntity.stockId,
-                                        orderRequestEntity.partyId, orderRequestEntity.userId,
-                                        orderRequestEntity.isBuy, orderRequestEntity.price, orderRequestEntity.size);
+        return orderService.createOrder(createOrderRequestEntity.stockId,
+                                        createOrderRequestEntity.partyId,
+                                        createOrderRequestEntity.userId,
+                                        createOrderRequestEntity.isBuy,
+                                        createOrderRequestEntity.price,
+                                        createOrderRequestEntity.size);
     }
 
     /**
@@ -175,11 +178,12 @@ public class OrderController {
      */
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/order/edit/{id}")
-    public void editOrder(@PathVariable int id,
-                          @RequestBody int userId,
-                          @RequestBody BigDecimal price,
-                          @RequestBody int size) throws IOException, InvalidEntityException, MissingEntityException {
-        orderService.editOrder(id, price, size, userId);
+    public void editOrder(@PathVariable int id, @RequestBody EditOrderRequestEntity editOrderRequestEntity) throws
+            IOException,
+            InvalidEntityException,
+            MissingEntityException {
+        orderService.editOrder(id, editOrderRequestEntity.price, editOrderRequestEntity.size,
+                               editOrderRequestEntity.userId);
     }
 
     @ExceptionHandler(IOException.class)
@@ -198,7 +202,7 @@ public class OrderController {
         return e.getValidationErrors();
     }
 
-    public static class OrderRequestEntity {
+    public static class CreateOrderRequestEntity {
 
         int stockId;
         int partyId;
@@ -211,7 +215,7 @@ public class OrderController {
             return stockId;
         }
 
-        public OrderRequestEntity setStockId(int stockId) {
+        public CreateOrderRequestEntity setStockId(int stockId) {
             this.stockId = stockId;
             return this;
         }
@@ -220,7 +224,7 @@ public class OrderController {
             return partyId;
         }
 
-        public OrderRequestEntity setPartyId(int partyId) {
+        public CreateOrderRequestEntity setPartyId(int partyId) {
             this.partyId = partyId;
             return this;
         }
@@ -229,7 +233,7 @@ public class OrderController {
             return userId;
         }
 
-        public OrderRequestEntity setUserId(int userId) {
+        public CreateOrderRequestEntity setUserId(int userId) {
             this.userId = userId;
             return this;
         }
@@ -238,7 +242,7 @@ public class OrderController {
             return isBuy;
         }
 
-        public OrderRequestEntity setBuy(boolean buy) {
+        public CreateOrderRequestEntity setBuy(boolean buy) {
             isBuy = buy;
             return this;
         }
@@ -247,7 +251,7 @@ public class OrderController {
             return price;
         }
 
-        public OrderRequestEntity setPrice(BigDecimal price) {
+        public CreateOrderRequestEntity setPrice(BigDecimal price) {
             this.price = price;
             return this;
         }
@@ -256,7 +260,43 @@ public class OrderController {
             return size;
         }
 
-        public OrderRequestEntity setSize(int size) {
+        public CreateOrderRequestEntity setSize(int size) {
+            this.size = size;
+            return this;
+        }
+
+    }
+
+
+    public static class EditOrderRequestEntity {
+
+        private int userId;
+        private BigDecimal price;
+        private int size;
+
+        public int getUserId() {
+            return userId;
+        }
+
+        public EditOrderRequestEntity setUserId(int userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public EditOrderRequestEntity setPrice(BigDecimal price) {
+            this.price = price;
+            return this;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public EditOrderRequestEntity setSize(int size) {
             this.size = size;
             return this;
         }
