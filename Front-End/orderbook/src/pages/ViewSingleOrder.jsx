@@ -6,7 +6,7 @@ import '../styles/MainPage.css'
 import MyNavBar from "../components/MyNavBar"
 import SingleOrder from "../components/singleOrder";
 
-class viewOrder extends Component {
+class viewSingleOrder extends Component {
     render() {
         return (
             <Container className="singleTradeContainer">
@@ -19,7 +19,7 @@ class viewOrder extends Component {
                 <MyNavBar />
                 <Container>
                     <Col className="tableContent align-content-center">
-                        <h4>Trade Summary</h4>
+                        <h4>Order History</h4>
                         <SingleOrder />
                     </Col>
                 </Container>
@@ -28,4 +28,4 @@ class viewOrder extends Component {
     }
 }
 
-export default viewOrder;
+export default viewSingleOrder;

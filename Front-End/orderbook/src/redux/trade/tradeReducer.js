@@ -4,6 +4,7 @@ const initialState = {
     loading: false,
     numOfTrades: -1,
     selectedTradeId: -1,
+    selectedTrade: [],
     trades: [],
     error: ''
 }
@@ -33,6 +34,11 @@ const tradeReducer = (state = initialState, action) => {
             return {
                 ...state,
                 selectedTradeId: action.payload,
+            }
+        case actions.FETCH_SINGLE_TRADE:
+            return {
+                ...state,
+                selectedTrade: action.payload
             }
         default: return state
     }

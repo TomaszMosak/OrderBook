@@ -1,5 +1,11 @@
 import axios from "axios";
-import {FETCH_ORDERS_FAILURE, FETCH_ORDERS_REQUEST, FETCH_ORDERS_SUCCESS} from "./orderTypes";
+import {
+    FETCH_ORDERS_FAILURE,
+    FETCH_ORDERS_REQUEST,
+    FETCH_BUY_ORDERS_SUCCESS,
+    FETCH_SELL_ORDERS_SUCCESS,
+    FETCH_ORDER_HISTORY
+} from "./orderTypes";
 
 const fetchOrdersRequest = () => {
     return {
@@ -7,13 +13,17 @@ const fetchOrdersRequest = () => {
     }
 }
 
-const fetchOrdersSuccess = (buyOrders, sellOrders) => {
+const fetchBuyOrdersSuccess = (orders) => {
     return {
-        type: FETCH_ORDERS_SUCCESS,
-        payload: {
-            buyOrders,
-            sellOrders
-        }
+        type: FETCH_BUY_ORDERS_SUCCESS,
+        payload: orders
+    }
+}
+
+const fetchSellOrdersSuccess = (orders) => {
+    return {
+        type: FETCH_SELL_ORDERS_SUCCESS,
+        payload: orders
     }
 }
 
@@ -24,13 +34,46 @@ const fetchOrdersFailure = error => {
     }
 }
 
-export const fetchOrders = () => {
+export const fetchAllOrders = () => {
     return (dispatch) => {
         dispatch(fetchOrdersRequest)
         axios.get("https://jsonplaceholder.typicode.com/users")
             .then(r => {
-                const orders = r.data
-                dispatch(fetchOrdersSuccess(orders))
+                const buyOrders = r.data
+                dispatch(fetchBuyOrdersSuccess(buyOrders))
+                //response data is the array of stocks
+            })
+            .catch(err => {
+                const errorMsg = err.message
+                dispatch(fetchOrdersFailure(errorMsg))
+                // error.message is the error description
+            })
+        axios.get("https://jsonplaceholder.typicode.com/users")
+            .then(r => {
+                const sellOrders = r.data
+                dispatch(fetchSellOrdersSuccess(sellOrders))
+            })
+            .catch(err => {
+                const errorMsg = err.message
+                dispatch(fetchOrdersFailure(errorMsg))
+            })
+    }
+}
+
+const returnOrderHistory = (orderHistory) => {
+    return {
+        type: FETCH_ORDER_HISTORY,
+        payload: orderHistory
+    }
+}
+
+export const fetchOrderHistory = orderId => {
+    return (dispatch) => {
+        dispatch(fetchOrdersRequest)
+        axios.get("https://jsonplaceholder.typicode.com/users")
+            .then(r => {
+                const buyOrders = r.data
+                dispatch(returnOrderHistory(buyOrders))
                 //response data is the array of stocks
             })
             .catch(err => {

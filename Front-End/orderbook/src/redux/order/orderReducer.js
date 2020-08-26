@@ -17,11 +17,18 @@ const orderReducer = (state = initialState, action) => {
                 ...state,
                 loading: true
             }
-        case actions.FETCH_ORDERS_SUCCESS:
+        case actions.FETCH_BUY_ORDERS_SUCCESS:
             return {
+                ...state,
                 loading: false,
-                buyOrders: action.payload.buyOrders,
-                sellOrders: action.payload.sellOrders,
+                buyOrders: action.payload,
+                error: ''
+            }
+        case actions.FETCH_SELL_ORDERS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                sellOrders: action.payload,
                 error: ''
             }
         case actions.FETCH_ORDERS_FAILURE:
@@ -30,6 +37,13 @@ const orderReducer = (state = initialState, action) => {
                 buyOrders: [],
                 sellOrders: [],
                 error: action.payload
+            }
+        case actions.FETCH_ORDER_HISTORY:
+            return {
+                ...state,
+                loading: false,
+                orderHistory: action.payload,
+                error: ''
             }
         default: return state
     }
