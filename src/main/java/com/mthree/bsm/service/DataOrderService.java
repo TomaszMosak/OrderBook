@@ -31,6 +31,7 @@ import com.mthree.bsm.repository.UserDao;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -184,6 +185,7 @@ public class DataOrderService implements OrderService {
     public void matchOrders() throws IOException, MissingEntityException, InvalidEntityException {
         List<Order> buyOrders = getOrdersBySideAndStatus(true, ACTIVE);
         List<Order> sellOrders = getOrdersBySideAndStatus(false,ACTIVE);
+        
 
         for (Order buyOrder : buyOrders) {
             for (Order sellOrder : sellOrders) {
@@ -220,9 +222,16 @@ public class DataOrderService implements OrderService {
         }
     }
 
+    // sorts lists appropriately
     private List<Order> getOrdersBySideAndStatus(boolean isBuy, OrderStatus status) {
         List<Order> activeSideOrders = orderDao.getOrdersBySide(isBuy);
-        return activeSideOrders.stream().filter(o -> o.getStatus().equals(status)).collect(Collectors.toList());
+        activeSideOrders = activeSideOrders.stream().filter(o -> o.getStatus().equals(status)).collect(Collectors.toList());
+        if(isBuy == true){
+            Collections.reverse(activeSideOrders);
+        } else {
+            Collections.sort(activeSideOrders);
+        }
+        return activeSideOrders;
     }
 
     // when DB first loaded, setting the version time after a match will affect which price is selected for the trade

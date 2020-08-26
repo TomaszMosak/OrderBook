@@ -49,7 +49,7 @@ public class Order {
     private OrderStatus status;
 
     @NotNull(message = "The order's creation time cannot be null.")
-    @PastOrPresent(message = "The order's creation time must be in the past.")
+    // @PastOrPresent(message = "The order's creation time must be in the past.")
     private LocalDateTime versionTime;
 
     public Order() {
