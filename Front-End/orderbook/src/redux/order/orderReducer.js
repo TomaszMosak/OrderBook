@@ -6,10 +6,11 @@ const initialState = {
     currentOrder: 0,
     buyOrders: [],
     sellOrders: [],
+    orderHistory: [],
     error: ''
 }
 
-const stockReducer = (state = initialState, action) => {
+const orderReducer = (state = initialState, action) => {
     switch(action.type){
         case actions.FETCH_ORDERS_REQUEST:
             return {
@@ -19,17 +20,19 @@ const stockReducer = (state = initialState, action) => {
         case actions.FETCH_ORDERS_SUCCESS:
             return {
                 loading: false,
-                stocks: action.payload,
+                buyOrders: action.payload.buyOrders,
+                sellOrders: action.payload.sellOrders,
                 error: ''
             }
         case actions.FETCH_ORDERS_FAILURE:
             return {
                 loading: false,
-                stocks: [],
+                buyOrders: [],
+                sellOrders: [],
                 error: action.payload
             }
         default: return state
     }
 }
 
-export default stockReducer;
+export default orderReducer;

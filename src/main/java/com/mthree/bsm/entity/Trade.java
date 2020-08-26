@@ -98,9 +98,7 @@ public class Trade {
     }
 
     public BigDecimal getPrice() {
-        LocalDateTime buyTime = buyOrder.getVersionTime();
-        LocalDateTime sellTime = sellOrder.getVersionTime();
-        if(buyTime.isBefore(sellTime)){
+        if(buyOrder.getHistoryId()>sellOrder.getHistoryId()){
             return buyOrder.getPrice();
         } else {
             return sellOrder.getPrice();

@@ -32,7 +32,7 @@ const tradeReducer = (state = initialState, action) => {
         case actions.SELECT_SINGLE_TRADE:
             return {
                 ...state,
-                selectedTradeId: action.payload
+                selectedTradeId: action.payload,
             }
         default: return state
     }

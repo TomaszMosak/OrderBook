@@ -32,7 +32,7 @@ public interface OrderService {
     
     Optional<Order> getOrderById(int id);
     
-    Order createOrder(int stockId, int partyId, int userId, boolean isBuy, BigDecimal price, int size) throws InvalidEntityException, IOException;
+    Order createOrder(int stockId, int partyId, int userId, boolean isBuy, BigDecimal price, int size) throws InvalidEntityException, MissingEntityException, IOException;
     
     void cancelOrder(int id, int userId) throws MissingEntityException, InvalidEntityException, IOException;
     

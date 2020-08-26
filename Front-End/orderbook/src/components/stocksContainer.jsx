@@ -3,16 +3,16 @@ import {connect} from "react-redux";
 import { fetchStocks } from "../redux";
 import {Table} from "react-bootstrap";
 
-function StockContainer({ stockData, fetchStocks }){
+function StockContainer(props){
 
     useEffect(() => {
-        fetchStocks()
+        props.fetchStocks()
     }, [])
 
-    return stockData.loading ? (
+    return props.stockData.loading ? (
         <h2>Loading Text</h2>
-    ) : stockData.error ? (
-        <h2>{stockData.error}</h2>
+    ) : props.stockData.error ? (
+        <h2>{props.stockData.error}</h2>
     ) : (
         <Table striped bordered hover>
             <thead>
@@ -25,7 +25,7 @@ function StockContainer({ stockData, fetchStocks }){
             </thead>
             <tbody>
                 {
-                    stockData.stocks.map(stock =>
+                    props.stockData.stocks.map(stock =>
                         <tr>
                             <td>{stock.address.city}</td>
                             <td>{stock.address.city}</td>

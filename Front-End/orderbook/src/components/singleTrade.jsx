@@ -14,7 +14,7 @@ function SingleTrade({ tradeData, singleTrade }){
     }
 
     const found = search(singleTrade, tradeData.trades)
-    if(found == undefined){
+    if(found === undefined){
         return(
         <Redirect to="/404"/>
         )

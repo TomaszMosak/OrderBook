@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {connect} from "react-redux";
 import {fetchTrades, selectSingleTrade} from "../redux";
 import {Table} from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-function StockContainer({ tradeData, fetchTrades, selectSingleTrade }){
+function StockContainer(props){
 
     useEffect(() => {
-        fetchTrades()
+        props.fetchTrades()
     }, [])
-    const [id, setId] = useState(tradeData.trades.id);
-    return tradeData.loading ? (
+    return props.tradeData.loading ? (
         <h2>Loading Text</h2>
-    ) : tradeData.error ? (
-        <h2>{tradeData.error}</h2>
+    ) : props.tradeData.error ? (
+        <h2>{props.tradeData.error}</h2>
     ) : (
         <Table striped bordered hover>
             <thead>
@@ -28,14 +27,14 @@ function StockContainer({ tradeData, fetchTrades, selectSingleTrade }){
             </thead>
             <tbody>
             {
-                tradeData.trades.map(trade =>
+                props.tradeData.trades.map(trade =>
                     <tr>
                         <td>{trade.address.city}</td>
                         <td>{trade.address.city}</td>
                         <td>{trade.address.city}</td>
                         <td>{trade.address.city}</td>
                         <td>{trade.address.city}</td>
-                        <td onClick={() => selectSingleTrade(trade.id)}><Link to="/singleTrade">Trade Details</Link></td>
+                        <td onClick={() => props.selectSingleTrade(trade.id)}><Link to="/singleTrade">Trade Details</Link></td>
                     </tr>)
             }
             </tbody>
