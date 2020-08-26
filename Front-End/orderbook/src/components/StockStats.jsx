@@ -8,35 +8,26 @@ function StockStats({ orderData, stockData }){
 
     return (
         <Card className="border-dark mb-2">
-            <Card.Header className="text-center">
-                <Card.Title>Stock Information: {stockData.name}</Card.Title>
-                    <Card.Subtitle className="text-center">{stockData.username}</Card.Subtitle>
-                </Card.Header>
+                    <Card.Title className="text-center">Stock Information: {stockData.name}</Card.Title>
+                    <Card.Subtitle className="subTitle text-center mb-2">{stockData.username}</Card.Subtitle>
             <Row>
                 <Col>
-                    <Card.Body>This is some text within a card body.</Card.Body>
+                    <Card className="border-dark mb-2 ml-2">
+                        <Card.Title className="ml-3">Orders</Card.Title>
+                    <Card.Body>
+                        <p>Total Accepted: </p>
+                        <p>Accepted Today: </p>
+                    </Card.Body>
+                    </Card>
                 </Col>
-                <div className="verticalLine"/>
                 <Col>
-                    <Card.Body>This is some text within a card body.</Card.Body>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <Card.Body>This is some text within a card body.</Card.Body>
-                </Col>
-                <div className="verticalLine"/>
-                <Col>
-                    <Card.Body>This is some text within a card body.</Card.Body>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <Card.Body>This is some text within a card body.</Card.Body>
-                </Col>
-                <div className="verticalLine"/>
-                <Col>
-                    <Card.Body>This is some text within a card body.</Card.Body>
+                    <Card className="border-dark mb-2 mr-2">
+                        <Card.Title className="text-right mr-3">Trades</Card.Title>
+                        <Card.Body>
+                            <p>Total Volume Traded: </p>
+                            <p>Most Recent Traded Price: </p>
+                        </Card.Body>
+                    </Card>
                 </Col>
             </Row>
         </Card>

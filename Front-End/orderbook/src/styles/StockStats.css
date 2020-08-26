@@ -2,3 +2,10 @@
     border-left: 1.5px solid #D8D8D8;
     height: auto;
 }
+
+.subTitle{
+    border-top-style: solid;
+    border-color: #D8D8D8;
+    border-width: 1.5px;
+    color: #989898;
+}
