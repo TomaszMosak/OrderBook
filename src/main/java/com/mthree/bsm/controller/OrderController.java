@@ -98,6 +98,29 @@ public class OrderController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    
+    
+    // double check shouldn't be an exception thrown for an incorrect status entered
+    @GetMapping("/orders/buy/{status}")
+    public ResponseEntity<List<Order>> displayBuyOrdersByStatus(@PathVariable OrderStatus status) {
+//        try{
+            List<Order> orders = orderService.getSideOrdersByStatus(true, status);
+            return ResponseEntity.ok(orders);
+//        } catch (MissingEntityException e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+    }
+    
+    @GetMapping("/orders/sell/{status}")
+    public ResponseEntity<List<Order>> displaySellOrdersByStatus(@PathVariable OrderStatus status) {
+//        try{
+            List<Order> orders = orderService.getSideOrdersByStatus(false, status);
+            return ResponseEntity.ok(orders);
+//        } catch (MissingEntityException e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+    }
+
 
     /**
      * Creates a new order in the system with the given parameters. If the parameters passed are OK, returns the created
