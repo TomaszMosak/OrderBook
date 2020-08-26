@@ -18,9 +18,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataStockService implements StockService {
 
-    @Autowired
     StockDao stockDao;
-    
+
+    @Autowired
+    public DataStockService(StockDao stockDao) {
+        this.stockDao = stockDao;
+    }
+
     @Override
     public List<Stock> getStocks() {
        return stockDao.getStocks();

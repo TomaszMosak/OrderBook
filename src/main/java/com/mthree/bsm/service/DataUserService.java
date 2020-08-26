@@ -18,8 +18,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataUserService implements UserService {
     
-    @Autowired
     UserDao userDao;
+
+    @Autowired
+    public DataUserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public List<User> getUsers() {

@@ -18,8 +18,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataPartyService implements PartyService {
     
-    @Autowired
     PartyDao partyDao;
+
+    @Autowired
+    public DataPartyService(PartyDao partyDao) {
+        this.partyDao = partyDao;
+    }
 
     @Override
     public List<Party> getParties() {
