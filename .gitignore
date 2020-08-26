@@ -8,3 +8,4 @@ OrderBook.iml
 auditlog.txt
 src/main/resources/application.properties
 src/main/resources/application.properties
+*.properties
