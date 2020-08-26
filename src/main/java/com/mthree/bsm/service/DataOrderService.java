@@ -167,12 +167,12 @@ public class DataOrderService implements OrderService {
         LocalDateTime versionTime = LocalDateTime.now();
         order.setVersionTime(versionTime);
 
-        auditDao.writeMessage("Edit Order: " + order.getId() + ", userId:  " + userId);
+        auditDao.writeMessage("Edit Order " + order.getId() + ", userId:  " + userId);
 
         order.setStatus(PENDING);
         orderDao.editOrder(order);
 
-        if(originalPrice != price) {
+        if(!originalPrice.equals(price)) {
             matchOrder(order);
         }
 
@@ -217,7 +217,7 @@ public class DataOrderService implements OrderService {
             LocalDateTime executionTime = LocalDateTime.now();
             Trade trade = new Trade(buyOrder, sellOrder, executionTime);
             tradeDao.addTrade(trade);
-            auditDao.writeMessage("Add trade:" + trade.getId() + " to Repository.");
+            auditDao.writeMessage("Add trade " + trade.getId() + " to repository.");
 
             editMatchedOrders(buyOrder, trade);
             editMatchedOrders(sellOrder, trade);
@@ -227,8 +227,10 @@ public class DataOrderService implements OrderService {
     // sorts lists appropriately
     private List<Order> getOrdersBySideAndStatus(boolean isBuy, OrderStatus status) {
         List<Order> activeSideOrders = orderDao.getOrdersBySide(isBuy);
-        activeSideOrders = activeSideOrders.stream().filter(o -> o.getStatus().equals(status)).collect(Collectors.toList());
-        if(isBuy == true){
+        activeSideOrders = activeSideOrders.stream()
+                                           .filter(o -> o.getStatus() == status)
+                                           .collect(Collectors.toList());
+        if(isBuy){
             Collections.reverse(activeSideOrders);
         } else {
             Collections.sort(activeSideOrders);
@@ -258,7 +260,7 @@ public class DataOrderService implements OrderService {
         }
         orderDao.editOrder(order);
 
-        auditDao.writeMessage("Edit order: " + order.getId() + ", matched.");
+        auditDao.writeMessage("Edit order " + order.getId() + ", matched.");
     }
 
   
