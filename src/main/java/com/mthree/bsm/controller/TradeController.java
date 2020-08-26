@@ -6,10 +6,14 @@
 package com.mthree.bsm.controller;
 
 import com.mthree.bsm.entity.Trade;
+import com.mthree.bsm.repository.InvalidEntityException;
+import com.mthree.bsm.repository.MissingEntityException;
+import com.mthree.bsm.service.OrderService;
 
 import java.util.List;
 
 import com.mthree.bsm.service.TradeService;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +29,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class TradeController {
 
     private final TradeService tradeService;
+    private final OrderService orderService;
 
     @Autowired
-    public TradeController(TradeService tradeService) {
+    public TradeController(TradeService tradeService, OrderService orderService) {
         this.tradeService = tradeService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/trade")
-    public List<Trade> displayTrades() {
+    public List<Trade> displayTrades() throws IOException, MissingEntityException, InvalidEntityException {
+        orderService.matchOrders();
         return tradeService.getTrades();
     }
 
