@@ -15,7 +15,7 @@ import java.util.Objects;
  * #price} for the order, the {@link #size} of the order and the {@link #versionTime} when the current version of the
  * order came into being.
  */
-public class Order {
+public class Order implements Comparable<Order> {
 
     private int id;
 
@@ -212,4 +212,12 @@ public class Order {
         return this;
     }
 
+    // allows sorting by price
+    @Override
+    public int compareTo(Order o) {
+        if (getPrice() == null || o.getPrice() == null) {
+            return 0;
+        }
+        return getPrice().compareTo(o.getPrice());
+    }
 }

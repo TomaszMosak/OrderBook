@@ -85,7 +85,7 @@ public class DataOrderService implements OrderService {
     
     @Override
         public List<Order> getSideOrdersByStatus(boolean isBuy, OrderStatus status) {
-       return getOrdersBySideAndStatus(true, status);
+       return getOrdersBySideAndStatus(isBuy, status);
     }
 
     @Override
