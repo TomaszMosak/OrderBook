@@ -37,7 +37,7 @@ public class DatabasePartyDao implements PartyDao {
     public Optional<Party> getPartyById(int partyId) {
         try {
             Party party = jdbc.queryForObject("SELECT * " +
-                                              "FROM party " +
+                                              "FROM Party " +
                                               "WHERE id = ?", partyRowMapper, partyId);
 
             return Optional.ofNullable(party);
@@ -52,7 +52,7 @@ public class DatabasePartyDao implements PartyDao {
     @Override
     public List<Party> getParties() {
         return jdbc.query("SELECT * " +
-                          "FROM party", partyRowMapper);
+                          "FROM Party", partyRowMapper);
     }
 
     /**
@@ -61,13 +61,13 @@ public class DatabasePartyDao implements PartyDao {
     @Override
     public List<Party> deleteParties() {
         List<Party> parties = jdbc.query("SELECT * " +
-                                         "FROM party", partyRowMapper);
+                                         "FROM Party", partyRowMapper);
 
         jdbc.update("DELETE FROM Trade");
         jdbc.update("DELETE FROM OrderHistory");
-        jdbc.update("DELETE FROM `order`");
+        jdbc.update("DELETE FROM `Order`");
         jdbc.update("DELETE FROM Stock");
-        jdbc.update("DELETE FROM party");
+        jdbc.update("DELETE FROM Party");
 
         return parties;
     }
@@ -91,7 +91,7 @@ public class DatabasePartyDao implements PartyDao {
         }
 
         PreparedStatementCreator preparedStatementCreator = (Connection connection) -> {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO party (name, symbol) " +
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Party (name, symbol) " +
                                                                               "VALUES (?, ?)",
                                                                               Statement.RETURN_GENERATED_KEYS);
 

@@ -49,7 +49,7 @@ public class DatabaseOrderDao implements OrderDao {
                                   "        h.price, " +
                                   "        h.currentSize, " +
                                   "        h.timestamp " +
-                                  " FROM `order` o " +
+                                  " FROM `Order` o " +
                                   " INNER JOIN OrderHistory h " +
                                   "     ON o.id = h.orderId " +
                                   " ORDER BY historyId ";
@@ -76,7 +76,7 @@ public class DatabaseOrderDao implements OrderDao {
                                          "       h.price, " +
                                          "       h.currentSize, " +
                                          "       h.timestamp " +
-                                         "FROM `order` o " +
+                                         "FROM `Order` o " +
                                          "INNER JOIN OrderHistory h " +
                                          "     ON o.id = h.orderId " +
                                          "WHERE o.side = ? " +
@@ -105,7 +105,7 @@ public class DatabaseOrderDao implements OrderDao {
                                            "       h.price, " +
                                            "       h.currentSize, " +
                                            "       h.timestamp " +
-                                           "FROM `order` o " +
+                                           "FROM `Order` o " +
                                            "INNER JOIN OrderHistory h " +
                                            "     ON o.id = h.orderId " +
                                            "WHERE o.orderStatus = ? " +
@@ -143,7 +143,7 @@ public class DatabaseOrderDao implements OrderDao {
                                             "       h.price, " +
                                             "       h.currentSize, " +
                                             "       h.timestamp " +
-                                            "FROM `order` o " +
+                                            "FROM `Order` o " +
                                             "INNER JOIN OrderHistory h " +
                                             "     ON o.id = h.orderId " +
                                             "WHERE h.userId = ? " +
@@ -163,7 +163,7 @@ public class DatabaseOrderDao implements OrderDao {
     @Override
     public List<Order> getOrdersByPartyId(int partyId) throws MissingEntityException {
         final String GET_PARTY_BY_ID = "SELECT * " +
-                                       "FROM party " +
+                                       "FROM Party " +
                                        "WHERE id = ?";
         List<Party> parties = jdbc.query(GET_PARTY_BY_ID, partyRowMapper, partyId);
         if (parties.isEmpty()) {
@@ -180,7 +180,7 @@ public class DatabaseOrderDao implements OrderDao {
                                              "       h.price, " +
                                              "       h.currentSize, " +
                                              "       h.timestamp " +
-                                             "FROM `order` o " +
+                                             "FROM `Order` o " +
                                              "INNER JOIN OrderHistory h " +
                                              "     ON o.id = h.orderId " +
                                              "WHERE o.partyId = ? " +
@@ -209,7 +209,7 @@ public class DatabaseOrderDao implements OrderDao {
                                        "       h.price, " +
                                        "       h.currentSize, " +
                                        "       h.timestamp " +
-                                       "FROM `order` o " +
+                                       "FROM `Order` o " +
                                        "INNER JOIN OrderHistory h " +
                                        "     ON o.id = h.orderId " +
                                        "WHERE o.id = ? " +
@@ -250,7 +250,7 @@ public class DatabaseOrderDao implements OrderDao {
                                          "       h.price, " +
                                          "       h.currentSize, " +
                                          "       h.timestamp " +
-                                         "FROM `order` o " +
+                                         "FROM `Order` o " +
                                          "INNER JOIN OrderHistory h " +
                                          "     ON o.id = h.orderId " +
                                          "WHERE o.id = ? " +
@@ -289,7 +289,7 @@ public class DatabaseOrderDao implements OrderDao {
             throw new InvalidEntityException(violationMessages);
         }
 
-        final String CREATE_ORDER = "INSERT INTO `order` (partyId, stockId, orderStatus, side) " +
+        final String CREATE_ORDER = "INSERT INTO `Order` (partyId, stockId, orderStatus, side) " +
                                     "VALUES (?, ?, ?, ?)";
 
 
@@ -374,7 +374,7 @@ public class DatabaseOrderDao implements OrderDao {
         List<Order> orders = getOrders();
 
         jdbc.update("DELETE FROM OrderHistory");
-        jdbc.update("DELETE FROM `order`");
+        jdbc.update("DELETE FROM `Order`");
 
         return orders;
     }
@@ -389,7 +389,7 @@ public class DatabaseOrderDao implements OrderDao {
      */
     private void updateOrderPartyStockUser(@NonNull Order order) {
         Party party = jdbc.queryForObject("SELECT * " +
-                                          "FROM party " +
+                                          "FROM Party " +
                                           "WHERE id = ?", partyRowMapper, order.getParty().getId());
         assert party != null;
         order.setParty(party);

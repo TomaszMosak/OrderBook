@@ -3,14 +3,14 @@ USE OrderBook;
 DELETE FROM Trade;
 DELETE FROM User;
 DELETE FROM OrderHistory;
-DELETE FROM `order`;
+DELETE FROM `Order`;
 DELETE FROM Stock;
 DELETE FROM Party;
 
 ALTER TABLE Trade AUTO_INCREMENT = 1;
 ALTER TABLE User AUTO_INCREMENT = 1;
 ALTER TABLE OrderHistory AUTO_INCREMENT = 1;
-ALTER TABLE `order` AUTO_INCREMENT = 1;
+ALTER TABLE `Order` AUTO_INCREMENT = 1;
 ALTER TABLE Stock AUTO_INCREMENT = 1;
 ALTER TABLE Party AUTO_INCREMENT = 1;
 
@@ -157,7 +157,6 @@ INSERT INTO OrderHistory (orderId, price, currentSize, userId, timestamp) VALUES
     (23, 1234.14, 250, 1, '2017-12-23T11:55:27'),
     (24, 1234.15, 225, 1, '2017-12-24T12:55:28'),
     (25, 1234.16, 123, 1, '2017-12-27T11:55:27'),
-
     (26, 1276.17, 110, 1, '2018-01-01T11:55:28'),
     (27, 1274.18, 120, 1, '2018-01-02T11:55:27'),
     (28, 1334.19, 130, 1, '2018-02-03T11:55:28'),
@@ -183,7 +182,6 @@ INSERT INTO OrderHistory (orderId, price, currentSize, userId, timestamp) VALUES
     (48, 1234.19, 150, 1, '2018-12-23T15:55:28'),
     (49, 1234.20, 160, 1, '2018-12-25T15:55:27'),
     (50, 1234.21, 170, 1, '2018-12-27T16:55:28'),
-
     (51, 1234.12, 101, 1, '2019-01-01T16:55:27'),
     (52, 1234.13, 102, 1, '2019-01-02T16:55:28'),
     (53, 1234.14, 103, 1, '2019-02-03T16:55:27'),
@@ -209,7 +207,6 @@ INSERT INTO OrderHistory (orderId, price, currentSize, userId, timestamp) VALUES
     (73, 1234.14, 150, 1, '2019-12-23T10:55:27'),
     (74, 1234.15, 160, 1, '2019-12-24T10:55:28'),
     (75, 1234.16, 170, 1, '2019-12-27T09:55:27'),
-
     (76, 1235.89, 101, 1, '2020-01-01T09:55:28'),
     (77, 1236.18, 102, 1, '2020-01-02T09:55:27'),
     (78, 1237.19, 103, 1, '2020-02-03T14:55:28'),
