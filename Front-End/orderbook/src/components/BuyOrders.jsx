@@ -9,14 +9,13 @@ function BuyOrders({ orderData }){
         <Table striped bordered hover size="sm" className="mr-4">
             <thead>
             <tr>
-                <th>Version</th>
-                <th>Stock Symbol</th>
-                <th>Price Remaining</th>
-                <th>Size</th>
-                <th>Side</th>
-                <th>Status</th>
+                <th>TimeStamp</th>
                 <th>CP</th>
-                <th>Stamp</th>
+                <th>Status</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Version</th>
+                <th>Tick</th>
             </tr>
             </thead>
             <tbody>
@@ -29,8 +28,7 @@ function BuyOrders({ orderData }){
                         <td>{order.id}</td>
                         <td>{order.id}</td>
                         <td>{order.id}</td>
-                        <td>{order.id}</td>
-                        <td>{order.id}</td>
+                        <td className="text-center"><i className="arrow up"></i></td>
                     </tr>)
             }
             </tbody>

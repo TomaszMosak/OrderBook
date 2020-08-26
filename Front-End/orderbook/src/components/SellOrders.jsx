@@ -9,22 +9,20 @@ function SellOrders({ orderData }){
         <Table striped bordered hover size="sm" className="mr-4">
             <thead>
             <tr>
+                <th>Tick</th>
                 <th>Version</th>
-                <th>Stock Symbol</th>
-                <th>Price Remaining</th>
+                <th>Price</th>
                 <th>Size</th>
-                <th>Side</th>
                 <th>Status</th>
                 <th>CP</th>
-                <th>Stamp</th>
+                <th>TimeStamp</th>
             </tr>
             </thead>
             <tbody>
             {
                 orderData.sellOrders.map(order =>
                     <tr>
-                        <td>{order.id}</td>
-                        <td>{order.id}</td>
+                        <td className="text-center"><i className="arrow down"></i></td>
                         <td>{order.id}</td>
                         <td>{order.id}</td>
                         <td>{order.id}</td>
