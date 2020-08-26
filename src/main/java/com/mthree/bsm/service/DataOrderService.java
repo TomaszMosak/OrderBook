@@ -236,7 +236,7 @@ public class DataOrderService implements OrderService {
         order.setStatus(MATCH_LOCK);
         orderDao.editOrder(order);
 
-        LocalDateTime versionTime = LocalDateTime.now();
+        LocalDateTime versionTime = LocalDateTime.now().minusSeconds(1);
         order.setVersionTime(versionTime);
 
         order.setSize(order.getSize() - trade.getQuantity());
