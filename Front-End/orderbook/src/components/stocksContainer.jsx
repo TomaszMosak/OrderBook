@@ -30,7 +30,7 @@ function StockContainer(props){
                             <td>{stock.address.city}</td>
                             <td>{stock.address.city}</td>
                             <td>{stock.address.city}</td>
-                            <td><a href={"/orderbook/id=" + stock.address.city}>Click Me!</a></td>
+                            <td><a href={"/Orderbook/id=" + stock.address.city}>Click Me!</a></td>
                         </tr>)
                 }
             </tbody>
