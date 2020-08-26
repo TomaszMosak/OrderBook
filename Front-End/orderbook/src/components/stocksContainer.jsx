@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import {connect} from "react-redux";
-import { fetchStocks } from "../redux";
+import { fetchStocks, selectStock } from "../redux";
 import {Table} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 function StockContainer(props){
 
@@ -30,7 +31,7 @@ function StockContainer(props){
                             <td>{stock.address.city}</td>
                             <td>{stock.address.city}</td>
                             <td>{stock.address.city}</td>
-                            <td><a href={"/Orderbook/id=" + stock.address.city}>Click Me!</a></td>
+                            <td onClick={() => props.selectStock(stock.id, props.stockData.stocks.indexOf(stock))}><Link to="/Orderbook">Orderbook Link</Link></td>
                         </tr>)
                 }
             </tbody>
@@ -47,7 +48,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchStocks: () => dispatch(fetchStocks())
+        fetchStocks: () => dispatch(fetchStocks()),
+        selectStock: (id, index) => dispatch(selectStock(id,index))
     }
 }
 

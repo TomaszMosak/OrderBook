@@ -1,47 +1,44 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Table} from "react-bootstrap";
+import {Card, Container, Row, Col} from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/StockStats.css'
 
-function StockStats({ orderData }){
+function StockStats({ orderData, stockData }){
 
     return (
-        <Table striped bordered hover>
-            <thead>
-            <tr>
-                <th>Version</th>
-                <th>Stock Symbol</th>
-                <th>Price Remaining</th>
-                <th>Size</th>
-                <th>Side</th>
-                <th>Status</th>
-                <th>CP</th>
-                <th>Timestamp</th>
-            </tr>
-            </thead>
-            <tbody>
-            {
-                orderData.orderHistory.map(order =>
-                    <tr>
-                        <td>{order.id}</td>
-                        <td>{order.name}</td>
-                        <td>{order.username}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
-                    </tr>)
-            }
-            </tbody>
-        </Table>
+        <Card className="border-dark mb-2">
+                    <Card.Title className="text-center">Stock Information: {stockData.name}</Card.Title>
+                    <Card.Subtitle className="subTitle text-center mb-2">{stockData.username}</Card.Subtitle>
+            <Row>
+                <Col>
+                    <Card className="innerCard mb-2 ml-2">
+                        <Card.Title className="innerCardTitle ml-3">Orders</Card.Title>
+                    <Card.Body>
+                        <p>Total Accepted: </p>
+                        <p>Accepted Today: </p>
+                    </Card.Body>
+                    </Card>
+                </Col>
+                <Col>
+                    <Card className="innerCard mb-2 mr-2">
+                        <Card.Title className="innerCardTitle text-right mr-3">Trades</Card.Title>
+                        <Card.Body>
+                            <p>Total Volume Traded: </p>
+                            <p>Most Recent Traded Price: </p>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+        </Card>
     )
 }
 
 const mapStateToProps = state => {
     return {
         orderData: state.order,
-        stockData: state.stocks
+        stockData: state.stock.selectedStock
     }
 }
 
-export default connect(mapStateToProps)(StockStats);
+export default connect(mapStateToProps, null)(StockStats);

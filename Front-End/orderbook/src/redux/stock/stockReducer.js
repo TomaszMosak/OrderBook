@@ -2,8 +2,9 @@ import * as actions from './stockTypes';
 
 const initialState = {
     loading: false,
-    numOfStocks: 0,
-    currentStock: 0,
+    numOfStocks: -1,
+    currentStockId: -1,
+    selectedStock: [],
     stocks: [],
     error: ''
 }
@@ -27,6 +28,12 @@ const stockReducer = (state = initialState, action) => {
             stocks: [],
             error: action.payload
         }
+        case actions.SELECT_SINGLE_STOCK:
+            return{
+                ...state,
+                currentStockId: action.payload.id,
+                selectedStock: state.stocks[action.payload.index]
+            }
         default: return state
     }
 }

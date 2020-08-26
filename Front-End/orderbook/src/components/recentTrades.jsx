@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import {connect} from "react-redux";
-import {fetchTrades, fetchSingleTrade} from "../redux";
+import {fetchRecentTrades, fetchSingleTrade} from "../redux";
 import {Table} from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-function Trades(props){
+function MostRecentTrades(props){
     useEffect(() => {
-        props.fetchTrades()
+        props.fetchRecentTrades()
     }, [])
     return props.tradeData.loading ? (
         <h2>Loading Text</h2>
@@ -49,9 +49,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchTrades: () => dispatch(fetchTrades()),
+        fetchRecentTrades: () => dispatch(fetchRecentTrades()),
         selectSingleTrade: (id) => dispatch(fetchSingleTrade(id))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Trades);
+export default connect(mapStateToProps, mapDispatchToProps)(MostRecentTrades);

@@ -26,6 +26,7 @@ const tradeReducer = (state = initialState, action) => {
             }
         case actions.FETCH_TRADES_FAILURE:
             return {
+                ...state,
                 loading: false,
                 trades: [],
                 error: action.payload

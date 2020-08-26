@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {useEffect} from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,8 +9,13 @@ import SellOrders from "../components/SellOrders";
 import MyNavBar from "../components/MyNavBar"
 import StockStats from "../components/StockStats";
 
-class MainPage extends Component {
-    render() {
+import {fetchAllOrders} from "../redux";
+import {connect} from "react-redux";
+
+function Orderbook (props){
+    useEffect(() => {
+        props.fetchAllOrders()
+    }, [])
         return (
             <Container className="mainPageContainer">
                 <Row className="title">
@@ -18,25 +23,31 @@ class MainPage extends Component {
                         <h1 className="text-center">The Fantastic OrderBook</h1>
                     </Col>
                 </Row>
-                <hr className="my-3 divider"/>
+
                 <MyNavBar />
                 <Container>
                     <Col className="stockStats align-content-center">
                         <StockStats/>
                     </Col>
-                    <Col className="align-content-center">
-                        <Row>
+                    <Row className="justify-content-md-center">
+                        <Col className="">
                             <BuyOrders/>
-                        </Row>
-                        <Row>
+                        </Col>
+                        <div className="orderSplit"/>
+                        <Col>
                             <SellOrders/>
-                        </Row>
-                    </Col>
+                        </Col>
+                    </Row>
                 </Container>
                 <Link to="/404">Show a 404 Error</Link>
             </Container>
         )
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchAllOrders: (id) => dispatch(fetchAllOrders(id))
     }
 }
 
-export default MainPage;
+export default connect(null, mapDispatchToProps)(Orderbook);

@@ -3,37 +3,33 @@ import {connect} from "react-redux";
 import {Table} from "react-bootstrap";
 
 function BuyOrders({ orderData }){
-
     return (
-        <Table striped bordered hover>
+        <React.Fragment>
+            <h5 className="buyText text-right">Bids</h5>
+        <Table striped bordered hover size="sm" className="mr-4">
             <thead>
             <tr>
-                <th>Version</th>
-                <th>Stock Symbol</th>
-                <th>Price Remaining</th>
+                <th>View Order</th>
+                <th>TimeStamp</th>
                 <th>Size</th>
-                <th>Side</th>
-                <th>Status</th>
-                <th>CP</th>
-                <th>Timestamp</th>
+                <th>Price</th>
+                <th>Tick</th>
             </tr>
             </thead>
             <tbody>
             {
-                orderData.orderHistory.map(order =>
+                orderData.buyOrders.map(order =>
                     <tr>
+                        <td>...</td>
                         <td>{order.id}</td>
-                        <td>{order.name}</td>
-                        <td>{order.username}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
-                        <td>{order.address.city}</td>
+                        <td>{order.id}</td>
+                        <td>{order.id}</td>
+                        <td className="text-center"><i className="arrow up"></i></td>
                     </tr>)
             }
             </tbody>
         </Table>
+        </React.Fragment>
     )
 }
 

@@ -41,8 +41,9 @@ const foundTradeDetails = trade => {
     }
 }
 
-export const fetchSingleTrade = id => {
+export const fetchSingleTrade = (id) => {
     return (dispatch) => {
+        //NEEDS CHANGING TO FETCH FOR SINGLE TRADE
         dispatch(selectSingleTrade(id))
         axios.get("https://jsonplaceholder.typicode.com/users")
             .then(r => {
@@ -59,6 +60,23 @@ export const fetchSingleTrade = id => {
 }
 
 export const fetchTrades = () => {
+    return (dispatch) => {
+        dispatch(fetchTradesRequest)
+        axios.get("https://jsonplaceholder.typicode.com/users")
+            .then(r => {
+                const trades = r.data
+                dispatch(fetchTradesSuccess(trades))
+                //response data is the array of stocks
+            })
+            .catch(err => {
+                const errorMsg = err.message
+                dispatch(fetchTradesFailure(errorMsg))
+                // error.message is the error description
+            })
+    }
+}
+
+export const fetchRecentTrades = () => {
     return (dispatch) => {
         dispatch(fetchTradesRequest)
         axios.get("https://jsonplaceholder.typicode.com/users")
