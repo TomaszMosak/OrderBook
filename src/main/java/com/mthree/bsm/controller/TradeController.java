@@ -17,9 +17,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author tombarton
@@ -47,6 +45,12 @@ public class TradeController {
     public ResponseEntity<Trade> displayTradeById(int id) {
         return tradeService.getTradeById(id).map(ResponseEntity::ok)
                            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @ExceptionHandler(InvalidEntityException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public List<String> handleInvalidEntityException(InvalidEntityException e) {
+        return e.getValidationErrors();
     }
 
 }
