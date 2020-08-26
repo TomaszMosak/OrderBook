@@ -10,12 +10,10 @@ function SellOrders({ orderData }){
             <thead>
             <tr>
                 <th>Tick</th>
-                <th>Version</th>
                 <th>Price</th>
                 <th>Size</th>
-                <th>Status</th>
-                <th>CP</th>
                 <th>TimeStamp</th>
+                <th>View Order</th>
             </tr>
             </thead>
             <tbody>
@@ -26,9 +24,7 @@ function SellOrders({ orderData }){
                         <td>{order.id}</td>
                         <td>{order.id}</td>
                         <td>{order.id}</td>
-                        <td>{order.id}</td>
-                        <td>{order.id}</td>
-                        <td>{order.id}</td>
+                        <td>...</td>
                     </tr>)
             }
             </tbody>

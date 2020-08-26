@@ -9,12 +9,10 @@ function BuyOrders({ orderData }){
         <Table striped bordered hover size="sm" className="mr-4">
             <thead>
             <tr>
+                <th>View Order</th>
                 <th>TimeStamp</th>
-                <th>CP</th>
-                <th>Status</th>
                 <th>Size</th>
                 <th>Price</th>
-                <th>Version</th>
                 <th>Tick</th>
             </tr>
             </thead>
@@ -22,9 +20,7 @@ function BuyOrders({ orderData }){
             {
                 orderData.buyOrders.map(order =>
                     <tr>
-                        <td>{order.id}</td>
-                        <td>{order.id}</td>
-                        <td>{order.id}</td>
+                        <td>...</td>
                         <td>{order.id}</td>
                         <td>{order.id}</td>
                         <td>{order.id}</td>
