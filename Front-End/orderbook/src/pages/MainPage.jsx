@@ -6,7 +6,7 @@ import '../styles/MainPage.css'
 
 import StockContainer from "../components/stocksContainer";
 import MyNavBar from "../components/MyNavBar"
-import Trades from "../components/Trades";
+import MostRecentTrades from "../components/recentTrades";
 
 class MainPage extends Component {
     render() {
@@ -22,7 +22,7 @@ class MainPage extends Component {
                 <Container>
                     <Col className="tableContent align-content-center">
                         <h5>Recent Trades</h5>
-                        <Trades />
+                        <MostRecentTrades />
                     </Col>
                     <Col className="align-content-center">
                         <h5>Stocks Available</h5>

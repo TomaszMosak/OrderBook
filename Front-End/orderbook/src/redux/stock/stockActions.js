@@ -1,5 +1,5 @@
 import axios from "axios";
-import {FETCH_STOCKS_FAILURE, FETCH_STOCKS_REQUEST, FETCH_STOCKS_SUCCESS} from "./stockTypes";
+import {FETCH_STOCKS_FAILURE, FETCH_STOCKS_REQUEST, FETCH_STOCKS_SUCCESS, SELECT_SINGLE_STOCK} from "./stockTypes";
 
 const fetchStocksRequest = () => {
     return {
@@ -18,6 +18,16 @@ const fetchStocksFailure = error => {
     return {
         type: FETCH_STOCKS_FAILURE,
         payload: error
+    }
+}
+
+export const selectStock = (id, index) => {
+    return {
+        type: SELECT_SINGLE_STOCK,
+        payload: {
+            id,
+            index
+        }
     }
 }
 

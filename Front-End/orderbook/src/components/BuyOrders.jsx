@@ -1,9 +1,8 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {connect} from "react-redux";
 import {Table} from "react-bootstrap";
 
 function BuyOrders({ orderData }){
-
     return (
         <Table striped bordered hover>
             <thead>
@@ -20,7 +19,7 @@ function BuyOrders({ orderData }){
             </thead>
             <tbody>
             {
-                orderData.orderHistory.map(order =>
+                orderData.buyOrders.map(order =>
                     <tr>
                         <td>{order.id}</td>
                         <td>{order.name}</td>

@@ -20,7 +20,7 @@ function SellOrders({ orderData }){
             </thead>
             <tbody>
             {
-                orderData.orderHistory.map(order =>
+                orderData.sellOrders.map(order =>
                     <tr>
                         <td>{order.id}</td>
                         <td>{order.name}</td>
