@@ -1,20 +1,12 @@
 import React from "react";
 import {connect} from "react-redux";
 import {Table} from "react-bootstrap";
-import { Redirect} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
+import {fetchOrderHistory} from "../redux";
 
-function SingleTrade({ tradeData, singleTrade }){
+function SingleTrade({ tradeData, fetchOrderHistory }){
 
-    function search(tradeId, allTrades){
-        for(var i=0; i < allTrades.length; i++){
-            if(allTrades[i].id === tradeId){
-                return allTrades[i]
-            }
-        }
-    }
-
-    const found = search(singleTrade, tradeData.trades)
-    if(found === undefined){
+    if(tradeData.selectedTrade === undefined){
         return(
         <Redirect to="/404"/>
         )
@@ -35,12 +27,12 @@ function SingleTrade({ tradeData, singleTrade }){
             <tbody>
             {
                     <tr>
-                        <td>{found.id}</td>
-                        <td>{found.name}</td>
-                        <td>{found.username}</td>
-                        <td>{found.address.city}</td>
-                        <td><a href={"/singleTrade"}>Buy Order History</a></td>
-                        <td><a href={"/singleTrade"}>Sell Order History</a></td>
+                        <td>{tradeData.selectedTrade.id}</td>
+                        <td>{tradeData.selectedTrade.name}</td>
+                        <td>{tradeData.selectedTrade.username}</td>
+                        <td>{tradeData.selectedTrade.website}</td>
+                        <td onClick={() => fetchOrderHistory(1)}><Link to="/singleOrder">Buy Order History</Link></td>
+                        <td onClick={() => fetchOrderHistory(2)}><Link to="/singleOrder">Sell Order History</Link></td>
                     </tr>
             }
             </tbody>
@@ -52,8 +44,13 @@ function SingleTrade({ tradeData, singleTrade }){
 const mapStateToProps = state => {
     return {
         tradeData: state.trade,
-        singleTrade: state.trade.selectedTradeId
     }
 }
 
-export default connect(mapStateToProps)(SingleTrade);
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchOrderHistory: (id) => dispatch(fetchOrderHistory(id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleTrade);
