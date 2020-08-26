@@ -13,7 +13,10 @@ import java.util.List;
  * @author tombarton
  */
 public interface PartyService {
-    
+
+    /**
+     * Gets a list of all {@link Party}s in the system.
+     */
     List<Party> getParties();
     
 }
