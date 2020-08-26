@@ -26,6 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -37,19 +38,24 @@ public class DatabaseTradeDaoTest {
     
     public DatabaseTradeDaoTest() {
     }
-    
+
+    @Qualifier("databaseTradeDao")
     @Autowired
     TradeDao tradeDao;
-    
+
+    @Qualifier("databaseOrderDao")
     @Autowired
     OrderDao orderDao;
-    
+
+    @Qualifier("databaseUserDao")
     @Autowired
     UserDao userDao;
-    
+
+    @Qualifier("databaseStockDao")
     @Autowired
     StockDao stockDao;
 
+    @Qualifier("databasePartyDao")
     @Autowired
     PartyDao partyDao;
     

@@ -29,42 +29,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * @author tombarton
  */
 @SpringBootTest
+@ExtendWith(SpringExtension.class)
 public class DataOrderServiceTest {
 
-    private OrderDao orderDao;
-    private TradeDao tradeDao;
-    private UserDao userDao;
-    private StockDao stockDao;
-    private PartyDao partyDao;
-    private AuditDao auditDao;
-    OrderService orderService;
+    OrderDao orderDao = new OrderDaoStub();
+    TradeDao tradeDao = new TradeDaoStub();
+    UserDao userDao = new UserDaoStub();
+    StockDao stockDao = new StockDaoStub();
+    PartyDao partyDao = new PartyDaoStub();
+    AuditDao auditDao = new AuditDaoStub();
 
-    @Autowired
-    public DataOrderServiceTest(@Qualifier("orderDaoStub") OrderDao orderDao,
-                                @Qualifier("tradeDaoStub") TradeDao tradeDao,
-                                @Qualifier("userDaoStub") UserDao userDao,
-                                @Qualifier("stockDaoStub") StockDao stockDao,
-                                @Qualifier("partyDaoStub") PartyDao partyDao,
-                                @Qualifier("auditDaoStub") AuditDao auditDao) {
-        this.orderDao = orderDao;
-        this.tradeDao = tradeDao;
-        this.userDao = userDao;
-        this.stockDao = stockDao;
-        this.partyDao = partyDao;
-        this.auditDao = auditDao;
-        this.orderService = new DataOrderService(orderDao, tradeDao, stockDao, userDao, partyDao, auditDao);
-    }
-
-    public DataOrderServiceTest() {
-    }
+    OrderService orderService = new DataOrderService(orderDao, tradeDao, stockDao, userDao, partyDao, auditDao);
 
     private BigDecimal tickSize = new BigDecimal("0.1");
     private Party lch = new Party("London Clearing House", "LCH");
@@ -78,19 +63,14 @@ public class DataOrderServiceTest {
     private Order order3 = new Order(tom, lch, tesla, lowPrice, 50, true, ACTIVE, ldt);
     private Order order4 = new Order(tom, lch, tesla, highPrice, 125, false, ACTIVE, ldt);
 
-    @BeforeAll
-    public static void setUpClass() {
-    }
-
-    @AfterAll
-    public static void tearDownClass() {
-    }
-
     // clears memory
     @BeforeEach
-    public void setUp() {
-        orderDao.deleteOrders();
-        tradeDao.deleteTrades();
+    public void setUp() throws InvalidEntityException {
+        partyDao.deleteParties();
+
+        partyDao.addParty(lch);
+        stockDao.addStock(tesla);
+        userDao.addUser(tom);
     }
 
     @AfterEach

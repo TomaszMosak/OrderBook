@@ -1,15 +1,21 @@
 package com.mthree.bsm.service;
 
 import com.mthree.bsm.entity.Stock;
+import com.mthree.bsm.entity.User;
 import com.mthree.bsm.repository.InvalidEntityException;
 import com.mthree.bsm.repository.StockDao;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class StockDaoStub implements StockDao {
+
+    private List<Stock> stocks = new ArrayList<>();
 
     /**
      * Gets a stock in the system with a given ID. If there is no stock in the system with the given ID, the returned
@@ -19,7 +25,9 @@ public class StockDaoStub implements StockDao {
      */
     @Override
     public Optional<Stock> getStockById(int stockId) {
-        return Optional.empty();
+        return stocks.stream()
+                     .filter(user -> user.getId() == stockId)
+                     .findAny();
     }
 
     /**
@@ -27,7 +35,7 @@ public class StockDaoStub implements StockDao {
      */
     @Override
     public List<Stock> getStocks() {
-        return null;
+        return stocks;
     }
 
     /**
@@ -35,7 +43,10 @@ public class StockDaoStub implements StockDao {
      */
     @Override
     public List<Stock> deleteStocks() {
-        return null;
+        List<Stock> oldStocks = new ArrayList<>(stocks);
+        stocks = new ArrayList<>();
+
+        return oldStocks;
     }
 
     /**
@@ -48,7 +59,24 @@ public class StockDaoStub implements StockDao {
      */
     @Override
     public Stock addStock(Stock stock) throws InvalidEntityException {
-        return null;
+        int newStockId = stocks.stream()
+                               .map(Stock::getId)
+                               .max(Comparator.naturalOrder())
+                               .map(id -> id + 1)
+                               .orElse(1);
+        stock.setId(newStockId);
+
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<Stock>> violations = validator.validate(stock);
+        if (!violations.isEmpty()) {
+            throw new InvalidEntityException(violations.stream()
+                                                       .map(ConstraintViolation::getMessage)
+                                                       .collect(Collectors.toList()));
+        }
+
+        stocks.add(stock);
+
+        return stock;
     }
 
 }
