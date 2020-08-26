@@ -8,8 +8,8 @@ function StockStats({ orderData, stockData }){
 
     return (
         <Card className="border-dark mb-2">
-                    <Card.Title className="text-center">Stock Information: {stockData.name}</Card.Title>
-                    <Card.Subtitle className="subTitle text-center mb-2">{stockData.username}</Card.Subtitle>
+                    <Card.Title className="text-center">Stock Information: {stockData.symbol}</Card.Title>
+                    <Card.Subtitle className="subTitle text-center mb-2">{stockData.companyName}</Card.Subtitle>
             <Row>
                 <Col>
                     <Card className="innerCard mb-2 ml-2">
