@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author tombarton
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class StockController {
 
     private final StockService stockService;
