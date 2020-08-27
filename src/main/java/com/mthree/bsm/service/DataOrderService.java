@@ -227,8 +227,8 @@ public class DataOrderService implements OrderService {
             MissingEntityException,
             InvalidEntityException {
         if (buyOrder.getPrice().compareTo(sellOrder.getPrice()) >= 0 && buyOrder.getSize() > 0 && sellOrder.getSize() > 0
-                && (buyOrder.getStatus() == ACTIVE || buyOrder.getStatus() == PENDING  || buyOrder.getStatus() == EDIT_LOCK) 
-                && (sellOrder.getStatus() == ACTIVE || sellOrder.getStatus() == PENDING  || sellOrder.getStatus() == EDIT_LOCK)) {
+                && (buyOrder.getStatus() == ACTIVE || buyOrder.getStatus() == PENDING) 
+                && (sellOrder.getStatus() == ACTIVE || sellOrder.getStatus() == PENDING)) {
             LocalDateTime executionTime = LocalDateTime.now();
             Trade trade = new Trade(buyOrder, sellOrder, executionTime);
             tradeDao.addTrade(trade);
