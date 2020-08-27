@@ -65,7 +65,7 @@ public class DatabasePartyDao implements PartyDao {
 
         jdbc.update("DELETE FROM Trade");
         jdbc.update("DELETE FROM OrderHistory");
-        jdbc.update("DELETE FROM `Order`");
+        jdbc.update("DELETE FROM `order`");
         jdbc.update("DELETE FROM Stock");
         jdbc.update("DELETE FROM Party");
 
