@@ -126,7 +126,7 @@ const returnCancelled = order => {
 export const cancelExistingOrder = orderId => {
     return (dispatch) => {
         dispatch(fetchOrdersRequest)
-        axios.post("http://localhost:8080/order/cancel" + orderId,
+        axios.post("http://localhost:8080/order/cancel/" + orderId,
             {userId: 1})
             .then(r => {
                 const cancelledOrder = r.data
@@ -149,7 +149,7 @@ const returnEdit = order => {
 export const editExistingOrder = order => {
     return (dispatch) => {
         dispatch(fetchOrdersRequest)
-        axios.post("http://localhost:8080/order/edit" + order.id,
+        axios.post("http://localhost:8080/order/edit/" + order.id,
             {userId: 1,
             price: order.price,
             size: order.size})

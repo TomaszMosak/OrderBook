@@ -48,7 +48,7 @@ const mapDispatchToProps = dispatch => {
         tickOrderUp: (order) => dispatch(editExistingOrder({
             id: order.id,
             userId: order.userId,
-            price: order.price + order.stock.tickSize,
+            price: (order.price + order.stock.tickSize).toFixed(2),
             size: order.size
         }))
     }

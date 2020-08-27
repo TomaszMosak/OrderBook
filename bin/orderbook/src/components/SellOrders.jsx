@@ -2,9 +2,9 @@ import React from "react";
 import {connect} from "react-redux";
 import {Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {fetchOrderHistory} from "../redux";
+import {editExistingOrder, fetchOrderHistory} from "../redux";
 
-function SellOrders({ orderData, fetchOrderHistory }){
+function SellOrders({ orderData, fetchOrderHistory, tickOrderDown }){
     return (
         <React.Fragment>
             <h5 className="sellText text-left">Asks</h5>
@@ -22,7 +22,7 @@ function SellOrders({ orderData, fetchOrderHistory }){
             {
                 orderData.sellOrders.map(order =>
                     <tr>
-                        <td className="text-center"><i className="arrow down"></i></td>
+                        <td><Link className="text-center" onClick={() => tickOrderDown(order)} to="/orderBook"><i className="arrow down"></i></Link></td>
                         <td>{order.price}</td>
                         <td>{order.size}</td>
                         <td>{order.versionTime}</td>
@@ -44,7 +44,13 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchOrderHistory: (id) => dispatch(fetchOrderHistory(id))
+        fetchOrderHistory: (id) => dispatch(fetchOrderHistory(id)),
+        tickOrderDown: (order) => dispatch(editExistingOrder({
+            id: order.id,
+            userId: order.userId,
+            price: (order.price - order.stock.tickSize).toFixed(2),
+            size: order.size
+        }))
     }
 }
 

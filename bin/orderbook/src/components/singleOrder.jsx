@@ -1,8 +1,9 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Table} from "react-bootstrap";
+import {Button, Table} from "react-bootstrap";
+import {cancelExistingOrder} from "../redux";
 
-function SingleOrder({ orderData }){
+function SingleOrder({ orderData, cancelOrder }){
 
     function side(boolean){
         if(boolean){
@@ -41,6 +42,7 @@ function SingleOrder({ orderData }){
                 </tr>)
             }
             </tbody>
+            <Button onClick={() => cancelOrder(orderData.orderHistory[0])}>Cancel order</Button>
         </Table>
     )
 }
@@ -52,4 +54,10 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(SingleOrder);
+const mapDispatchToProps = dispatch => {
+    return {
+        cancelOrder: order => dispatch(cancelExistingOrder(order.id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleOrder);
