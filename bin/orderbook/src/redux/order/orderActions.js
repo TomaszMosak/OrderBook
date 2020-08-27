@@ -40,7 +40,7 @@ const fetchOrdersFailure = error => {
 export const fetchAllOrders = () => {
     return (dispatch) => {
         dispatch(fetchOrdersRequest)
-        axios.get("http://localhost:8080/order/buy")
+        axios.get("http://localhost:8080/order/buy/active")
             .then(r => {
                 const buyOrders = r.data
                 dispatch(fetchBuyOrdersSuccess(buyOrders))
@@ -51,7 +51,7 @@ export const fetchAllOrders = () => {
                 dispatch(fetchOrdersFailure(errorMsg))
                 // error.message is the error description
             })
-        axios.get("http://localhost:8080/order/sell")
+        axios.get("http://localhost:8080/order/sell/active")
             .then(r => {
                 const sellOrders = r.data
                 dispatch(fetchSellOrdersSuccess(sellOrders))

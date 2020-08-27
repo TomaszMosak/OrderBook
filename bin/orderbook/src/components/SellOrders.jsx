@@ -20,7 +20,7 @@ function SellOrders({ orderData, fetchOrderHistory, tickOrderDown }){
             </thead>
             <tbody>
             {
-                orderData.sellOrders.map(order =>
+                orderData.sellOrders.sort((order1, order2) => order1.price - order2.price).map(order =>
                     <tr>
                         <td><Link className="text-center" onClick={() => { tickOrderDown(order) } } to="/orderBook"><i className="arrow down"></i></Link></td>
                         <td>{order.price}</td>
