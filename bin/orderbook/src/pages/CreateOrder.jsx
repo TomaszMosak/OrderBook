@@ -37,11 +37,11 @@ class CreateOrder extends Component {
                     <Form>
                         <Form.Group>
                             <Form.Label>Stock</Form.Label>
-                            <Form.Control placeholder="pee" disabled />
+                            <Form.Control placeholder="stock" disabled />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Party</Form.Label>
-                            <Form.Control placeholder="party haha" disabled />
+                            <Form.Control placeholder="party" disabled />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Side</Form.Label>
