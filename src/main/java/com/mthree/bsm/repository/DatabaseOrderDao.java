@@ -351,7 +351,7 @@ public class DatabaseOrderDao implements OrderDao {
             throw new InvalidEntityException(violationMessages);
         }
 
-        final String SET_ORDER_STATUS = "UPDATE `order` " +
+        final String SET_ORDER_STATUS = "UPDATE `Order` " +
                                         "SET orderStatus = ? " +
                                         "WHERE id = ?";
         jdbc.update(SET_ORDER_STATUS, order.getStatus().ordinal(), order.getId());
