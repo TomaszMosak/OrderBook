@@ -93,7 +93,7 @@ class CreateOrder extends Component {
                             })} />
                         </Form.Group>
                         <Form.Group>
-                            <Button onClick={() => this.props.createOrder(this.state.order)}>Submit</Button>
+                            <Button onClick={() => { this.props.createOrder(this.state.order); window.location.reload() } }>Submit</Button>
                         </Form.Group>
                     </Form>
                 </Container>
