@@ -42,7 +42,7 @@ function SingleOrder({ orderData, cancelOrder }){
                 </tr>)
             }
             </tbody>
-            <Button onClick={() => cancelOrder(orderData.orderHistory[0])}>Cancel order</Button>
+            <Button onClick={() => { cancelOrder(orderData.orderHistory[0]); window.location.reload() } }>Cancel order</Button>
         </Table>
     )
 }
