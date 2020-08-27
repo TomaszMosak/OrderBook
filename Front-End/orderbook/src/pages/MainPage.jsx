@@ -19,13 +19,13 @@ class MainPage extends Component {
                 </Row>
                 <MyNavBar />
                 <Container>
-                    <Col className="tableContent align-content-center">
-                        <h5>Recent Trades</h5>
-                        <MostRecentTrades />
-                    </Col>
                     <Col className="align-content-center">
                         <h5>Stocks Available</h5>
                         <StockContainer />
+                    </Col>
+                    <Col className="tableContent align-content-center">
+                        <h5>Recent Trades</h5>
+                        <MostRecentTrades />
                     </Col>
                 </Container>
                 <Link to="/404">Show a 404 Error</Link>

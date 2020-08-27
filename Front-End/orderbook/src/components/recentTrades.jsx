@@ -36,11 +36,11 @@ function MostRecentTrades(props){
             {
                 props.tradeData.trades.map(trade =>
                     <tr>
-                        <td>{trade.address.city}</td>
-                        <td>{trade.address.city}</td>
-                        <td>{trade.address.city}</td>
-                        <td>{trade.address.city}</td>
-                        <td>{trade.address.city}</td>
+                        <td>{trade.buyOrder.stock.symbol}</td>
+                        <td>{trade.price}</td>
+                        <td>{trade.quantity}</td>
+                        <td>{trade.executionTime}</td>
+                        <td>{trade.buyOrder.stock.centralParty.symbol}/{trade.sellOrder.stock.centralParty.symbol}</td>
                         <td onClick={() => props.selectSingleTrade(trade.id)}><Link to="/singleTrade">Trade Details</Link></td>
                     </tr>)
             }
