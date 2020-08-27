@@ -28,11 +28,11 @@ function SingleTrade({ tradeData, fetchOrderHistory }){
             {
                     <tr>
                         <td>{tradeData.selectedTrade.id}</td>
-                        <td>{tradeData.selectedTrade.name}</td>
-                        <td>{tradeData.selectedTrade.username}</td>
-                        <td>{tradeData.selectedTrade.website}</td>
-                        <td onClick={() => fetchOrderHistory(1)}><Link to="/singleOrder">Buy Order History</Link></td>
-                        <td onClick={() => fetchOrderHistory(2)}><Link to="/singleOrder">Sell Order History</Link></td>
+                        <td>{tradeData.selectedTrade.quantity}</td>
+                        <td>{tradeData.selectedTrade.price}</td>
+                        <td>{tradeData.selectedTrade.executionTime}</td>
+                        <td onClick={() => fetchOrderHistory(tradeData.selectedTrade.buyOrder.id)}><Link to="/singleOrder">Buy Order History</Link></td>
+                        <td onClick={() => fetchOrderHistory(tradeData.selectedTrade.sellOrder.id)}><Link to="/singleOrder">Sell Order History</Link></td>
                     </tr>
             }
             </tbody>
