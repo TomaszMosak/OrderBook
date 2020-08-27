@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -82,10 +83,10 @@ public class DataOrderService implements OrderService {
     public List<Order> getOrdersByStatus(OrderStatus status) {
         return orderDao.getOrdersByStatus(status);
     }
-    
+
     @Override
-        public List<Order> getSideOrdersByStatus(boolean isBuy, OrderStatus status) {
-       return getOrdersBySideAndStatus(isBuy, status);
+    public List<Order> getSideOrdersByStatus(boolean isBuy, OrderStatus status) {
+        return getOrdersBySideAndStatus(isBuy, status);
     }
 
     @Override
@@ -177,7 +178,7 @@ public class DataOrderService implements OrderService {
         order.setStatus(PENDING);
         orderDao.editOrder(order);
 
-        if(!originalPrice.equals(price)) {
+        if (!originalPrice.equals(price)) {
             matchOrder(order);
         }
 
@@ -194,8 +195,7 @@ public class DataOrderService implements OrderService {
     @Override
     public void matchOrders() throws IOException, MissingEntityException, InvalidEntityException {
         List<Order> buyOrders = getOrdersBySideAndStatus(true, ACTIVE);
-        List<Order> sellOrders = getOrdersBySideAndStatus(false,ACTIVE);
-        
+        List<Order> sellOrders = getOrdersBySideAndStatus(false, ACTIVE);
 
         for (Order buyOrder : buyOrders) {
             for (Order sellOrder : sellOrders) {
@@ -226,15 +226,18 @@ public class DataOrderService implements OrderService {
             IOException,
             MissingEntityException,
             InvalidEntityException {
-        if (buyOrder.getPrice().compareTo(sellOrder.getPrice()) >= 0 && buyOrder.getSize() > 0 && sellOrder.getSize() > 0
-                && (buyOrder.getStatus() == ACTIVE || buyOrder.getStatus() == PENDING  || buyOrder.getStatus() == EDIT_LOCK) 
-                && (sellOrder.getStatus() == ACTIVE || sellOrder.getStatus() == PENDING  || sellOrder.getStatus() == EDIT_LOCK)) {
+        if (buyOrder.getPrice().compareTo(sellOrder.getPrice()) >= 0
+            && buyOrder.getSize() > 0
+            && sellOrder.getSize() > 0
+            && (buyOrder.getStatus() == ACTIVE || buyOrder.getStatus() == PENDING)
+            && (sellOrder.getStatus() == ACTIVE || sellOrder.getStatus() == PENDING)) {
             LocalDateTime executionTime = LocalDateTime.now();
             Trade trade = new Trade(buyOrder, sellOrder, executionTime);
             tradeDao.addTrade(trade);
             auditDao.writeMessage("Add trade " + trade.getId() + " to repository.");
 
             editMatchedOrders(buyOrder, trade);
+            trade = tradeDao.getTradeById(trade.getId()).orElseThrow();
             editMatchedOrders(sellOrder, trade);
         }
     }
@@ -244,12 +247,10 @@ public class DataOrderService implements OrderService {
         List<Order> activeSideOrders = orderDao.getOrdersBySide(isBuy);
         activeSideOrders = activeSideOrders.stream()
                                            .filter(o -> o.getStatus() == status)
+                                           .sorted(isBuy ? Comparator.comparing(Order::getPrice).reversed()
+                                                         : Comparator.comparing(Order::getPrice))
                                            .collect(Collectors.toList());
-        if(isBuy){
-            Collections.reverse(activeSideOrders);
-        } else {
-            Collections.sort(activeSideOrders);
-        }
+
         return activeSideOrders;
     }
 
@@ -268,7 +269,7 @@ public class DataOrderService implements OrderService {
         order.setVersionTime(versionTime);
 
         order.setSize(order.getSize() - trade.getQuantity());
-        
+
         if (order.getSize() == 0) {
             order.setStatus(FULFILLED);
         } else {
@@ -279,6 +280,4 @@ public class DataOrderService implements OrderService {
         auditDao.writeMessage("Edit order " + order.getId() + ", matched.");
     }
 
-  
-    
 }
