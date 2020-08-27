@@ -126,8 +126,7 @@ const returnCancelled = order => {
 export const cancelExistingOrder = orderId => {
     return (dispatch) => {
         dispatch(fetchOrdersRequest)
-        axios.post("http://localhost:8080/order/cancel/" + orderId,
-            {userId: 1})
+        axios.post("http://localhost:8080/order/cancel/" + orderId, 1)
             .then(r => {
                 const cancelledOrder = r.data
                 dispatch(returnCancelled(cancelledOrder))

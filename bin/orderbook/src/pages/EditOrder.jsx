@@ -5,8 +5,23 @@ import '../styles/MainPage.css'
 
 import MyNavBar from "../components/MyNavBar"
 import SingleOrder from "../components/singleOrder";
+import {createNewOrder, editExistingOrder} from "../redux";
+import {connect} from "react-redux";
 
 class EditOrder extends Component {
+
+    componentDidMount() {
+        this.state = {
+            order: {
+                stockId: 1,
+                partyId: 1,
+                userId: 1,
+                buy: false,
+                price: 100.00,
+                size: 1
+            }
+        }
+    }
 
     render() {
         return (
@@ -23,22 +38,40 @@ class EditOrder extends Component {
                     <Form>
                         <Form.Group>
                             <Form.Label>Stock</Form.Label>
-                            <Form.Control placeholder="pee" disabled />
+                            <Form.Control placeholder="1" disabled />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Party</Form.Label>
-                            <Form.Control placeholder="party haha" disabled />
+                            <Form.Control placeholder="1" disabled />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Price</Form.Label>
-                            <Form.Control />
+                            <Form.Control onChange={(event) => this.setState({
+                                order: {
+                                    stockId: this.state.order.stockId,
+                                    partyId: this.state.order.partyId,
+                                    userId: this.state.order.userId,
+                                    buy: this.state.order.buy,
+                                    price: event.target.value,
+                                    size: this.state.order.size
+                                }
+                            })}/>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Size</Form.Label>
-                            <Form.Control />
+                            <Form.Control onChange={(event) => this.setState({
+                                order: {
+                                    stockId: this.state.order.stockId,
+                                    partyId: this.state.order.partyId,
+                                    userId: this.state.order.userId,
+                                    buy: this.state.order.buy,
+                                    price: this.state.order.price,
+                                    size: event.target.value
+                                }
+                            })}/>
                         </Form.Group>
                         <Form.Group>
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit" onClick={() => this.props.createOrder(this.state.order)}>Submit</Button>
                         </Form.Group>
                     </Form>
                 </Container>
@@ -48,4 +81,10 @@ class EditOrder extends Component {
     
 }
 
-export default EditOrder
+const mapDispatchToProps = dispatch => {
+    return {
+        editOrder: order => dispatch(editExistingOrder(order))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(EditOrder);
