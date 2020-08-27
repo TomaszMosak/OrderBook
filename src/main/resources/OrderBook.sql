@@ -18,7 +18,7 @@ CREATE TABLE `Order` (
 CREATE TABLE OrderHistory (
     id int AUTO_INCREMENT NOT NULL ,
     orderId int NOT NULL ,
-    Price Decimal(8,2)  NOT NULL ,
+    price Decimal(8,2)  NOT NULL ,
     currentSize int  NOT NULL ,
     userId int  NOT NULL ,
     timestamp timestamp  NOT NULL ,

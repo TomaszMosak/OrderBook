@@ -311,7 +311,7 @@ public class DatabaseOrderDao implements OrderDao {
         assert keyHolder.getKey() != null;
         order.setId(keyHolder.getKey().intValue());
 
-        final String CREATE_VERSION = "INSERT INTO OrderHistory (orderId, Price, currentSize, userId, timestamp) " +
+        final String CREATE_VERSION = "INSERT INTO OrderHistory (orderId, price, currentSize, userId, timestamp) " +
                                       "VALUES (?, ?, ?, ?, ?)";
         jdbc.update(CREATE_VERSION,
                     order.getId(),
@@ -337,9 +337,12 @@ public class DatabaseOrderDao implements OrderDao {
     @Override
     @Transactional
     public void editOrder(Order order) throws MissingEntityException, InvalidEntityException {
-        if (getOrderById(order.getId()).isEmpty()) {
+        Optional<Order> formerOrderOptional = getOrderById(order.getId());
+        if (formerOrderOptional.isEmpty()) {
             throw new MissingEntityException("Order with given order's ID does not already exist in the system.");
         }
+
+        Order formerOrder = formerOrderOptional.get();
 
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         Set<ConstraintViolation<Order>> violations = validator.validate(order);
@@ -356,18 +359,20 @@ public class DatabaseOrderDao implements OrderDao {
                                         "WHERE id = ?";
         jdbc.update(SET_ORDER_STATUS, order.getStatus().ordinal(), order.getId());
 
-        final String CREATE_VERSION = "INSERT INTO OrderHistory (orderId, Price, currentSize, userId, timestamp) " +
-                                      "VALUES (?, ?, ?, ?, ?)";
-        jdbc.update(CREATE_VERSION,
-                    order.getId(),
-                    order.getPrice(),
-                    order.getSize(),
-                    order.getUser().getId(),
-                    order.getVersionTime());
+        if (!formerOrder.getPrice().equals(order.getPrice()) || formerOrder.getSize() != order.getSize()) {
+            final String CREATE_VERSION = "INSERT INTO OrderHistory (orderId, price, currentSize, userId, timestamp) " +
+                                          "VALUES (?, ?, ?, ?, ?)";
+            jdbc.update(CREATE_VERSION,
+                        order.getId(),
+                        order.getPrice(),
+                        order.getSize(),
+                        order.getUser().getId(),
+                        order.getVersionTime());
 
-        Order retrievedOrder = getOrderById(order.getId()).get();
-        order.setHistoryId(retrievedOrder.getHistoryId());
-        order.setVersion(retrievedOrder.getVersion());
+            Order retrievedOrder = getOrderById(order.getId()).get();
+            order.setHistoryId(retrievedOrder.getHistoryId());
+            order.setVersion(retrievedOrder.getVersion());
+        }
     }
 
     /**
