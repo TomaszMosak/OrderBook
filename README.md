@@ -4,7 +4,9 @@ It works sometimes.
 
 ## How to run
 
-We assume there is a MySQL distribution running on port 3306 or some other port you know about, and you know the username and password of an administrator for this distribution (like the root user).
+We assume there is a MySQL distribution running on a host (like `localhost`) and port (like `3306`) you know about, and you know the username and password of an administrator for this distribution (like the root user).
+
+Furthermore, we assume the system has Java 11 and npm installed.
 
 1. Click the green "Code" button in the top right and then "Download ZIP" in the drop down menu that shows to download this repository to your downloads folder (or probably somewhere else, depending on your system/browser).
 
