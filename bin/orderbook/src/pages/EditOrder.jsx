@@ -10,6 +10,10 @@ import {connect} from "react-redux";
 
 class EditOrder extends Component {
 
+    constructor(props) {
+        super(props)
+    }
+
     componentDidMount() {
         this.state = {
             order: {
@@ -38,11 +42,11 @@ class EditOrder extends Component {
                     <Form>
                         <Form.Group>
                             <Form.Label>Stock</Form.Label>
-                            <Form.Control placeholder={this.props.orderData[0].stockId} disabled />
+                            <Form.Control placeholder={this.props.orderData.orderHistory[0].stockId} disabled />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Party</Form.Label>
-                            <Form.Control placeholder={this.props.orderData[0].partyId} disabled />
+                            <Form.Control placeholder={this.props.orderData} disabled />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Price</Form.Label>

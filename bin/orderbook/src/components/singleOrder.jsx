@@ -43,7 +43,6 @@ function SingleOrder({ orderData, cancelOrder }){
             }
             </tbody>
             <Button onClick={() => cancelOrder(orderData.orderHistory[0])}>Cancel order</Button>
-            <Button href="/EditOrder">Edit order</Button>
         </Table>
     )
 }
