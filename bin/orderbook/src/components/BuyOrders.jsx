@@ -26,7 +26,7 @@ function BuyOrders({ orderData, fetchOrderHistory, tickOrderUp }){
                         <td>{order.versionTime}</td>
                         <td>{order.size}</td>
                         <td>{order.price}</td>
-                        <td><Link className="text-center" onClick={() => tickOrderUp(order)} to="/orderBook"><i className="arrow up"></i></Link></td>
+                        <td><Link className="text-center" onClick={() => { tickOrderUp(order) } } to="/orderBook"><i className="arrow up"></i></Link></td>
                     </tr>)
             }
             </tbody>

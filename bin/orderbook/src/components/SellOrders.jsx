@@ -22,7 +22,7 @@ function SellOrders({ orderData, fetchOrderHistory, tickOrderDown }){
             {
                 orderData.sellOrders.map(order =>
                     <tr>
-                        <td><Link className="text-center" onClick={() => tickOrderDown(order)} to="/orderBook"><i className="arrow down"></i></Link></td>
+                        <td><Link className="text-center" onClick={() => { tickOrderDown(order) } } to="/orderBook"><i className="arrow down"></i></Link></td>
                         <td>{order.price}</td>
                         <td>{order.size}</td>
                         <td>{order.versionTime}</td>
