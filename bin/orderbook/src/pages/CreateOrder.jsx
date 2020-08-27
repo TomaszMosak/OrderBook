@@ -4,9 +4,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/MainPage.css'
 
 import MyNavBar from "../components/MyNavBar"
+import {connect} from "react-redux";
+import {createNewOrder} from "../redux";
 
 class CreateOrder extends Component {
-    
+
+    componentDidMount() {
+        this.state = {
+            order: {
+                stockId: 1,
+                partyId: 1,
+                userId: 1,
+                buy: false,
+                price: 100.00,
+                size: 1
+            }
+        }
+    }
+
     render() {
         return (
             <Container className="createOrderContainer">
@@ -30,19 +45,55 @@ class CreateOrder extends Component {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Side</Form.Label>
-                            <Form.Check inline label="Buy" type="radio" />
-                            <Form.Check inline label="Sell" type="radio" />
+                            <Form.Check inline label="Buy" type="radio" name="side" onClick={() => this.setState({
+                                order: {
+                                    stockId: this.state.order.stockId,
+                                    partyId: this.state.order.partyId,
+                                    userId: this.state.order.userId,
+                                    buy: true,
+                                    price: this.state.order.price,
+                                    size: this.state.order.size
+                                }
+                            })} />
+                            <Form.Check inline label="Sell" type="radio" name="side" onClick={() => this.setState({
+                                order: {
+                                    stockId: this.state.order.stockId,
+                                    partyId: this.state.order.partyId,
+                                    userId: this.state.order.userId,
+                                    buy: false,
+                                    price: this.state.order.price,
+                                    size: this.state.order.size
+                                }
+                            })} />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Price</Form.Label>
-                            <Form.Control />
+                            <Form.Control onChange={(event) => this.setState({
+                                order: {
+                                    stockId: this.state.order.stockId,
+                                    partyId: this.state.order.partyId,
+                                    userId: this.state.order.userId,
+                                    buy: this.state.order.buy,
+                                    price: event.target.value,
+                                    size: this.state.order.size
+                                }
+                            })} />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Size</Form.Label>
-                            <Form.Control />
+                            <Form.Control onChange={(event) => this.setState({
+                                order: {
+                                    stockId: this.state.order.stockId,
+                                    partyId: this.state.order.partyId,
+                                    userId: this.state.order.userId,
+                                    buy: this.state.order.buy,
+                                    price: this.state.order.price,
+                                    size: event.target.value
+                                }
+                            })} />
                         </Form.Group>
                         <Form.Group>
-                            <Button type="submit">Submit</Button>
+                            <Button onClick={() => this.props.createOrder(this.state.order)}>Submit</Button>
                         </Form.Group>
                     </Form>
                 </Container>
@@ -52,4 +103,10 @@ class CreateOrder extends Component {
 
 }
 
-export default CreateOrder
+const mapDispatchToProps = dispatch => {
+    return {
+        createOrder: order => dispatch(createNewOrder(order))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(CreateOrder);

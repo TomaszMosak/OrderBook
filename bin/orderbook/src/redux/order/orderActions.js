@@ -98,10 +98,10 @@ export const createNewOrder = order => {
     return (dispatch) => {
         dispatch(fetchOrdersRequest)
         axios.post("http://localhost:8080/order",
-            {stockId: order.stock.id,
-            partyId: order.party.id,
+            {stockId: order.stockId,
+            partyId: order.partyId,
             userId: 1,
-            buy: order.isBuy,
+            buy: order.buy,
             price: order.price,
             size: order.size})
             .then(r => {

@@ -39,7 +39,7 @@ function MostRecentTrades(props){
                         <td>{trade.buyOrder.stock.symbol}</td>
                         <td>{trade.price}</td>
                         <td>{trade.quantity}</td>
-                        <td>{trade.executionTime.city}</td>
+                        <td>{trade.executionTime}</td>
                         <td>{trade.buyOrder.stock.centralParty.symbol}</td>
                         <td onClick={() => props.selectSingleTrade(trade.id)}><Link to="/singleTrade">Trade Details</Link></td>
                     </tr>)
