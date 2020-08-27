@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {Button, Table} from "react-bootstrap";
-import {cancelExistingOrder} from "../redux";
+import {cancelExistingOrder, fetchOrderHistory} from "../redux";
 
 function SingleOrder({ orderData, cancelOrder }){
 
@@ -43,6 +43,7 @@ function SingleOrder({ orderData, cancelOrder }){
             }
             </tbody>
             <Button onClick={() => cancelOrder(orderData.orderHistory[0])}>Cancel order</Button>
+            <Button href="/EditOrder">Edit order</Button>
         </Table>
     )
 }

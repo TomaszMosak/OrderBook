@@ -38,11 +38,11 @@ class EditOrder extends Component {
                     <Form>
                         <Form.Group>
                             <Form.Label>Stock</Form.Label>
-                            <Form.Control placeholder="1" disabled />
+                            <Form.Control placeholder={this.props.orderData[0].stockId} disabled />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Party</Form.Label>
-                            <Form.Control placeholder="1" disabled />
+                            <Form.Control placeholder={this.props.orderData[0].partyId} disabled />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Price</Form.Label>
@@ -81,10 +81,16 @@ class EditOrder extends Component {
     
 }
 
+const mapStateToProps = state => {
+    return {
+        orderData: state.order
+    }
+}
+
 const mapDispatchToProps = dispatch => {
     return {
         editOrder: order => dispatch(editExistingOrder(order))
     }
 }
 
-export default connect(null, mapDispatchToProps)(EditOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(EditOrder);

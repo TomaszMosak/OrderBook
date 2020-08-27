@@ -19,7 +19,7 @@ spring.datasource.password=password
 ```
 Change `root` and `password` right of the equals signs to the username and password of a MySQL admin. This usually means the root user. Save the document and close it.
 
-N.B. If you know your MySQL is not running on port 3306, you may need to change `3306` in `jdbc:mysql://localhost:3306/OrderBook?serverTimezone=BST` to match this port.
+N.B. If you know your MySQL is not running on port 3306, you may need to change `3306` in `jdbc:mysql://localhost:3306/OrderBook?serverTimezone=BST` to match this port. Similarly, if your database is not running on `localhost`, change `localhost` to the URL of your database.
 
 4. Open a terminal in `bin`. Run
 ```
@@ -27,9 +27,9 @@ $ chmod 755 startup.sh
 ```
 to allow the script `startup.sh` to. be executed, and then
 ```
-$ ./startup.sh <username> <password>
+$ ./startup.sh <host-url> <username> <password>
 ```
-where `<username>` and `<password>` should be replaced by the username and password of a MySQL admin like before.
+where `<host-url>`, `<username>` and `<password>` should be replaced by the url of your database, username and password of a MySQL admin like before.
 
 The website will be available at `http://localhost:3000`.
 
