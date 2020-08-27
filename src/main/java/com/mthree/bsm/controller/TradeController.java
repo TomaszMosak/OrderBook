@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  * @author tombarton
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class TradeController {
 
     private final TradeService tradeService;

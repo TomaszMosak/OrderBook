@@ -22,7 +22,7 @@ INSERT INTO User (username, deleted) VALUES
 INSERT INTO Stock (companyName, stockSymbol, stockExchange, centralPartyId, tickSize) VALUES
     ('Royal Dutch Shell', 'RDS-A', 'LSE', 1, 0.01);
 
-INSERT INTO `Order` (partyId, stockId, orderStatus, side) VALUES 
+INSERT INTO `Order` (partyId, stockId, orderStatus, side) VALUES
     (2, 1, 3, true),
     (3, 1, 3, false),
     (4, 1, 3, true),
