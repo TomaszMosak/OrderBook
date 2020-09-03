@@ -4,7 +4,9 @@ It works sometimes.
 
 ## How to run
 
-We assume there is a MySQL distribution running on port 3306 or some other port you know about, and you know the username and password of an administrator for this distribution (like the root user).
+We assume there is a MySQL distribution running on a host (like `localhost`) and port (like `3306`) you know about, and you know the username and password of an administrator for this distribution (like the root user).
+
+Furthermore, we assume the system has Java 11 and npm installed.
 
 1. Click the green "Code" button in the top right and then "Download ZIP" in the drop down menu that shows to download this repository to your downloads folder (or probably somewhere else, depending on your system/browser).
 
@@ -19,7 +21,7 @@ spring.datasource.password=password
 ```
 Change `root` and `password` right of the equals signs to the username and password of a MySQL admin. This usually means the root user. Save the document and close it.
 
-N.B. If you know your MySQL is not running on port 3306, you may need to change `3306` in `jdbc:mysql://localhost:3306/OrderBook?serverTimezone=BST` to match this port.
+N.B. If you know your MySQL is not running on port 3306, you may need to change `3306` in `jdbc:mysql://localhost:3306/OrderBook?serverTimezone=BST` to match this port. Similarly, if your database is not running on `localhost`, change `localhost` to the URL of your database.
 
 4. Open a terminal in `bin`. Run
 ```
@@ -27,9 +29,9 @@ $ chmod 755 startup.sh
 ```
 to allow the script `startup.sh` to. be executed, and then
 ```
-$ ./startup.sh <username> <password>
+$ ./startup.sh <host-url> <username> <password>
 ```
-where `<username>` and `<password>` should be replaced by the username and password of a MySQL admin like before.
+where `<host-url>`, `<username>` and `<password>` should be replaced by the url of your database, username and password of a MySQL admin like before.
 
 The website will be available at `http://localhost:3000`.
 

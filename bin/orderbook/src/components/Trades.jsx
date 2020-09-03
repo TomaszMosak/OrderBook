@@ -26,7 +26,7 @@ function Trades(props){
             </thead>
             <tbody>
             {
-                props.tradeData.trades.map(trade =>
+                props.tradeData.trades.reverse().map(trade =>
                     <tr>
                         <td>{trade.buyOrder.stock.symbol}</td>
                         <td>{trade.price}</td>

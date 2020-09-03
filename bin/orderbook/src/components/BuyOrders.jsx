@@ -20,13 +20,13 @@ function BuyOrders({ orderData, fetchOrderHistory, tickOrderUp }){
             </thead>
             <tbody>
             {
-                orderData.buyOrders.map(order =>
+                orderData.buyOrders.sort((order1, order2) => order2.price - order1.price).map(order =>
                     <tr>
                         <td onClick={() => fetchOrderHistory(order.id)}><Link to="/singleOrder">Order History</Link></td>
                         <td>{order.versionTime}</td>
                         <td>{order.size}</td>
                         <td>{order.price}</td>
-                        <td><Link className="text-center" onClick={() => tickOrderUp(order)} to="/orderBook"><i className="arrow up"></i></Link></td>
+                        <td><Link className="text-center" onClick={() => { tickOrderUp(order); window.location.reload() } } to="/orderBook"><i className="arrow up"></i></Link></td>
                     </tr>)
             }
             </tbody>

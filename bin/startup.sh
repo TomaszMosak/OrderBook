@@ -1,8 +1,13 @@
 #!/bin/bash
 
+# Alter application.properties
+perl -pi -e "s'{HOST}'$1'g" application.properties
+perl -pi -e "s'{USERNAME}'$2'g" application.properties
+perl -pi -e "s'{PASSWORD}'$3'g" application.properties
+
 # Create database and dump data.
-mysql -u"$1" -p"$2" < ./dbscripts/OrderBook.sql
-mysql -u"$1" -p"$2" orderbook < ./dbscripts/OrderBookData.sql
+mysql -h"$1" -u"$2" -p"$3" < ./dbscripts/OrderBook.sql
+mysql -h"$1" -u"$2" -p"$3" OrderBook < ./dbscripts/OrderBookData.sql
 
 # Run jar and react app
 cd orderbook && npm install
